@@ -1,0 +1,390 @@
+.assessment-page {
+    width: 100%;
+    min-height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    color: var(--text);
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.assessment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: var(--card);
+    padding: 24px 28px;
+
+    border-radius: 20px;
+    margin-bottom: 25px;
+
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+}
+
+.assessment-header h1 {
+    margin: 0;
+
+    font-size: 28px;
+    color: var(--text);
+}
+
+.assessment-header p {
+    margin: 7px 0 0;
+
+    color: var(--secondary);
+}
+
+
+.assessment-progress {
+    padding: 10px 18px;
+
+    border-radius: 20px;
+
+    background: rgba(37, 99, 235, 0.10);
+
+    color: var(--primary);
+
+    font-weight: 700;
+}
+
+
+/* =========================
+   MAIN ASSESSMENT CARD
+========================= */
+
+.assessment-card {
+    background: var(--card);
+
+    border-radius: 24px;
+
+    padding: 40px;
+
+    min-height: 500px;
+
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+
+    text-align: center;
+}
+
+
+/* =========================
+   EXPECTED LETTER
+========================= */
+
+.assessment-letter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.assessment-label {
+    color: var(--secondary);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+
+.assessment-letter {
+    margin: 15px 0 25px;
+
+    width: 180px;
+    height: 180px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 30px;
+
+    background: rgba(37, 99, 235, 0.08);
+
+    color: var(--primary);
+
+    font-size: 110px;
+
+    font-weight: 900;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.attempt-btn,
+.submit-btn {
+    border: none;
+
+    padding: 14px 28px;
+
+    border-radius: 12px;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+.attempt-btn {
+    background: var(--primary);
+}
+
+
+.attempt-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+
+.submit-btn {
+    margin-top: 20px;
+
+    background: #16a34a;
+}
+
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    background: #15803d;
+}
+
+
+/* =========================
+   CAMERA
+========================= */
+
+.assessment-camera-section {
+    margin-top: 30px;
+}
+
+
+.camera-placeholder {
+    max-width: 700px;
+
+    margin: auto;
+
+    padding: 25px;
+
+    border-radius: 20px;
+
+    background: var(--bg);
+}
+
+
+.camera-icon {
+    font-size: 45px;
+}
+
+
+.camera-placeholder h2 {
+    margin: 10px 0 5px;
+
+    color: var(--text);
+}
+
+
+.camera-placeholder p {
+    color: var(--secondary);
+}
+
+
+.camera-preview {
+    margin-top: 20px;
+
+    width: 100%;
+
+    height: 360px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: #020617;
+
+    overflow: hidden;
+}
+
+
+.camera-preview video {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    transform: scaleX(-1);
+
+}
+
+
+/* =========================
+   CAMERA ERROR
+========================= */
+
+.camera-error {
+
+    margin: 20px auto;
+
+    max-width: 650px;
+
+    padding: 15px 20px;
+
+    border-radius: 12px;
+
+    background: #fee2e2;
+
+    color: #b91c1c;
+
+    font-weight: 600;
+
+}
+
+
+/* =========================
+   RECORDED
+========================= */
+
+.attempt-recorded {
+    margin-top: 40px;
+}
+
+
+.success-icon {
+    width: 70px;
+    height: 70px;
+
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #dcfce7;
+
+    color: #16a34a;
+
+    font-size: 35px;
+    font-weight: bold;
+}
+
+
+.attempt-recorded h2 {
+    color: var(--text);
+}
+
+
+.attempt-recorded p {
+    color: var(--secondary);
+}
+
+
+/* =========================
+   INFO CARDS
+========================= */
+
+.assessment-info {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+
+    margin-top: 25px;
+}
+
+
+.info-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    background: var(--card);
+
+    padding: 22px;
+
+    border-radius: 18px;
+
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+
+.info-card > span {
+    font-size: 30px;
+}
+
+
+.info-card h3 {
+    margin: 0;
+
+    color: var(--text);
+}
+
+
+.info-card p {
+    margin: 5px 0 0;
+
+    color: var(--secondary);
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+    .assessment-info {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .assessment-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .assessment-card {
+        padding: 25px 15px;
+    }
+
+    .assessment-letter {
+        width: 140px;
+        height: 140px;
+
+        font-size: 85px;
+    }
+
+}

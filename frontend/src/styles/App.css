@@ -1,0 +1,1015 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+html,
+body,
+#root {
+    min-height: 100%;
+}
+
+html {
+    overflow-y: auto;
+}
+
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#root {
+    width: 100%;
+}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:
+    "Inter",
+    "Segoe UI",
+    sans-serif;
+
+    background:
+    linear-gradient(
+        135deg,
+        #eef2ff,
+        #f8fafc
+    );
+
+    color:#1e293b;
+
+    min-height:100vh;
+}
+
+
+/* =========================
+   MAIN APP
+========================= */
+
+.app{
+
+    width:95%;
+
+    max-width:1500px;
+
+    margin:auto;
+
+    padding:30px;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+
+    display:flex;
+
+    justify-content:center;
+
+    text-align:center;
+
+    margin-bottom:35px;
+
+}
+
+
+.title{
+
+    font-size:48px;
+
+    font-weight:800;
+
+    color:#2563eb;
+
+    letter-spacing:-1px;
+
+}
+
+
+.subtitle{
+
+    margin-top:8px;
+
+    font-size:18px;
+
+    color:#64748b;
+
+}
+
+
+
+/* =========================
+   GLASS CARD
+========================= */
+
+
+.glass-card{
+
+    background:
+
+    rgba(
+        255,
+        255,
+        255,
+        0.85
+    );
+
+    backdrop-filter:
+    blur(12px);
+
+
+    border-radius:25px;
+
+
+    padding:25px;
+
+
+    box-shadow:
+
+    0 20px 40px
+    rgba(
+        15,
+        23,
+        42,
+        0.08
+    );
+
+}
+
+
+/* =========================
+   ALPHABET SECTION
+========================= */
+
+
+.alphabet-section{
+
+    margin-bottom:30px;
+
+}
+
+
+.alphabet-section h2{
+
+    text-align:center;
+
+    color:#334155;
+
+    margin-bottom:20px;
+
+}
+
+
+.alphabet-grid{
+
+    display:grid;
+
+
+    grid-template-columns:
+    repeat(13,1fr);
+
+
+    gap:12px;
+
+}
+
+
+.alphabet-grid button{
+
+
+    height:48px;
+
+
+    border:none;
+
+
+    border-radius:14px;
+
+
+    background:#f1f5f9;
+
+
+    color:#334155;
+
+
+    font-size:17px;
+
+
+    font-weight:700;
+
+
+    cursor:pointer;
+
+
+    transition:
+    all .25s ease;
+
+}
+
+
+
+.alphabet-grid button:hover{
+
+
+    transform:
+    translateY(-5px);
+
+
+    background:#dbeafe;
+
+
+}
+
+
+
+.selected{
+
+
+    background:#2563eb !important;
+
+
+    color:white !important;
+
+
+    box-shadow:
+
+    0 8px 20px
+    rgba(
+        37,
+        99,
+        235,
+        .35
+    );
+
+}
+
+
+
+.completed-letter{
+
+
+    background:#16a34a !important;
+
+
+    color:white !important;
+
+}
+
+
+
+/* =========================
+   BUTTON
+========================= */
+
+
+.start-btn{
+
+
+    display:block;
+
+
+    margin:25px auto;
+
+
+    padding:
+
+    14px 45px;
+
+
+    border:none;
+
+
+    border-radius:15px;
+
+
+    background:#2563eb;
+
+
+    color:white;
+
+
+    font-size:18px;
+
+
+    font-weight:700;
+
+
+    cursor:pointer;
+
+
+    transition:.3s;
+
+
+}
+
+
+
+.start-btn:hover{
+
+
+    transform:
+    scale(1.05);
+
+
+    background:#1d4ed8;
+
+
+}
+
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+
+@media(max-width:1100px){
+
+
+.alphabet-grid{
+
+    grid-template-columns:
+    repeat(8,1fr);
+
+}
+
+
+}
+
+
+
+@media(max-width:700px){
+
+
+.app{
+
+    width:100%;
+
+    padding:15px;
+
+}
+
+
+.title{
+
+    font-size:35px;
+
+}
+
+
+
+.alphabet-grid{
+
+    grid-template-columns:
+    repeat(5,1fr);
+
+}
+
+
+
+}
+/* =========================
+   FINAL POLISH
+========================= */
+
+
+/* Smooth scrolling */
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+
+
+/* Better scrollbar */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+
+
+::-webkit-scrollbar-track{
+
+    background:#e2e8f0;
+
+}
+
+
+
+::-webkit-scrollbar-thumb{
+
+    background:#2563eb;
+
+    border-radius:20px;
+
+}
+
+
+
+/* Page entrance animation */
+
+.app{
+
+    animation:
+
+    pageEnter .6s ease;
+
+}
+
+
+
+@keyframes pageEnter{
+
+
+from{
+
+    opacity:0;
+
+    transform:
+
+    translateY(20px);
+
+}
+
+
+to{
+
+    opacity:1;
+
+    transform:
+
+    translateY(0);
+
+}
+
+
+}
+
+
+
+
+/* Floating glow behind cards */
+
+.card,
+.glass-card,
+.student-dashboard,
+.stats{
+
+
+    position:relative;
+
+
+    overflow:hidden;
+
+
+}
+
+
+
+.card::before,
+.glass-card::before,
+.student-dashboard::before{
+
+
+    content:"";
+
+
+    position:absolute;
+
+
+    width:150px;
+
+
+    height:150px;
+
+
+    background:
+
+    rgba(
+        37,
+        99,
+        235,
+        .08
+    );
+
+
+    border-radius:50%;
+
+
+    top:-70px;
+
+
+    right:-70px;
+
+
+}
+
+
+
+
+/* Better headings */
+
+
+h1,h2,h3{
+
+    letter-spacing:-.5px;
+
+}
+
+
+
+/* Disabled button */
+
+button:disabled{
+
+
+    opacity:.6;
+
+
+    cursor:not-allowed;
+
+
+}
+
+
+
+/* Hover lift effect */
+
+.card:hover,
+.stats:hover,
+.student-dashboard:hover{
+
+
+    transform:
+
+    translateY(-4px);
+
+
+    transition:.3s;
+
+
+}
+/* =========================
+   TOP HEADER
+========================= */
+
+
+.top-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:35px;
+
+    background:white;
+
+    padding:20px 30px;
+
+    border-radius:25px;
+
+    box-shadow:
+
+    0 10px 30px
+    rgba(
+        15,
+        23,
+        42,
+        .08
+    );
+
+}
+
+
+
+
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+
+
+.logo{
+
+
+    width:60px;
+
+
+    height:60px;
+
+
+    border-radius:20px;
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    align-items:center;
+
+
+    font-size:35px;
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #2563eb,
+        #22c55e
+    );
+
+}
+
+
+
+.brand h1{
+
+
+    font-size:32px;
+
+
+    color:#2563eb;
+
+
+}
+
+
+
+.brand p{
+
+
+    color:#64748b;
+
+
+    margin-top:5px;
+
+
+}
+
+
+
+
+.user-badge{
+
+
+    background:#eff6ff;
+
+
+    color:#2563eb;
+
+
+    padding:12px 20px;
+
+
+    border-radius:20px;
+
+
+    font-weight:700;
+
+
+}
+
+
+
+@media(max-width:700px){
+
+
+.top-header{
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+
+
+}
+.session-dashboard{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    margin:25px 0;
+}
+
+.stats-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    text-align:center;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+    transition:.25s;
+}
+
+.stats-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.stats-card h4{
+
+    color:#6b7280;
+
+    margin-bottom:8px;
+
+}
+
+.stats-card h2{
+
+    color:#2563eb;
+
+    font-size:34px;
+
+}
+.live-status-card{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:28px;
+
+    box-shadow:0 12px 35px rgba(0,0,0,.08);
+
+}
+progress{
+
+    appearance:none;
+
+    width:100%;
+
+    height:18px;
+
+    border-radius:50px;
+
+    overflow:hidden;
+
+}
+
+progress::-webkit-progress-bar{
+
+    background:#e5e7eb;
+
+    border-radius:50px;
+
+}
+
+progress::-webkit-progress-value{
+
+    background:linear-gradient(
+
+        90deg,
+
+        #2563eb,
+
+        #3b82f6
+
+    );
+
+    border-radius:50px;
+
+}
+.metric-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.metric-table td{
+
+    padding:10px 6px;
+
+    border-bottom:1px solid #ececec;
+
+}
+
+.metric-table td:last-child{
+
+    text-align:right;
+
+    font-weight:bold;
+
+    color:#2563eb;
+
+}
+.achievement-card{
+
+    margin-top:25px;
+
+}
+
+.badge-container{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    margin-top:15px;
+
+}
+
+.badge{
+
+    padding:10px 18px;
+
+    border-radius:50px;
+
+    font-weight:600;
+
+}
+
+.badge.success{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
+
+.badge.info{
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+}
+
+.badge.warning{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+.badge.gold{
+
+    background:#fde68a;
+
+    color:#854d0e;
+
+}
+.ai-coach-card{
+
+    margin-top:20px;
+
+    border-left:5px solid #2563eb;
+
+}
+.session-header{
+
+    margin:25px 0;
+
+}
+.practice-layout{
+
+    display:grid;
+
+    grid-template-columns:330px 1fr;
+
+    gap:30px;
+
+    margin-top:30px;
+
+}
+@media(max-width:1000px){
+
+.practice-layout{
+
+    grid-template-columns:1fr;
+
+}
+
+.session-dashboard{
+
+    grid-template-columns:1fr;
+
+}
+
+}
+
+/* =========================================================
+   PAGE SCROLL FIX
+========================================================= */
+
+/*
+   Allow every page to grow naturally with its content.
+   Do NOT use height:100vh on the main page containers.
+*/
+
+html,
+body,
+#root{
+
+    height:auto;
+    min-height:100vh;
+
+    overflow-x:hidden;
+    overflow-y:auto;
+
+}
+
+
+/* Main application wrapper */
+
+.app{
+
+    min-height:100vh;
+
+    height:auto;
+
+    overflow:visible;
+
+}
+
+
+/* Common page containers */
+
+.practice-page,
+.report-page,
+.settings-page,
+.practice-container,
+.report-container,
+.settings-container{
+
+    min-height:100vh;
+
+    height:auto;
+
+    overflow:visible;
+
+}
+
+
+/* If any page uses a generic content wrapper */
+
+.page,
+.page-container,
+.main-content,
+.content{
+
+    height:auto;
+
+    min-height:100vh;
+
+    overflow:visible;
+
+}
+
+
+/* Prevent cards from clipping their own content */
+
+.card,
+.glass-card,
+.student-dashboard,
+.stats,
+.live-status-card,
+.practice-layout{
+
+    overflow:visible;
+
+}
+
+
+/* Keep horizontal overflow under control */
+
+body{
+
+    overflow-x:hidden;
+
+}
+

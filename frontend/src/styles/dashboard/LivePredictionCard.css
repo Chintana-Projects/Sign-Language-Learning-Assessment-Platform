@@ -1,0 +1,303 @@
+/* =========================================================
+   LIVE AI CARD
+========================================================= */
+
+.live-status-card {
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    padding: 24px;
+
+    border: 1px solid #E5E7EB;
+
+    box-shadow: 0 10px 30px rgba(15,23,42,.08);
+
+    transition: .25s;
+
+}
+
+.live-status-card:hover{
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 16px 36px rgba(15,23,42,.12);
+
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.recognition-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    margin-bottom:22px;
+
+}
+
+.recognition-header h2{
+
+    margin:0;
+
+    font-size:22px;
+
+    color:#111827;
+
+}
+
+.recognition-header p{
+
+    margin-top:6px;
+
+    color:#6B7280;
+
+    font-size:13px;
+
+}
+
+.recognition-status{
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+
+}
+
+.recognition-status.stable{
+
+    background:#DCFCE7;
+
+    color:#15803D;
+
+}
+
+.recognition-status.waiting{
+
+    background:#FEF3C7;
+
+    color:#B45309;
+
+}
+
+/* =========================================================
+   PREDICTION
+========================================================= */
+
+.prediction-display{
+
+    text-align:center;
+
+    padding:12px 0 24px;
+
+}
+
+.prediction-label{
+
+    display:block;
+
+    font-size:13px;
+
+    color:#6B7280;
+
+    margin-bottom:10px;
+
+}
+
+.prediction-display h1{
+
+    margin:0;
+
+    font-size:84px;
+
+    line-height:1;
+
+    color:#4F46E5;
+
+    font-weight:800;
+
+}
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.recognition-metrics{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:24px;
+
+}
+
+.recognition-metric{
+
+    width:100%;
+
+}
+
+.metric-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:8px;
+
+    font-size:14px;
+
+}
+
+.metric-header span{
+
+    color:#4B5563;
+
+    font-weight:600;
+
+}
+
+.metric-header strong{
+
+    color:#111827;
+
+}
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.metric-progress{
+
+    height:12px;
+
+    background:#E5E7EB;
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+}
+
+.metric-progress-fill{
+
+    height:100%;
+
+    transition:.35s;
+
+}
+
+.confidence-fill{
+
+    background:linear-gradient(
+        90deg,
+        #60A5FA,
+        #2563EB
+    );
+
+}
+
+.stability-fill{
+
+    background:linear-gradient(
+        90deg,
+        #FACC15,
+        #22C55E
+    );
+
+}
+
+/* =========================================================
+   FRAME COUNTER
+========================================================= */
+
+.stable-frame-section{
+
+    margin-top:28px;
+
+    padding-top:20px;
+
+    border-top:1px solid #E5E7EB;
+
+}
+
+.stable-frame-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:12px;
+
+    font-size:14px;
+
+}
+
+.stable-frame-header span{
+
+    color:#4B5563;
+
+    font-weight:600;
+
+}
+
+.stable-frame-header strong{
+
+    color:#4F46E5;
+
+}
+
+.frame-dots{
+
+    display:flex;
+
+    gap:8px;
+
+}
+
+.frame-dot{
+
+    flex:1;
+
+    height:8px;
+
+    border-radius:999px;
+
+    background:#E5E7EB;
+
+    transition:.3s;
+
+}
+
+.frame-dot.active{
+
+    background:#22C55E;
+
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:768px){
+
+    .prediction-display h1{
+
+        font-size:64px;
+
+    }
+
+}

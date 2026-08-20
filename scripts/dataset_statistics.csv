@@ -1,0 +1,35 @@
+Class,Number of Images
+A,8758
+B,8609
+C,8446
+D,7929
+E,8044
+F,8331
+G,8144
+H,8206
+I,8253
+J,7803
+K,8176
+L,8239
+M,8200
+N,8232
+O,8440
+P,7901
+Q,8254
+R,8321
+S,8409
+T,8354
+U,8323
+V,7897
+W,8087
+X,8393
+Y,8478
+Z,7710
+del,6836
+nothing,3030
+space,7071
+
+Total Classes,29
+Total Images,230874
+Largest Class,A,8758
+Smallest Class,nothing,3030

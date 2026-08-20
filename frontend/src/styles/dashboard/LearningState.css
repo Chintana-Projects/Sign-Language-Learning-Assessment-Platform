@@ -1,0 +1,523 @@
+/* =========================================
+   LEARNING STATE CARD
+========================================= */
+
+.learning-state-card {
+    width: 100%;
+    box-sizing: border-box;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #fafaff 100%
+        );
+
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    padding: 18px;
+
+    margin-top: 18px;
+
+    box-shadow:
+        0 5px 18px rgba(15, 23, 42, 0.05);
+
+    overflow: hidden;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.learning-state-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 14px;
+
+    margin-bottom: 18px;
+}
+
+.learning-state-title-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.learning-state-icon {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eef2ff;
+    color: #4f46e5;
+
+    font-size: 15px;
+}
+
+.learning-state-header h2 {
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.learning-state-header p {
+    margin: 2px 0 0;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+
+/* =========================================
+   LEVEL BADGE
+========================================= */
+
+.learning-level-badge {
+    display: inline-flex;
+
+    align-items: center;
+    gap: 5px;
+
+    padding: 6px 10px;
+
+    border-radius: 16px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.learning-improving {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+.learning-good {
+    background: #ecfdf5;
+    color: #15803d;
+}
+
+.learning-mastered {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.learning-beginner {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+
+.learning-state-content {
+    display: grid;
+
+    grid-template-columns:
+        130px 1fr;
+
+    gap: 22px;
+
+    align-items: center;
+}
+
+
+/* =========================================
+   PERFORMANCE CIRCLE
+========================================= */
+
+.performance-section {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.performance-circle {
+    width: 105px;
+    height: 105px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        conic-gradient(
+            #4f46e5 var(--progress),
+            #e5e7eb var(--progress)
+        );
+
+    position: relative;
+}
+
+.performance-circle::before {
+    content: "";
+
+    position: absolute;
+
+    width: 86px;
+    height: 86px;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+}
+
+.performance-circle-inner {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.performance-circle-inner strong {
+    font-size: 22px;
+
+    color: #111827;
+
+    line-height: 1;
+}
+
+.performance-circle-inner span {
+    margin-top: 4px;
+
+    color: #9ca3af;
+
+    font-size: 9px;
+}
+
+
+/* =========================================
+   PERFORMANCE INFO
+========================================= */
+
+.performance-info {
+    min-width: 0;
+}
+
+.performance-heading {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+.performance-heading span {
+    color: #6b7280;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.performance-heading h3 {
+    margin: 4px 0 0;
+
+    color: #111827;
+
+    font-size: 22px;
+    line-height: 1;
+}
+
+.target-badge {
+    background: #f5f3ff;
+
+    color: #7c3aed;
+
+    padding: 5px 8px;
+
+    border-radius: 8px;
+
+    font-size: 9px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   GOAL PROGRESS
+========================================= */
+
+.goal-progress {
+    margin-top: 15px;
+}
+
+.goal-progress-labels {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 5px;
+
+    color: #9ca3af;
+
+    font-size: 9px;
+}
+
+.goal-progress-labels span:last-child {
+    color: #4f46e5;
+    font-weight: 600;
+}
+
+.goal-progress-track {
+    position: relative;
+
+    width: 100%;
+    height: 7px;
+
+    background: #e5e7eb;
+
+    border-radius: 20px;
+
+    overflow: visible;
+}
+
+.goal-progress-fill {
+    height: 100%;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #6366f1,
+            #7c3aed
+        );
+
+    transition: width 0.5s ease;
+}
+
+.goal-marker {
+    position: absolute;
+
+    top: -3px;
+
+    width: 2px;
+    height: 13px;
+
+    background: #7c3aed;
+
+    border-radius: 2px;
+}
+
+.goal-scale {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 5px;
+
+    color: #c0c4cc;
+
+    font-size: 8px;
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.learning-message {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 14px;
+
+    padding: 9px 10px;
+
+    background: #f8fafc;
+
+    border: 1px solid #eef0f4;
+
+    border-radius: 10px;
+}
+
+.message-icon {
+    width: 27px;
+    height: 27px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #fff7ed;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+}
+
+.learning-message strong {
+    display: block;
+
+    margin-bottom: 1px;
+
+    color: #374151;
+
+    font-size: 10px;
+}
+
+.learning-message p {
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 10px;
+
+    line-height: 1.3;
+}
+
+
+/* =========================================
+   NEXT GOAL
+========================================= */
+
+.next-goal {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-top: 17px;
+
+    padding: 10px 12px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #eef2ff,
+            #f5f3ff
+        );
+
+    border: 1px solid #e0e7ff;
+
+    border-radius: 11px;
+}
+
+.next-goal-icon {
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #4f46e5;
+
+    box-shadow:
+        0 2px 5px rgba(79, 70, 229, 0.08);
+}
+
+.next-goal-content {
+    flex: 1;
+}
+
+.next-goal-content span {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #6366f1;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+}
+
+.next-goal-content p {
+    margin: 0;
+
+    color: #374151;
+
+    font-size: 10px;
+
+    font-weight: 500;
+}
+
+.goal-arrow {
+    color: #6366f1;
+
+    font-size: 17px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .learning-state-card {
+        padding: 15px;
+    }
+
+    .learning-state-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .learning-state-content {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .performance-section {
+        justify-content: flex-start;
+    }
+
+    .performance-circle {
+        width: 95px;
+        height: 95px;
+    }
+
+    .performance-circle::before {
+        width: 77px;
+        height: 77px;
+    }
+
+    .performance-circle-inner strong {
+        font-size: 20px;
+    }
+
+    .next-goal {
+        align-items: flex-start;
+    }
+}

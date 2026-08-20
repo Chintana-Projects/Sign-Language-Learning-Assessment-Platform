@@ -1,0 +1,202 @@
+/* ========================================================= 
+   LESSON CARD 
+========================================================= */ 
+ 
+.lesson-card{ 
+ 
+    height:100%; 
+ 
+    min-height:760px; 
+ 
+    display:flex; 
+ 
+    flex-direction:column; 
+ 
+    justify-content:flex-start; 
+ 
+    background:#fff; 
+ 
+    border-radius:22px; 
+ 
+    padding:28px; 
+ 
+    border:1px solid #EEF2F7; 
+ 
+    box-shadow:0 12px 30px rgba(15,23,42,.08); 
+ 
+    width:100%;
+    box-sizing:border-box;
+ 
+} 
+ 
+/* ========================================================= 
+   HEADER 
+========================================================= */ 
+ 
+.lesson-title{ 
+ 
+    display:flex; 
+ 
+    justify-content:space-between; 
+ 
+    align-items:center; 
+ 
+} 
+ 
+.lesson-title h2{ 
+ 
+    margin:0; 
+ 
+    font-size:28px; 
+ 
+    color:#111827; 
+ 
+} 
+ 
+.lesson-badge{ 
+ 
+    background:#EEF2FF; 
+ 
+    color:#4F46E5; 
+ 
+    padding:8px 16px; 
+ 
+    border-radius:999px; 
+ 
+    font-size:12px; 
+ 
+    font-weight:700; 
+ 
+    letter-spacing:.8px; 
+ 
+} 
+ 
+/* ========================================================= 
+   LETTER 
+========================================================= */ 
+ 
+.lesson-letter{ 
+ 
+    font-size:54px; 
+ 
+    font-weight:700; 
+ 
+    color:#4F46E5; 
+ 
+    text-align:center; 
+ 
+} 
+ 
+/* ========================================================= 
+   IMAGE 
+========================================================= */ 
+ 
+.lesson-image-wrapper { 
+ 
+    width:100%; 
+ 
+    display:flex; 
+ 
+    justify-content:center; 
+ 
+    align-items:flex-start; 
+ 
+    box-sizing:border-box;
+
+    margin-top:10px;
+ 
+} 
+ 
+.lesson-image { 
+ 
+    display:block; 
+ 
+    width:100%; 
+ 
+    max-width:240px; 
+ 
+    height:auto; 
+ 
+    object-fit:contain; 
+ 
+} 
+ 
+/* ========================================================= 
+   QUICK TIPS 
+========================================================= */ 
+ 
+.lesson-tips{ 
+ 
+    background:#F8FAFC; 
+ 
+    border-radius:16px; 
+ 
+    padding:18px; 
+ 
+    margin-top:25px;
+ 
+} 
+ 
+.lesson-tips h3{ 
+ 
+    margin-bottom:12px; 
+ 
+    color:#111827; 
+ 
+} 
+ 
+.lesson-tips ul{ 
+ 
+    list-style:none; 
+ 
+    padding:0; 
+ 
+    margin:0; 
+ 
+} 
+ 
+.lesson-tips li{ 
+ 
+    margin:8px 0; 
+ 
+    color:#4B5563; 
+ 
+    font-size:15px; 
+ 
+} 
+ 
+/* ========================================================= 
+   MEANING 
+========================================================= */ 
+ 
+.lesson-meaning-box{ 
+ 
+    background:#EEF2FF; 
+ 
+    border-left:5px solid #4F46E5; 
+ 
+    padding:18px; 
+ 
+    border-radius:14px; 
+ 
+    margin-top:20px;
+ 
+} 
+ 
+.lesson-meaning-box h3{ 
+ 
+    margin:0 0 6px; 
+ 
+    color:#111827; 
+ 
+} 
+ 
+.lesson-meaning-box p{ 
+ 
+    margin:0; 
+ 
+    color:#374151; 
+ 
+    font-weight:500; 
+ 
+}

@@ -1,0 +1,391 @@
+/* =========================================================
+   CAMERA CARD
+========================================================= */
+.camera-section{
+
+    height:100%;
+
+    min-height:760px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    background:#fff;
+
+    border-radius:22px;
+
+    padding:28px;
+
+    border:1px solid #EEF2F7;
+
+    box-shadow:0 12px 30px rgba(15,23,42,.08);
+
+}
+/* =========================================================
+   HEADER
+========================================================= */
+
+.camera-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:22px;
+
+}
+
+.camera-header h2{
+
+    margin:0;
+
+    font-size:28px;
+
+    color:#111827;
+
+}
+
+.camera-header p{
+
+    margin-top:6px;
+
+    color:#6B7280;
+
+    font-size:14px;
+
+}
+
+/* =========================================================
+   LIVE BADGE
+========================================================= */
+
+.live-indicator{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    background:#DCFCE7;
+
+    color:#15803D;
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+.live-indicator span{
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:#22C55E;
+
+}
+
+/* =========================================================
+   CAMERA FRAME
+========================================================= */
+
+.camera-wrapper{
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    overflow:hidden;
+
+    border-radius:20px;
+
+    background:#0F172A;
+
+    border:4px solid #EEF2FF;
+
+    min-height:520px;
+
+}
+
+/* =========================================================
+   WEBCAM
+========================================================= */
+
+.webcam-frame{
+
+    width:100%;
+
+    aspect-ratio:16/9;
+
+    overflow:hidden;
+
+}
+
+.webcam-video{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
+
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.camera-status{
+
+    margin-bottom:16px;
+
+    padding:12px;
+
+    border-radius:14px;
+
+    text-align:center;
+
+    font-weight:700;
+
+}
+
+.camera-status.detected{
+
+    background:#DCFCE7;
+
+    color:#15803D;
+
+}
+
+.camera-status.not-detected{
+
+    background:#FEF3C7;
+
+    color:#B45309;
+
+}
+
+/* =========================================================
+   INSTRUCTIONS
+========================================================= */
+.camera-instructions {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.instruction-item{
+
+    background:#F8FAFC;
+
+    border-radius:16px;
+
+    padding:18px;
+
+    display:flex;
+
+    gap:14px;
+
+    align-items:flex-start;
+
+}
+
+.instruction-item span{
+
+    width:28px;
+
+    height:28px;
+
+    border-radius:50%;
+
+    background:#EEF2FF;
+
+    color:#4F46E5;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:700;
+
+    flex-shrink:0;
+
+}
+
+.instruction-item p{
+
+    margin:0;
+
+    color:#6B7280;
+
+    font-size:14px;
+
+    line-height:1.6;
+
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px){
+
+.camera-instructions{
+
+grid-template-columns:1fr;
+
+}
+
+}
+/* =========================================================
+   AI FEEDBACK
+========================================================= */
+
+.feedback-content {
+    margin-top: 20px;
+       width: 100%;
+    box-sizing: border-box;
+
+    padding: 20px;
+    background: #F8FAFC;
+    border: 1px solid #E5E7EB;
+    border-radius: 16px;
+    color: #111827;
+}
+.camera-section {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.camera-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.feedback-title {
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.feedback-success {
+    margin-bottom: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #15803D;
+}
+
+.feedback-error {
+    margin-bottom: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #B91C1C;
+}
+
+.feedback-content p {
+    margin: 8px 0;
+    color: #374151;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.feedback-details {
+    margin-top: 15px;
+    padding: 14px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    border: 1px solid #E5E7EB;
+}
+
+.feedback-details div {
+    margin: 6px 0;
+    color: #374151;
+    font-size: 14px;
+}
+
+.feedback-details strong {
+    color: #111827;
+}
+
+.feedback-summary {
+    margin-top: 12px;
+}
+
+.feedback-summary p {
+    color: #374151;
+}
+
+.feedback-summary strong {
+    color: #111827;
+}
+
+.feedback-tip {
+    margin-top: 15px;
+    padding: 12px 14px;
+    background: #EEF2FF;
+    border-radius: 10px;
+    color: #3730A3;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.feedback-mistakes {
+    margin-top: 15px;
+    padding: 14px;
+    background: #FEF2F2;
+    border-radius: 10px;
+    color: #991B1B;
+}
+
+.feedback-mistakes strong {
+    color: #991B1B;
+}
+
+.feedback-mistakes ul,
+.feedback-tips ul {
+    margin: 8px 0 0;
+    padding-left: 20px;
+}
+
+.feedback-mistakes li {
+    margin-bottom: 5px;
+    color: #7F1D1D;
+}
+
+.feedback-tips {
+    margin-top: 15px;
+    padding: 14px;
+    background: #F0FDF4;
+    border-radius: 10px;
+    color: #166534;
+}
+
+.feedback-tips strong {
+    color: #166534;
+}
+
+.feedback-tips li {
+    margin-bottom: 5px;
+    color: #166534;
+}

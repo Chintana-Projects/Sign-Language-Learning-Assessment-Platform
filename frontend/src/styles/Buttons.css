@@ -1,0 +1,25 @@
+.primary-btn{
+
+    background:#2563EB;
+
+    color:white;
+
+    border:none;
+
+    padding:12px 22px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+.primary-btn:hover{
+
+    background:#1D4ED8;
+
+}

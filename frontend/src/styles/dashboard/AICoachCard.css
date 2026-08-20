@@ -1,0 +1,111 @@
+.ai-coach-card{
+
+    background:linear-gradient(135deg,#2563EB,#4F46E5);
+
+    color:white;
+
+    border-radius:20px;
+
+    padding:24px;
+
+    box-shadow:0 10px 25px rgba(37,99,235,.25);
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    min-height:320px;
+
+}
+
+.coach-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.coach-icon{
+
+    font-size:30px;
+
+}
+
+.coach-body{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+    margin-top:20px;
+
+}
+
+.coach-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-weight:600;
+
+}
+
+.coach-body p{
+
+    line-height:1.7;
+
+    opacity:.95;
+
+}
+
+.coach-body h2{
+
+    font-size:34px;
+
+}
+
+.coach-body button{
+
+    margin-top:auto;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:white;
+
+    color:#2563EB;
+
+    cursor:pointer;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-weight:700;
+
+    transition:.3s;
+
+}
+
+.coach-body button:hover{
+
+    transform:translateY(-3px);
+
+}

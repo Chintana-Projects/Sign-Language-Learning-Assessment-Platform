@@ -1,0 +1,82 @@
+# ==============================
+# Python
+# ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# ==============================
+# IDE / OS
+# ==============================
+.vscode/
+.idea/
+*.code-workspace
+
+.DS_Store
+Thumbs.db
+
+# ==============================
+# Python tools / caches
+# ==============================
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ==============================
+# SignSync datasets
+# ==============================
+datasets/
+
+# ==============================
+# Generated files
+# ==============================
+generated/
+
+# ==============================
+# Runtime captures / logs
+# ==============================
+captures/
+*.log
+*.jsonl
+
+# ==============================
+# Local database / generated data
+# ==============================
+backend/app/database/*.json
+backend/app/database/database
+
+# ==============================
+# Reports generated during testing
+# ==============================
+*_report.json
+*_report.pdf
+backend/*_report.json
+backend/*_report.pdf
+
+# ==============================
+# ML model artifacts
+# ==============================
+*.pkl
+*.joblib
+*.h5
+*.keras
+*.onnx
+
+# ==============================
+# Temporary files
+# ==============================
+*.tmp
+*.temp
+*.bak
+# Environment variables
+.env
+*.env

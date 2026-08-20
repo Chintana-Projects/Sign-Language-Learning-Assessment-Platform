@@ -1,0 +1,370 @@
+import React from "react";
+import Sidebar from "../components/dashboard/Sidebar";
+import "../styles/accessibilityTrainer.css";
+
+export default function AccessibilityTrainer() {
+    return (
+        <div className="trainer-layout">
+
+            {/* =========================================
+                SIDEBAR
+            ========================================= */}
+            <Sidebar />
+
+            {/* =========================================
+                MAIN CONTENT
+            ========================================= */}
+            <main className="trainer-page">
+
+                {/* =========================================
+                    HEADER
+                ========================================= */}
+                <header className="trainer-header">
+
+                    <div>
+                        <h1>
+                            Accessibility Trainer
+                        </h1>
+
+                        <p>
+                            Help learners practice and improve
+                            their sign language skills.
+                        </p>
+                    </div>
+
+                    <div className="trainer-profile">
+
+                        <div className="profile-avatar">
+                            AT
+                        </div>
+
+                        <div>
+                            <strong>
+                                Accessibility Trainer
+                            </strong>
+
+                            <span>
+                                SignSync
+                            </span>
+                        </div>
+
+                    </div>
+
+                </header>
+
+
+                {/* =========================================
+                    STATISTICS
+                ========================================= */}
+                <section className="trainer-stats">
+
+                    {/* Total Learners */}
+                    <div className="trainer-stat-card">
+
+                        <span className="stat-icon">
+                            👥
+                        </span>
+
+                        <div>
+                            <p>
+                                Total Learners
+                            </p>
+
+                            <h2>
+                                12
+                            </h2>
+                        </div>
+
+                    </div>
+
+
+                    {/* Active Learners */}
+                    <div className="trainer-stat-card">
+
+                        <span className="stat-icon">
+                            🎯
+                        </span>
+
+                        <div>
+                            <p>
+                                Active Learners
+                            </p>
+
+                            <h2>
+                                8
+                            </h2>
+                        </div>
+
+                    </div>
+
+
+                    {/* Lessons Completed */}
+                    <div className="trainer-stat-card">
+
+                        <span className="stat-icon">
+                            📚
+                        </span>
+
+                        <div>
+                            <p>
+                                Lessons Completed
+                            </p>
+
+                            <h2>
+                                46
+                            </h2>
+                        </div>
+
+                    </div>
+
+
+                    {/* Average Accuracy */}
+                    <div className="trainer-stat-card">
+
+                        <span className="stat-icon">
+                            ⭐
+                        </span>
+
+                        <div>
+                            <p>
+                                Average Accuracy
+                            </p>
+
+                            <h2>
+                                82%
+                            </h2>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {/* =========================================
+                    LEARNERS SECTION
+                ========================================= */}
+                <section className="learners-section">
+
+                    {/* Section Header */}
+                    <div className="section-heading">
+
+                        <div>
+                            <h2>
+                                Learners
+                            </h2>
+
+                            <p>
+                                View learner practice progress.
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            className="view-all-button"
+                        >
+                            View All
+                        </button>
+
+                    </div>
+
+
+                    {/* =====================================
+                        LEARNER LIST
+                    ===================================== */}
+                    <div className="learner-list">
+
+
+                        {/* =================================
+                            ARJUN
+                        ================================= */}
+                        <div className="learner-card">
+
+                            <div className="learner-info">
+
+                                <div className="learner-avatar">
+                                    AS
+                                </div>
+
+                                <div>
+                                    <h3>
+                                        Arjun S
+                                    </h3>
+
+                                    <p>
+                                        Current lesson: C
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div className="learner-progress">
+
+                                <div className="progress-label">
+
+                                    <span>
+                                        Progress
+                                    </span>
+
+                                    <strong>
+                                        72%
+                                    </strong>
+
+                                </div>
+
+                                <div className="progress-bar">
+
+                                    <div
+                                        className="progress-fill"
+                                        style={{
+                                            width: "72%"
+                                        }}
+                                    />
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                className="view-button"
+                            >
+                                View Learner
+                            </button>
+
+                        </div>
+
+
+                        {/* =================================
+                            PRIYA
+                        ================================= */}
+                        <div className="learner-card">
+
+                            <div className="learner-info">
+
+                                <div className="learner-avatar">
+                                    PR
+                                </div>
+
+                                <div>
+                                    <h3>
+                                        Priya R
+                                    </h3>
+
+                                    <p>
+                                        Current lesson: H
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div className="learner-progress">
+
+                                <div className="progress-label">
+
+                                    <span>
+                                        Progress
+                                    </span>
+
+                                    <strong>
+                                        58%
+                                    </strong>
+
+                                </div>
+
+                                <div className="progress-bar">
+
+                                    <div
+                                        className="progress-fill"
+                                        style={{
+                                            width: "58%"
+                                        }}
+                                    />
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                className="view-button"
+                            >
+                                View Learner
+                            </button>
+
+                        </div>
+
+
+                        {/* =================================
+                            RAHUL
+                        ================================= */}
+                        <div className="learner-card">
+
+                            <div className="learner-info">
+
+                                <div className="learner-avatar">
+                                    RK
+                                </div>
+
+                                <div>
+                                    <h3>
+                                        Rahul K
+                                    </h3>
+
+                                    <p>
+                                        Current lesson: M
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div className="learner-progress">
+
+                                <div className="progress-label">
+
+                                    <span>
+                                        Progress
+                                    </span>
+
+                                    <strong>
+                                        86%
+                                    </strong>
+
+                                </div>
+
+                                <div className="progress-bar">
+
+                                    <div
+                                        className="progress-fill"
+                                        style={{
+                                            width: "86%"
+                                        }}
+                                    />
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                className="view-button"
+                            >
+                                View Learner
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </main>
+
+        </div>
+    );
+}

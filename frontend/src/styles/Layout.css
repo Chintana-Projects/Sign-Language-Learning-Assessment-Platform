@@ -1,0 +1,1148 @@
+
+/* =========================================================
+   PRACTICE LAYOUT
+   ========================================================= */
+
+.practice-container {
+    width: 100%;
+}
+/* =========================================================
+LESSON PAGE LAYOUT
+========================================================= */
+
+.practice-container{
+    width:100%;
+    max-width:100%;
+    margin:0;
+    padding:0;
+}
+.lesson-top-row {
+    display: grid;
+    grid-template-columns: 330px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.lesson-reference {
+    width: 100%;
+    min-width: 0;
+    align-self: start;
+    position: relative;
+    z-index: 2;
+}
+
+.lesson-camera {
+    width: 100%;
+    min-width: 0;
+    align-self: start;
+    position: relative;
+    z-index: 1;
+}
+/* ---------- LEFT PANEL ---------- */
+
+.lesson-reference{
+
+   
+       width:100%;
+    max-width:420px;
+
+
+}
+.lesson-reference,
+.lesson-camera {
+    width: 100%;
+    height: 100%;
+}
+.camera-section {
+    height: 100%;
+    box-sizing: border-box;
+}
+/* ---------- RIGHT PANEL ---------- */
+
+.lesson-camera{
+
+    width:100%;
+
+    min-width:0;
+
+}
+.camera-section{
+    height: 100%;
+box-sizing: border-box;
+
+    height:100%;
+
+}
+
+.lesson-card{
+
+    height:100%;
+
+}
+
+/* ---------- BOTTOM ROW ---------- */
+
+.lesson-bottom-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 30px;
+}
+
+/* ---------- CARD LOOK ---------- */
+
+.lesson-reference > *,
+.lesson-camera > *,
+.lesson-bottom-row > * {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 1100px) {
+
+    .lesson-top-row {
+        grid-template-columns: 1fr;
+    }
+
+    .lesson-reference {
+        max-width: 100%;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .practice-container {
+        padding: 18px;
+    }
+
+    .lesson-top-row {
+        gap: 20px;
+    }
+
+    .lesson-bottom-row {
+        margin-top: 20px;
+    }
+
+}
+/* =========================================================
+   CAMERA CONTAINER
+   ========================================================= */
+
+.camera-card-container {
+    width: 100%;
+}
+
+
+/* =========================================================
+   SESSION BOX
+   ========================================================= */
+
+.session-box {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 16px;
+}
+
+
+/* =========================================================
+   STAT CARDS
+   ========================================================= */
+
+.stats {
+    background: #ffffff;
+
+    border-radius: 12px;
+
+    padding: 18px;
+
+    text-align: center;
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.stats h4 {
+    margin: 0;
+
+    color: #666;
+
+    font-size: 15px;
+}
+
+.stats h2 {
+    margin-top: 8px;
+
+    color: #2563eb;
+
+    font-size: 30px;
+}
+
+
+/* =========================================================
+   ASSESSMENT
+   ========================================================= */
+
+.assessment-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 20px;
+
+    margin: 20px 0;
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.label {
+    display: block;
+
+    color: #666;
+
+    font-size: 14px;
+
+    margin-bottom: 6px;
+}
+
+
+/* =========================================================
+   LIVE PREDICTION
+   ========================================================= */
+
+.live-prediction-card {
+    text-align: center;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   PRACTICE HEADER
+   ========================================================= */
+
+.practice-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 20px;
+
+    margin-bottom: 20px;
+
+    background: var(--card);
+    border-radius: 14px;
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.practice-header h2 {
+    margin: 0;
+}
+
+.practice-header p {
+    margin-top: 5px;
+
+    color: #666;
+}
+
+
+/* =========================================================
+   END SESSION BUTTON
+   ========================================================= */
+
+.end-session-btn {
+    background: #ef4444;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 20px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+.end-session-btn:hover {
+    background: #dc2626;
+}
+
+
+/* =========================================================
+   SESSION PROGRESS
+   ========================================================= */
+
+.session-progress {
+    margin-top: 15px;
+}
+
+.progress-track {
+    width: 320px;
+
+    height: 12px;
+
+    background: #e5e7eb;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #2563eb,
+            #22c55e
+        );
+
+    transition: 0.4s;
+}
+
+.session-progress p {
+    margin-top: 8px;
+
+    font-size: 14px;
+
+    color: #666;
+}
+
+
+/* =========================================================
+   RECOMMENDATION BANNER
+   ========================================================= */
+
+.recommendation-banner {
+    margin-top: 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background: #eef5ff;
+
+    border-left: 6px solid #2563eb;
+
+    padding: 18px;
+
+    border-radius: 12px;
+
+    gap: 20px;
+}
+
+.recommendation-banner small {
+    color: #666;
+}
+
+.recommendation-banner h2 {
+    margin: 5px 0;
+
+    font-size: 32px;
+
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   PRIORITY
+   ========================================================= */
+
+.priority {
+    padding: 8px 18px;
+
+    border-radius: 20px;
+
+    color: white;
+
+    font-weight: bold;
+}
+
+.priority.high {
+    background: #ef4444;
+}
+
+.priority.medium {
+    background: #f59e0b;
+}
+
+.priority.low {
+    background: #22c55e;
+}
+
+
+/* =========================================================
+   CELEBRATION
+   ========================================================= */
+
+.celebration {
+    margin: 20px auto;
+
+    padding: 18px;
+
+    background: #dcfce7;
+
+    border: 2px solid #22c55e;
+
+    border-radius: 14px;
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+    color: #166534;
+
+    animation: pop 0.5s ease;
+}
+
+
+/* =========================================================
+   TRY AGAIN
+   ========================================================= */
+
+.try-again {
+    margin: 20px auto;
+
+    padding: 18px;
+
+    background: #fef3c7;
+
+    border: 2px solid #f59e0b;
+
+    border-radius: 14px;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    color: #92400e;
+
+    animation: shake 0.4s ease;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes pop {
+
+    0% {
+        transform: scale(0.7);
+
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+
+        opacity: 1;
+    }
+
+}
+
+@keyframes shake {
+
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-6px);
+    }
+
+    50% {
+        transform: translateX(6px);
+    }
+
+    75% {
+        transform: translateX(-6px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+
+}
+
+
+/* =========================================================
+   ACHIEVEMENTS
+   ========================================================= */
+
+.achievement-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+.badge {
+    background: #2563eb;
+
+    color: white;
+
+    padding: 8px 14px;
+
+    border-radius: 20px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    animation: pop 0.4s;
+}
+
+
+/* =========================================================
+   SESSION SUMMARY POPUP
+   ========================================================= */
+
+.session-summary-overlay {
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 9999;
+
+    backdrop-filter: blur(5px);
+}
+
+
+.session-summary-card {
+    width: 650px;
+
+    max-width: 90%;
+
+    background: var(--card);
+
+    border-radius: 20px;
+
+    padding: 35px;
+
+    text-align: center;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.25);
+
+    animation: pop 0.35s ease;
+}
+
+.session-summary-card h1 {
+    margin-bottom: 10px;
+
+    color: #2563eb;
+}
+
+.session-summary-card h2 {
+    margin-top: 15px;
+
+    font-size: 22px;
+}
+
+
+/* =========================================================
+   SUMMARY GRID
+   ========================================================= */
+
+.summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 20px;
+
+    margin: 30px 0;
+}
+
+.summary-grid div {
+    background: #f8fafc;
+
+    padding: 20px;
+
+    border-radius: 15px;
+}
+
+.summary-grid h3 {
+    margin-bottom: 10px;
+
+    color: #555;
+}
+
+.summary-grid p {
+    font-size: 28px;
+
+    font-weight: bold;
+
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   NEXT PRACTICE
+   ========================================================= */
+
+.next-practice-box {
+    margin: 25px 0;
+
+    padding: 20px;
+
+    background: #eef5ff;
+
+    border-left: 6px solid #2563eb;
+
+    border-radius: 15px;
+
+    text-align: left;
+}
+
+.next-practice-box h2 {
+    margin: 10px 0;
+
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   SUMMARY BUTTONS
+   ========================================================= */
+
+.summary-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 20px;
+
+    margin-top: 30px;
+}
+
+.secondary-btn {
+    padding: 14px 24px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #22c55e;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.secondary-btn:hover {
+    background: #16a34a;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+/* Tablet */
+
+@media (max-width: 1200px) {
+
+    .practice-layout {
+        grid-template-columns: 320px 1fr;
+        gap: 18px;
+    }
+
+}
+
+
+/* Smaller screens */
+
+@media (max-width:1000px){
+
+.lesson-top-row{
+
+    grid-template-columns:1fr;
+
+}
+
+.lesson-bottom-row{
+
+    grid-template-columns:1fr;
+
+}
+
+    .left-panel,
+    .right-panel,
+    .center-panel {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    min-width: 0;
+}
+
+    .session-box {
+        grid-template-columns: 1fr;
+    }
+
+    .assessment-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .progress-track {
+        width: 100%;
+    }
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .practice-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-buttons {
+        flex-direction: column;
+    }
+
+}
+
+/* =========================================
+   AI RECOGNITION CARD
+========================================= */
+
+.live-status-card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.recognition-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.recognition-header h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.recognition-header p {
+    margin: 5px 0 0;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.recognition-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.recognition-status.stable {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.recognition-status.waiting {
+    background: #fef3c7;
+    color: #a16207;
+}
+
+/* =========================================
+   PREDICTION
+========================================= */
+
+.prediction-display {
+    text-align: center;
+    padding: 18px 10px 22px;
+}
+
+.prediction-label {
+    display: block;
+    color: #6b7280;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.prediction-display h1 {
+    margin: 0;
+    font-size: 72px;
+    line-height: 1;
+    color: #2563eb;
+}
+
+/* =========================================
+   METRICS
+========================================= */
+
+.recognition-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.recognition-metric {
+    width: 100%;
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.metric-header span {
+    color: #4b5563;
+    font-weight: 600;
+}
+
+.metric-header strong {
+    color: var(--text);
+}
+
+/* =========================================
+   PROGRESS BAR
+========================================= */
+
+.metric-progress {
+    width: 100%;
+    height: 12px;
+    background: #e5e7eb;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.metric-progress-fill {
+    height: 100%;
+    border-radius: 20px;
+    transition: width 0.3s ease;
+}
+
+.confidence-fill {
+    background: linear-gradient(
+        90deg,
+        #60a5fa,
+        #2563eb
+    );
+}
+
+.stability-fill {
+    background: linear-gradient(
+        90deg,
+        #facc15,
+        #22c55e
+    );
+}
+
+/* =========================================
+   STABLE FRAME COUNTER
+========================================= */
+
+.stable-frame-section {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.stable-frame-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.stable-frame-header span {
+    color: #4b5563;
+    font-weight: 600;
+}
+
+.stable-frame-header strong {
+    color: #2563eb;
+}
+
+.frame-dots {
+    display: flex;
+    gap: 7px;
+}
+
+.frame-dot {
+    flex: 1;
+    height: 7px;
+    border-radius: 10px;
+    background: #e5e7eb;
+    transition: 0.25s ease;
+}
+
+.frame-dot.active {
+    background: #22c55e;
+}
+
+/* =========================================
+   NO PREDICTION
+========================================= */
+
+.prediction-placeholder {
+    text-align: center;
+    padding: 35px 15px;
+}
+
+.placeholder-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.prediction-placeholder p {
+    margin: 0;
+    font-weight: 600;
+    color: #374151;
+}
+
+.prediction-placeholder span {
+    display: block;
+    margin-top: 6px;
+    color: #9ca3af;
+    font-size: 13px;
+}
+/* ===================================
+   Practice Header
+=================================== */
+
+.practice-header{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:#ffffff;
+
+    padding:22px 28px;
+
+    border-radius:18px;
+
+    margin-bottom:24px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+
+}
+
+.practice-title{
+
+    display:flex;
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.practice-letter{
+
+    width:64px;
+    height:64px;
+
+    border-radius:16px;
+
+    background:#4f46e5;
+
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:28px;
+    font-weight:700;
+
+}
+
+.practice-title h2{
+
+    margin:0;
+
+    font-size:24px;
+
+    color:#111827;
+
+}
+
+.practice-title p{
+
+    margin-top:5px;
+
+    color: var(--secondary);
+
+    font-size:15px;
+
+}
+
+.practice-actions{
+
+    display:flex;
+    gap:14px;
+
+}
+/* =========================================
+   START PRACTICE BUTTON
+========================================= */
+
+.start-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-width: 190px;
+    height: 52px;
+    padding: 0 24px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.25);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.start-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    background: linear-gradient(135deg, #4338ca, #4f46e5);
+
+    box-shadow: 0 9px 22px rgba(79, 70, 229, 0.32);
+}
+
+.start-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.start-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    box-shadow: none;
+}/* =========================================
+   START PRACTICE BUTTON
+========================================= */
+
+.start-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-width: 190px;
+    height: 52px;
+    padding: 0 24px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.25);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.start-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    background: linear-gradient(135deg, #4338ca, #4f46e5);
+
+    box-shadow: 0 9px 22px rgba(79, 70, 229, 0.32);
+}
+
+.start-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.start-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    box-shadow: none;
+}

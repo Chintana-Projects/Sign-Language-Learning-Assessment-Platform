@@ -1,0 +1,19 @@
+{
+    "experiment_id": "experiment_001",
+    "dataset_version": "generated/landmarks.csv",
+    "feature_version": "MediaPipe Hands - 21 landmarks - x,y,z (63 features)",
+    "model_used": "Random Forest",
+    "parameters": {
+        "n_estimators": 100,
+        "random_state": 42
+    },
+    "metrics": [
+        "accuracy",
+        "precision",
+        "recall",
+        "f1_score",
+        "training_time"
+    ],
+    "date": "2026-07-31",
+    "engineer_name": "SignSync Team"
+}

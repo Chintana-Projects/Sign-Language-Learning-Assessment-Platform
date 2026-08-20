@@ -1,0 +1,494 @@
+/* =========================================
+   WEEKLY PROGRESS CARD
+========================================= */
+
+.weekly-progress-card {
+    width: 100%;
+    box-sizing: border-box;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #fafaff 100%
+        );
+
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    padding: 18px;
+
+    margin-top: 18px;
+
+    box-shadow:
+        0 5px 18px rgba(15, 23, 42, 0.05);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.weekly-progress-card:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.weekly-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 14px;
+
+    margin-bottom: 18px;
+}
+
+.weekly-title-section {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+.weekly-icon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #eef2ff;
+
+    font-size: 15px;
+}
+
+.weekly-title-section h2 {
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.weekly-title-section p {
+    margin: 2px 0 0;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+.weekly-status {
+    padding: 6px 10px;
+
+    background: #f5f3ff;
+    color: #6d28d9;
+
+    border-radius: 16px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   MAIN SECTION
+========================================= */
+
+.weekly-main {
+    display: grid;
+
+    grid-template-columns: 130px 1fr;
+
+    gap: 22px;
+
+    align-items: center;
+}
+
+
+/* =========================================
+   CIRCLE
+========================================= */
+
+.weekly-circle-wrapper {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.weekly-circle {
+    width: 105px;
+    height: 105px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    background:
+        conic-gradient(
+            #4f46e5 var(--weekly-progress),
+            #e5e7eb var(--weekly-progress)
+        );
+}
+
+.weekly-circle::before {
+    content: "";
+
+    position: absolute;
+
+    width: 85px;
+    height: 85px;
+
+    border-radius: 50%;
+
+    background: white;
+}
+
+.weekly-circle-inner {
+    position: relative;
+
+    z-index: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+}
+
+.weekly-circle-inner strong {
+    color: #111827;
+
+    font-size: 22px;
+
+    line-height: 1;
+}
+
+.weekly-circle-inner span {
+    margin-top: 4px;
+
+    color: #9ca3af;
+
+    font-size: 9px;
+}
+
+
+/* =========================================
+   DETAILS
+========================================= */
+
+.weekly-details {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+.weekly-attempt-stat {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 8px 10px;
+
+    background: #f8fafc;
+
+    border: 1px solid #eef0f4;
+
+    border-radius: 9px;
+}
+
+.weekly-stat-icon {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    font-size: 13px;
+}
+
+.weekly-attempt-stat strong {
+    display: block;
+
+    color: #111827;
+
+    font-size: 15px;
+
+    line-height: 1.1;
+}
+
+.weekly-attempt-stat div span {
+    color: #9ca3af;
+
+    font-size: 9px;
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.weekly-message {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 8px 10px;
+
+    border-radius: 9px;
+
+    background: #eef2ff;
+
+    color: #4f46e5;
+}
+
+.weekly-message span {
+    font-size: 13px;
+}
+
+.weekly-message p {
+    margin: 0;
+
+    font-size: 10px;
+
+    line-height: 1.3;
+
+    color: #4b5563;
+}
+
+
+/* =========================================
+   WEEKLY ACTIVITY
+========================================= */
+
+.weekly-activity {
+    margin-top: 18px;
+
+    padding-top: 14px;
+
+    border-top: 1px solid #eef0f4;
+}
+
+.weekly-activity-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+}
+
+.weekly-activity-header span:first-child {
+    color: #374151;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+.weekly-activity-header span:last-child {
+    color: #9ca3af;
+
+    font-size: 10px;
+}
+
+
+/* =========================================
+   DAYS
+========================================= */
+
+.weekly-days {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    gap: 7px;
+}
+
+.weekly-day {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+.day-dot {
+    width: 25px;
+    height: 25px;
+
+    border-radius: 8px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #f1f5f9;
+
+    border: 1px solid #e5e7eb;
+
+    color: #9ca3af;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.day-dot.active {
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #7c3aed
+        );
+
+    border-color: transparent;
+
+    color: white;
+
+    box-shadow:
+        0 3px 7px rgba(79, 70, 229, 0.22);
+}
+
+.weekly-day:hover .day-dot {
+    transform: translateY(-1px);
+}
+
+.weekly-day > span {
+    color: #9ca3af;
+
+    font-size: 9px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.weekly-footer {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+    padding-top: 12px;
+
+    border-top: 1px solid #eef0f4;
+
+    color: #9ca3af;
+
+    font-size: 9px;
+}
+
+.weekly-footer span:first-child {
+    color: #6b7280;
+
+    font-weight: 600;
+}
+
+.weekly-footer span:last-child {
+    color: #4f46e5;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .weekly-progress-card {
+        padding: 15px;
+    }
+
+    .weekly-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        margin-bottom: 15px;
+    }
+
+    .weekly-main {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+    .weekly-circle-wrapper {
+        justify-content: flex-start;
+    }
+
+    .weekly-circle {
+        width: 90px;
+        height: 90px;
+    }
+
+    .weekly-circle::before {
+        width: 72px;
+        height: 72px;
+    }
+
+    .weekly-days {
+        gap: 4px;
+    }
+
+    .day-dot {
+        width: 23px;
+        height: 23px;
+    }
+
+    .weekly-footer {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+}

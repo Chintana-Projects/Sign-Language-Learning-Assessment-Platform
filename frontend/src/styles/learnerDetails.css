@@ -1,0 +1,597 @@
+/* =========================================
+   LEARNER DETAILS PAGE
+========================================= */
+
+.learner-details-page {
+    min-height: 100vh;
+    background: #f5f7fb;
+    padding: 32px 40px;
+    font-family: inherit;
+}
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.back-button {
+    border: none;
+    background: transparent;
+    color: #4f46e5;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 0;
+    margin-bottom: 28px;
+}
+
+.back-button:hover {
+    color: #3730a3;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.learner-details-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 32px;
+}
+
+.learner-details-avatar {
+    width: 64px;
+    height: 64px;
+
+    border-radius: 50%;
+
+    background: #e0e7ff;
+    color: #4338ca;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.learner-details-header h1 {
+    margin: 0 0 6px;
+
+    font-size: 30px;
+    color: #111827;
+}
+
+.learner-details-header p {
+    margin: 0;
+
+    color: #6b7280;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   OVERVIEW CARDS
+========================================= */
+
+.learner-overview {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 28px;
+}
+
+.overview-card {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.04);
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.overview-card span {
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+.overview-card strong {
+    color: #111827;
+
+    font-size: 26px;
+}
+
+
+/* =========================================
+   PROGRESS SECTION
+========================================= */
+
+.learner-progress-section {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    padding: 28px;
+
+    margin-bottom: 24px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.learner-progress-section h2 {
+    margin: 0 0 6px;
+
+    color: #111827;
+    font-size: 20px;
+}
+
+.learner-progress-section p {
+    margin: 0 0 24px;
+
+    color: #6b7280;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   LARGE PROGRESS BAR
+========================================= */
+
+.large-progress-bar {
+    width: 100%;
+    height: 12px;
+
+    background: #e5e7eb;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.large-progress-fill {
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #2563eb,
+            #10b981
+        );
+
+    border-radius: 20px;
+
+    transition: width 0.4s ease;
+}
+
+.progress-percentage {
+    margin-top: 10px;
+
+    text-align: right;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #374151;
+}
+
+
+/* =========================================
+   STATUS SECTION
+========================================= */
+
+.learner-status-section {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.learner-status-section h2 {
+    margin: 0 0 18px;
+
+    font-size: 20px;
+    color: #111827;
+}
+
+.status-card {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 20px;
+
+    background: #f9fafb;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+}
+
+.status-card strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #111827;
+
+    font-size: 15px;
+}
+
+.status-card p {
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   STATUS BADGE
+========================================= */
+
+.status-badge {
+    padding: 7px 14px;
+
+    border-radius: 20px;
+
+    background: #dcfce7;
+    color: #15803d;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .learner-overview {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .learner-details-page {
+        padding: 24px 18px;
+    }
+
+    .learner-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .status-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+}
+/* =========================================
+   PERFORMANCE SECTION
+========================================= */
+
+.learner-performance-section {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    padding: 28px;
+
+    margin-bottom: 24px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.learner-performance-section h2 {
+    margin: 0 0 6px;
+
+    color: #111827;
+    font-size: 20px;
+}
+
+.learner-performance-section > p {
+    margin: 0 0 22px;
+
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.performance-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 16px;
+}
+
+.performance-card {
+    background: #f9fafb;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.performance-card span {
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+.performance-card strong {
+    color: #111827;
+
+    font-size: 24px;
+}
+
+
+/* =========================================
+   PERFORMANCE RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .performance-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .performance-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* =========================================
+   PERFORMANCE OVERVIEW
+========================================= */
+
+.learner-performance-section {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    padding: 28px;
+
+    margin-bottom: 24px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.learner-performance-section h2 {
+    margin: 0 0 6px;
+
+    font-size: 20px;
+    color: #111827;
+}
+
+.learner-performance-section > p {
+    margin: 0 0 24px;
+
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.performance-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 16px;
+}
+
+.performance-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px;
+
+    background: #f9fafb;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+}
+
+.performance-icon {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 10px;
+
+    background: #eef2ff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+}
+
+.performance-card div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.performance-card span:not(.performance-icon) {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.performance-card strong {
+    font-size: 17px;
+    color: #111827;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .performance-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .performance-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* =========================================
+   RECENT PRACTICE ACTIVITY
+========================================= */
+
+.learner-activity-section {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.learner-activity-section h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+    color: #111827;
+}
+
+.learner-activity-section > p {
+    margin: 0 0 20px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.activity-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 14px 16px;
+
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+.activity-letter {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 10px;
+
+    background: #e0e7ff;
+    color: #4338ca;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.activity-info {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.activity-info strong {
+    font-size: 14px;
+    color: #111827;
+}
+
+.activity-info span {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.activity-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.activity-status.correct {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.activity-status.needs-practice {
+    background: #fef3c7;
+    color: #b45309;
+}

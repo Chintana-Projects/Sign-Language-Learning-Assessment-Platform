@@ -1,0 +1,437 @@
+/* =========================================================
+   SETTINGS PAGE
+========================================================= */
+.settings-page {
+    min-height: 100vh;
+    padding: 35px 42px 50px;
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    color: #111827;
+}
+/* =========================================================
+   HEADER
+========================================================= */
+
+.settings-header {
+    max-width: 1000px;
+    margin-bottom: 32px;
+
+    padding: 28px 30px;
+
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    box-shadow:
+        0 6px 20px rgba(15, 23, 42, 0.05);
+}
+
+.settings-eyebrow {
+    display: inline-flex;
+
+    align-items: center;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1.6px;
+
+    color: #6366f1;
+
+    margin-bottom: 7px;
+}
+
+.settings-header h1 {
+    margin: 0;
+
+    font-size: 32px;
+    font-weight: 800;
+
+    letter-spacing: -0.8px;
+}
+
+.settings-header p {
+    margin: 8px 0 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.settings-section {
+    max-width: 1000px;
+
+    margin-bottom: 30px;
+}
+
+.settings-section h2 {
+    margin: 5px 0 14px;
+
+    font-size: 19px;
+    font-weight: 750;
+
+    letter-spacing: -0.2px;
+}
+
+
+/* =========================================================
+   SETTINGS CARD
+========================================================= */
+
+.settings-card {
+    position: relative;
+
+    overflow: hidden;
+
+    background: var(--card, #ffffff);
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 25px rgba(15, 23, 42, 0.05);
+}
+
+.settings-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 4px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            180deg,
+            #6366f1,
+            #8b5cf6
+        );
+}
+
+
+/* =========================================================
+   PLATFORM INFORMATION
+========================================================= */
+
+.setting-row {
+    min-height: 72px;
+
+    padding: 0 25px 0 28px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #f1f5f9;
+
+    transition:
+        background 0.2s ease;
+}
+
+.setting-row:last-child {
+    border-bottom: none;
+}
+
+.setting-row:hover {
+    background: #f8faff;
+}
+
+.setting-row span {
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+.setting-row strong {
+    font-size: 14px;
+
+    color: #1e293b;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-good {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 6px 11px;
+
+    border-radius: 20px;
+
+    background: #ecfdf5;
+
+    color: #059669 !important;
+
+    font-size: 12px !important;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   PREFERENCES
+========================================================= */
+
+.preference-row {
+    min-height: 82px;
+
+    padding: 16px 25px 16px 28px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border-bottom: 1px solid #f1f5f9;
+
+    transition:
+        background 0.2s ease;
+}
+
+.preference-row:last-child {
+    border-bottom: none;
+}
+
+.preference-row:hover {
+    background: #f8faff;
+}
+
+.preference-row strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 14px;
+
+    color: #1e293b;
+}
+
+.preference-row p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   SWITCH
+========================================================= */
+
+.switch {
+    position: relative;
+
+    width: 50px;
+    height: 28px;
+
+    flex-shrink: 0;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+
+    inset: 0;
+
+    background: #cbd5e1;
+
+    border-radius: 30px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.slider::before {
+    content: "";
+
+    position: absolute;
+
+    width: 22px;
+    height: 22px;
+
+    left: 3px;
+    top: 3px;
+
+    background: white;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.18);
+
+    transition:
+        transform 0.25s ease;
+}
+
+.switch input:checked + .slider {
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #4f46e5
+        );
+
+    box-shadow:
+        0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(22px);
+}
+
+
+/* =========================================================
+   SYSTEM ACTIONS
+========================================================= */
+
+.settings-actions {
+    display: flex;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+}
+
+.settings-button {
+    height: 44px;
+
+    padding: 0 19px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #6366f1
+        );
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 15px rgba(79, 70, 229, 0.20);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.settings-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 20px rgba(79, 70, 229, 0.28);
+}
+
+.settings-button.secondary {
+    background: white;
+
+    color: #4f46e5;
+
+    border: 1px solid #c7d2fe;
+
+    box-shadow: none;
+}
+
+.settings-button.secondary:hover {
+    background: #eef2ff;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .settings-page {
+        padding: 25px 18px 40px;
+    }
+
+    .settings-header {
+        padding: 23px;
+    }
+
+    .settings-header h1 {
+        font-size: 27px;
+    }
+
+    .setting-row,
+    .preference-row {
+        padding-left: 22px;
+        padding-right: 20px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .setting-row {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        justify-content: center;
+
+        gap: 5px;
+    }
+
+    .preference-row {
+        align-items: flex-start;
+    }
+
+    .settings-actions {
+        flex-direction: column;
+    }
+
+    .settings-button {
+        width: 100%;
+    }
+
+}
