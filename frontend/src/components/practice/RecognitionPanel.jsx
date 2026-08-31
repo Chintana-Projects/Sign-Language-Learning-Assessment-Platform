@@ -4,6 +4,7 @@ export default function RecognitionPanel({
     handDetected,
     prediction,
     confidence,
+    accuracy,
     checking,
     checkResult,
     onCheck,
@@ -11,21 +12,36 @@ export default function RecognitionPanel({
     disabled
 }) {
 
-    const safeConfidence =
-        Math.min(
-            Math.max(
-                Number(confidence) || 0,
-                0
-            ),
-            100
-        );
+    // ==========================================
+    // SAFE CONFIDENCE
+    // ==========================================
+
+    const safeConfidence = Math.min(
+        Math.max(
+            Number(confidence) || 0,
+            0
+        ),
+        100
+    );
+
+    // ==========================================
+    // SAFE ACCURACY
+    // ==========================================
+
+    const safeAccuracy = Math.min(
+        Math.max(
+            Number(accuracy) || 0,
+            0
+        ),
+        100
+    );
 
     return (
         <div className="recognition-panel">
 
             {/* ==========================================
                 HEADER
-               ========================================== */}
+            ========================================== */}
 
             <div className="recognition-header">
 
@@ -36,7 +52,6 @@ export default function RecognitionPanel({
                     </span>
 
                     <h3>
-
                         {checkResult === "correct"
                             ? "Sign verified"
 
@@ -50,7 +65,6 @@ export default function RecognitionPanel({
                                         ? "Hand detected"
                                         : "Show your hand"
                         }
-
                     </h3>
 
                 </div>
@@ -66,6 +80,7 @@ export default function RecognitionPanel({
 
                                 : handDetected
                                     ? "recognition-status detected"
+
                                     : "recognition-status waiting"
                     }
                 >
@@ -93,7 +108,7 @@ export default function RecognitionPanel({
 
             {/* ==========================================
                 CORRECT RESULT
-               ========================================== */}
+            ========================================== */}
 
             {checkResult === "correct" && (
 
@@ -122,7 +137,7 @@ export default function RecognitionPanel({
 
             {/* ==========================================
                 INCORRECT RESULT
-               ========================================== */}
+            ========================================== */}
 
             {checkResult === "incorrect" && (
 
@@ -151,7 +166,7 @@ export default function RecognitionPanel({
 
             {/* ==========================================
                 ERROR
-               ========================================== */}
+            ========================================== */}
 
             {checkResult === "error" && (
 
@@ -180,9 +195,14 @@ export default function RecognitionPanel({
 
             {/* ==========================================
                 STATS
-               ========================================== */}
+            ========================================== */}
 
             <div className="recognition-stats">
+
+
+                {/* ======================================
+                    PREDICTED SIGN
+                ====================================== */}
 
                 <div className="recognition-stat">
 
@@ -196,6 +216,10 @@ export default function RecognitionPanel({
 
                 </div>
 
+
+                {/* ======================================
+                    CONFIDENCE
+                ====================================== */}
 
                 <div className="recognition-stat">
 
@@ -211,33 +235,74 @@ export default function RecognitionPanel({
 
 
                 {/* ======================================
-                    CONFIDENCE
-                   ====================================== */}
+                    CONFIDENCE + ACCURACY
+                ====================================== */}
 
-                <div className="confidence-section">
+                <div className="recognition-metrics">
 
-                    <div className="confidence-header">
 
-                        <span>
-                            Recognition Confidence
-                        </span>
+                    {/* ==================================
+                        RECOGNITION CONFIDENCE
+                    ================================== */}
 
-                        <span>
-                            {safeConfidence.toFixed(1)}%
-                        </span>
+                    <div className="confidence-section">
+
+                        <div className="confidence-header">
+
+                            <span>
+                                Recognition Confidence
+                            </span>
+
+                            <span>
+                                {safeConfidence.toFixed(1)}%
+                            </span>
+
+                        </div>
+
+
+                        <div className="confidence-track">
+
+                            <div
+                                className="confidence-fill"
+                                style={{
+                                    width: `${safeConfidence}%`
+                                }}
+                            />
+
+                        </div>
 
                     </div>
 
 
-                    <div className="confidence-track">
+                    {/* ==================================
+                        SIGN ACCURACY
+                    ================================== */}
 
-                        <div
-                            className="confidence-fill"
-                            style={{
-                                width:
-                                    `${safeConfidence}%`
-                            }}
-                        />
+                    <div className="accuracy-section">
+
+                        <div className="accuracy-header">
+
+                            <span>
+                                Sign Accuracy
+                            </span>
+
+                            <span>
+                                {safeAccuracy.toFixed(1)}%
+                            </span>
+
+                        </div>
+
+
+                        <div className="accuracy-track">
+
+                            <div
+                                className="accuracy-fill"
+                                style={{
+                                    width: `${safeAccuracy}%`
+                                }}
+                            />
+
+                        </div>
 
                     </div>
 
@@ -246,46 +311,47 @@ export default function RecognitionPanel({
 
                 {/* ======================================
                     BUTTON
-                   ====================================== */}
-{/* ======================================
-    BUTTON
-   ====================================== */}
+                ====================================== */}
 
-{checkResult === "incorrect" ? (
+                {checkResult === "incorrect" ? (
 
-    <button
-        type="button"
-        className="check-btn try-again-btn"
-        onClick={onTryAgain}
-    >
-        ↻ Try Again
-    </button>
+                    <button
+                        type="button"
+                        className="check-btn try-again-btn"
+                        onClick={onTryAgain}
+                    >
+                        ↻ Try Again
+                    </button>
 
-) : checkResult === "correct" ? (
+                ) : checkResult === "correct" ? (
 
-    <button
-        type="button"
-        className="check-btn result-correct-btn"
-        disabled
-    >
-        ✓ Correct
-    </button>
+                    <button
+                        type="button"
+                        className="check-btn result-correct-btn"
+                        disabled
+                    >
+                        ✓ Correct
+                    </button>
 
-) : (
+                ) : (
 
-    <button
-        type="button"
-        className="check-btn"
-        onClick={onCheck}
-        disabled={disabled || checking}
-    >
-        {checking
-            ? "Checking..."
-            : "✓ Check Sign"
-        }
-    </button>
+                    <button
+                        type="button"
+                        className="check-btn"
+                        onClick={onCheck}
+                        disabled={
+                            disabled ||
+                            checking
+                        }
+                    >
+                        {checking
+                            ? "Checking..."
+                            : "✓ Check Sign"
+                        }
+                    </button>
 
-)}
+                )}
+
             </div>
 
         </div>

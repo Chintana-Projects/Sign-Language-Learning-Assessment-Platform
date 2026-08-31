@@ -497,3 +497,23 @@
     }
 
 }
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    height: auto;
+}
+
+.main-content {
+    flex: 1;
+}
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    position: sticky;
+    top: 0;
+}

@@ -1,34 +1,12 @@
 import "../../styles/dashboard/WeeklyProgress.css";
 
 export default function WeeklyProgress({
-    history = []
+    weeklyActivity = []
 }) {
-    const today = new Date();
 
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(
-        today.getDate() - today.getDay()
-    );
-    startOfWeek.setHours(0, 0, 0, 0);
-
-    const weeklyAttempts = history.filter((attempt) => {
-        if (!attempt.timestamp) return false;
-
-        const date = new Date(attempt.timestamp);
-
-        return date >= startOfWeek;
-    });
-
-    const daysPracticed = new Set(
-        weeklyAttempts.map(
-            (attempt) =>
-                new Date(attempt.timestamp).getDay()
-        )
-    ).size;
-
-    const consistency = Math.round(
-        (daysPracticed / 7) * 100
-    );
+    // ==========================================
+    // DAY NAMES
+    // ==========================================
 
     const dayNames = [
         "Sun",
@@ -40,18 +18,124 @@ export default function WeeklyProgress({
         "Sat"
     ];
 
-    const practicedDays = dayNames.map((day, index) => {
-        return daysPracticed > 0 &&
-            weeklyAttempts.some(
-                (attempt) =>
-                    new Date(attempt.timestamp).getDay() === index
+
+    // ==========================================
+    // NORMALIZE BACKEND DATA
+    // ==========================================
+
+    const activity = Array.isArray(weeklyActivity)
+        ? weeklyActivity
+        : [];
+
+
+    // ==========================================
+    // TOTAL PRACTICE ATTEMPTS
+    // ==========================================
+
+    const totalAttempts = activity.reduce(
+        (total, day) => {
+            return total + Number(
+                day.attempts || 0
             );
+        },
+        0
+    );
+
+
+    // ==========================================
+    // TOTAL ACTIVE DAYS
+    // ==========================================
+
+    const daysPracticed = activity.filter(
+        (day) =>
+            Number(day.attempts || 0) > 0
+    ).length;
+
+
+    // ==========================================
+    // WEEKLY CONSISTENCY
+    // ==========================================
+
+    const consistency = Math.round(
+        (daysPracticed / 7) * 100
+    );
+
+
+    // ==========================================
+    // MAP BACKEND DATES TO WEEK DAYS
+    // ==========================================
+
+    const practicedDays = Array(7).fill(false);
+
+    activity.forEach((day) => {
+
+        if (
+            !day.date ||
+            Number(day.attempts || 0) <= 0
+        ) {
+            return;
+        }
+
+        const date = new Date(
+            `${day.date}T00:00:00`
+        );
+
+        if (Number.isNaN(date.getTime())) {
+            return;
+        }
+
+        const dayIndex = date.getDay();
+
+        practicedDays[dayIndex] = true;
+
     });
 
+
+    // ==========================================
+    // STATUS
+    // ==========================================
+
+    let status = "Keep going";
+
+    if (consistency >= 70) {
+        status = "Excellent";
+    } else if (consistency >= 40) {
+        status = "Good progress";
+    }
+
+
+    // ==========================================
+    // MESSAGE
+    // ==========================================
+
+    let message =
+        "Practice a little each day to build consistency.";
+
+    if (consistency === 100) {
+
+        message =
+            "Amazing consistency! You practiced every day.";
+
+    } else if (consistency >= 70) {
+
+        message =
+            "Great work! Keep your practice streak going.";
+
+    }
+
+
+    // ==========================================
+    // RENDER
+    // ==========================================
+
     return (
+
         <div className="weekly-progress-card">
 
-            {/* ================= HEADER ================= */}
+
+            {/* ==================================
+                HEADER
+            ================================== */}
 
             <div className="weekly-header">
 
@@ -62,6 +146,7 @@ export default function WeeklyProgress({
                     </div>
 
                     <div>
+
                         <h2>
                             Weekly Progress
                         </h2>
@@ -69,26 +154,29 @@ export default function WeeklyProgress({
                         <p>
                             Your practice consistency this week
                         </p>
+
                     </div>
 
                 </div>
 
+
                 <div className="weekly-status">
-                    {consistency >= 70
-                        ? "Excellent"
-                        : consistency >= 40
-                            ? "Good progress"
-                            : "Keep going"}
+                    {status}
                 </div>
 
             </div>
 
 
-            {/* ================= MAIN STATS ================= */}
+            {/* ==================================
+                MAIN STATS
+            ================================== */}
 
             <div className="weekly-main">
 
-                {/* Progress Circle */}
+
+                {/* ==================================
+                    PROGRESS CIRCLE
+                ================================== */}
 
                 <div className="weekly-circle-wrapper">
 
@@ -99,6 +187,7 @@ export default function WeeklyProgress({
                                 `${consistency * 3.6}deg`
                         }}
                     >
+
                         <div className="weekly-circle-inner">
 
                             <strong>
@@ -110,14 +199,22 @@ export default function WeeklyProgress({
                             </span>
 
                         </div>
+
                     </div>
 
                 </div>
 
 
-                {/* Statistics */}
+                {/* ==================================
+                    STATISTICS
+                ================================== */}
 
                 <div className="weekly-details">
+
+
+                    {/* ==================================
+                        TOTAL ATTEMPTS
+                    ================================== */}
 
                     <div className="weekly-attempt-stat">
 
@@ -126,20 +223,26 @@ export default function WeeklyProgress({
                         </span>
 
                         <div>
+
                             <strong>
-                                {weeklyAttempts.length}
+                                {totalAttempts}
                             </strong>
 
                             <span>
                                 Practice attempt
-                                {weeklyAttempts.length !== 1
+                                {totalAttempts !== 1
                                     ? "s"
                                     : ""}
                             </span>
+
                         </div>
 
                     </div>
 
+
+                    {/* ==================================
+                        ACTIVE DAYS
+                    ================================== */}
 
                     <div className="weekly-attempt-stat">
 
@@ -148,6 +251,7 @@ export default function WeeklyProgress({
                         </span>
 
                         <div>
+
                             <strong>
                                 {daysPracticed}
                             </strong>
@@ -158,21 +262,24 @@ export default function WeeklyProgress({
                                     ? "s"
                                     : ""}
                             </span>
+
                         </div>
 
                     </div>
 
 
+                    {/* ==================================
+                        MESSAGE
+                    ================================== */}
+
                     <div className="weekly-message">
 
-                        <span>💡</span>
+                        <span>
+                            💡
+                        </span>
 
                         <p>
-                            {consistency === 100
-                                ? "Amazing consistency! You practiced every day."
-                                : consistency >= 70
-                                    ? "Great work! Keep your practice streak going."
-                                    : "Practice a little each day to build consistency."}
+                            {message}
                         </p>
 
                     </div>
@@ -182,7 +289,9 @@ export default function WeeklyProgress({
             </div>
 
 
-            {/* ================= WEEKLY ACTIVITY ================= */}
+            {/* ==================================
+                WEEKLY ACTIVITY
+            ================================== */}
 
             <div className="weekly-activity">
 
@@ -201,39 +310,45 @@ export default function WeeklyProgress({
 
                 <div className="weekly-days">
 
-                    {dayNames.map((day, index) => (
-
-                        <div
-                            key={day}
-                            className="weekly-day"
-                        >
+                    {dayNames.map(
+                        (day, index) => (
 
                             <div
-                                className={
-                                    practicedDays[index]
-                                        ? "day-dot active"
-                                        : "day-dot"
-                                }
+                                key={day}
+                                className="weekly-day"
                             >
-                                {practicedDays[index]
-                                    ? "✓"
-                                    : ""}
+
+                                <div
+                                    className={
+                                        practicedDays[index]
+                                            ? "day-dot active"
+                                            : "day-dot"
+                                    }
+                                >
+
+                                    {practicedDays[index]
+                                        ? "✓"
+                                        : ""}
+
+                                </div>
+
+                                <span>
+                                    {day}
+                                </span>
+
                             </div>
 
-                            <span>
-                                {day}
-                            </span>
-
-                        </div>
-
-                    ))}
+                        )
+                    )}
 
                 </div>
 
             </div>
 
 
-            {/* ================= BOTTOM ================= */}
+            {/* ==================================
+                FOOTER
+            ================================== */}
 
             <div className="weekly-footer">
 
@@ -242,13 +357,17 @@ export default function WeeklyProgress({
                 </span>
 
                 <span>
+
                     {7 - daysPracticed > 0
                         ? `${7 - daysPracticed} days remaining`
                         : "Week completed 🎉"}
+
                 </span>
 
             </div>
 
         </div>
+
     );
+
 }

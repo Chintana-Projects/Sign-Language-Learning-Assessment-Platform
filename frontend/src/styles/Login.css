@@ -979,7 +979,7 @@ body.dark .create-account-link:hover {
     color: #374151;
 }
 
-.input-group input {
+.register-card .input-group input {
     width: 100%;
     height: 46px;
     box-sizing: border-box;
@@ -1001,11 +1001,11 @@ body.dark .create-account-link:hover {
         background 0.2s ease;
 }
 
-.input-group input::placeholder {
+.register-card .input-group input::placeholder {
     color: #9CA3AF;
 }
 
-.input-group input:focus {
+.register-card .input-group input:focus {
     border-color: #6366F1;
     background: #FFFFFF;
     box-shadow:
@@ -1384,4 +1384,58 @@ body.dark .create-account-link:hover {
     justify-content: center;
     width: min(560px, 100%);
     min-height: auto;
+}
+.login-input {
+    width: 100%;
+    padding: 16px 45px 16px 50px;
+    box-sizing: border-box;
+}
+.input-wrapper {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+
+.login-input {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding-left: 50px;
+    padding-right: 45px;
+}
+/* =========================================================
+   LOGIN INPUT ICON FIX
+========================================================= */
+
+.login-card .input-wrapper input,
+.login-card .input-wrapper select {
+    padding-left: 50px;
+    padding-right: 48px;
+}
+
+.login-card .input-wrapper {
+    position: relative;
+}
+
+.login-card .input-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 20px;
+    height: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 3;
+    pointer-events: none;
 }

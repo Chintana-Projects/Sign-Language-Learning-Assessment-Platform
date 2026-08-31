@@ -42,15 +42,15 @@ export default function RecentPracticeHistory({ history = [] }) {
                 <div style={listStyle}>
                     {recentHistory.map((attempt, index) => {
                         const expected =
-                            String(attempt.alphabet || "-").toUpperCase();
+    String(attempt.expected || "-").toUpperCase();
 
                         const predicted =
                             String(attempt.predicted || "-").toUpperCase();
 
                         const confidence =
-                            Math.round(
-                                Number(attempt.confidence ?? 0) * 100
-                            );
+    Math.round(
+        Number(attempt.confidence ?? 0)
+    );
 
                         const correct = Boolean(attempt.correct);
 

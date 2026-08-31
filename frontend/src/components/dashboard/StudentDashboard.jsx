@@ -210,8 +210,13 @@ export default function StudentDashboard() {
 
 
     const practiceHistory =
-        profile.practice_history || [];
+    dashboard.history || [];
 
+const recentPractice =
+    dashboard.recent_practice || [];
+
+const weeklyActivity =
+    dashboard.weekly_activity || [];
 
     const alphabetMastery =
         profile.alphabet_mastery || {};
@@ -329,8 +334,8 @@ export default function StudentDashboard() {
                 <section style={sectionStyle}>
 
                     <WeeklyProgress
-                        history={practiceHistory}
-                    />
+    weeklyActivity={weeklyActivity}
+/>
 
                 </section>
 
@@ -368,8 +373,8 @@ export default function StudentDashboard() {
                 <section style={sectionStyle}>
 
                     <RecentPracticeHistory
-                        history={practiceHistory}
-                    />
+    history={recentPractice}
+/>
 
                 </section>
 

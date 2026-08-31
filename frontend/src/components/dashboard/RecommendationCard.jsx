@@ -1,10 +1,11 @@
 import { FaRobot, FaArrowRight, FaBolt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 export default function RecommendationCard({
+    nextPractice = null,
     recommendations = []
 }) {
     const recommendation =
-        recommendations?.[0] || {};
+        nextPractice || recommendations?.[0] || {};
 
     const letter =
         recommendation.alphabet ||

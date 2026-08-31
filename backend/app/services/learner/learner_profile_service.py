@@ -1,4 +1,3 @@
-
 import json
 import os
 from datetime import datetime
@@ -40,6 +39,7 @@ class LearnerProfileService:
             return
 
         try:
+
             with open(
                 self.profile_file,
                 "r",
@@ -50,6 +50,7 @@ class LearnerProfileService:
 
                 if isinstance(data, dict):
                     self.profiles = data
+
                 else:
                     self.profiles = {}
 
@@ -75,6 +76,7 @@ class LearnerProfileService:
             )
 
             if directory:
+
                 os.makedirs(
                     directory,
                     exist_ok=True
@@ -123,7 +125,10 @@ class LearnerProfileService:
     # CREATE DEFAULT PROFILE
     # =====================================================
 
-    def _create_default_profile(self, student_id):
+    def _create_default_profile(
+        self,
+        student_id
+    ):
 
         now = datetime.now().isoformat()
 
@@ -132,48 +137,94 @@ class LearnerProfileService:
         for letter in self.alphabets:
 
             alphabet_mastery[letter] = {
+
                 "accuracy": 0.0,
+
                 "average_confidence": 0.0,
+
                 "attempts": 0,
+
                 "correct": 0,
+
                 "incorrect": 0,
+
                 "confused_with": {},
+
                 "consecutive_correct": 0,
+
                 "consecutive_incorrect": 0,
+
                 "last_prediction": None,
+
                 "last_confidence": 0.0,
+
                 "last_practiced": None
             }
 
         return {
-            "student_id": student_id,
-            "created_at": now,
-            "last_updated": now,
-            "total_sessions": 0,
-            "total_attempts": 0,
-            "correct_attempts": 0,
-            "incorrect_attempts": 0,
-            "overall_accuracy": 0.0,
-            "completed_letters": [],
-"current_letter": "A",
-"next_letter": "A",
-"lesson_progress": {
-    "completed": 0,
-    "total": 26,
-    "percentage": 0.0
-},
-            "alphabet_mastery": alphabet_mastery
+
+            "student_id":
+                student_id,
+
+            "created_at":
+                now,
+
+            "last_updated":
+                now,
+
+            "total_sessions":
+                0,
+
+            "total_attempts":
+                0,
+
+            "correct_attempts":
+                0,
+
+            "incorrect_attempts":
+                0,
+
+            "overall_accuracy":
+                0.0,
+
+            "completed_letters":
+                [],
+
+            "current_letter":
+                "A",
+
+            "next_letter":
+                "A",
+
+            "lesson_progress": {
+
+                "completed":
+                    0,
+
+                "total":
+                    26,
+
+                "percentage":
+                    0.0
+            },
+
+            "alphabet_mastery":
+                alphabet_mastery
         }
 
     # =====================================================
     # CREATE PROFILE
     # =====================================================
 
-    def create_profile(self, student_id):
+    def create_profile(
+        self,
+        student_id
+    ):
 
         student_id = str(student_id)
 
         if student_id in self.profiles:
+
             return self.profiles[student_id]
 
         self.profiles[student_id] = (
@@ -190,7 +241,10 @@ class LearnerProfileService:
     # PROFILE EXISTS
     # =====================================================
 
-    def profile_exists(self, student_id):
+    def profile_exists(
+        self,
+        student_id
+    ):
 
         return str(student_id) in self.profiles
 
@@ -198,7 +252,10 @@ class LearnerProfileService:
     # INCREMENT SESSION
     # =====================================================
 
-    def increment_sessions(self, student_id):
+    def increment_sessions(
+        self,
+        student_id
+    ):
 
         student_id = str(student_id)
 
@@ -247,6 +304,7 @@ class LearnerProfileService:
         )
 
         if total == 0:
+
             return 0.0
 
         return round(
@@ -267,12 +325,19 @@ class LearnerProfileService:
             student_id
         )
 
-        return list(
-            profile.get(
-                "completed_letters",
-                []
-            )
+        completed = profile.get(
+            "completed_letters",
+            []
         )
+
+        if not isinstance(
+            completed,
+            list
+        ):
+
+            return []
+
+        return list(completed)
 
     # =====================================================
     # GET CURRENT LETTER
@@ -329,6 +394,44 @@ class LearnerProfileService:
         )
 
     # =====================================================
+    # GET PRACTICED LETTERS
+    # =====================================================
+
+    def get_practiced_letters(
+        self,
+        student_id
+    ):
+
+        profile = self.get_profile(
+            student_id
+        )
+
+        mastery = profile.get(
+            "alphabet_mastery",
+            {}
+        )
+
+        practiced = []
+
+        for letter in self.alphabets:
+
+            data = mastery.get(
+                letter,
+                {}
+            )
+
+            attempts = data.get(
+                "attempts",
+                0
+            )
+
+            if attempts > 0:
+
+                practiced.append(letter)
+
+        return practiced
+
+    # =====================================================
     # GET WEAK GESTURES
     # =====================================================
 
@@ -369,6 +472,7 @@ class LearnerProfileService:
                 attempts >= 3
                 and accuracy < 60
             ):
+
                 weak_gestures.append(
                     letter
                 )
@@ -416,6 +520,7 @@ class LearnerProfileService:
                 attempts >= 3
                 and accuracy >= 90
             ):
+
                 strong_gestures.append(
                     letter
                 )
@@ -455,6 +560,7 @@ class LearnerProfileService:
             )
 
             if not confused_with:
+
                 continue
 
             for predicted, count in (
@@ -462,9 +568,15 @@ class LearnerProfileService:
             ):
 
                 confusion_data.append({
-                    "expected": letter,
-                    "predicted": predicted,
-                    "count": count
+
+                    "expected":
+                        letter,
+
+                    "predicted":
+                        predicted,
+
+                    "count":
+                        count
                 })
 
         confusion_data.sort(
@@ -490,12 +602,15 @@ class LearnerProfileService:
         )
 
         if accuracy >= 90:
+
             return "Mastered"
 
         elif accuracy >= 70:
+
             return "Good"
 
         elif accuracy >= 40:
+
             return "Improving"
 
         return "Beginner"
@@ -538,8 +653,13 @@ class LearnerProfileService:
         if weak_gestures:
 
             recommendations.append({
-                "type": "PRACTICE",
-                "priority": "HIGH",
+
+                "type":
+                    "PRACTICE",
+
+                "priority":
+                    "HIGH",
+
                 "message":
                     "Practice weak gestures: "
                     + ", ".join(
@@ -557,9 +677,16 @@ class LearnerProfileService:
         ):
 
             recommendations.append({
-                "type": "NEXT_LETTER",
-                "priority": "NORMAL",
-                "letter": current_letter,
+
+                "type":
+                    "NEXT_LETTER",
+
+                "priority":
+                    "NORMAL",
+
+                "letter":
+                    current_letter,
+
                 "message":
                     f"Continue practicing "
                     f"the letter {current_letter}."
@@ -572,8 +699,13 @@ class LearnerProfileService:
         if accuracy < 40:
 
             recommendations.append({
-                "type": "FOUNDATION",
-                "priority": "HIGH",
+
+                "type":
+                    "FOUNDATION",
+
+                "priority":
+                    "HIGH",
+
                 "message":
                     "Continue basic alphabet "
                     "practice to improve consistency."
@@ -586,8 +718,13 @@ class LearnerProfileService:
         elif accuracy < 70:
 
             recommendations.append({
-                "type": "CONSISTENCY",
-                "priority": "NORMAL",
+
+                "type":
+                    "CONSISTENCY",
+
+                "priority":
+                    "NORMAL",
+
                 "message":
                     "Keep practicing regularly "
                     "to improve recognition accuracy."
@@ -600,8 +737,13 @@ class LearnerProfileService:
         elif accuracy < 90:
 
             recommendations.append({
-                "type": "ADVANCED",
-                "priority": "NORMAL",
+
+                "type":
+                    "ADVANCED",
+
+                "priority":
+                    "NORMAL",
+
                 "message":
                     "Good progress. Practice "
                     "confusing letters to improve accuracy."
@@ -614,8 +756,13 @@ class LearnerProfileService:
         else:
 
             recommendations.append({
-                "type": "MAINTENANCE",
-                "priority": "LOW",
+
+                "type":
+                    "MAINTENANCE",
+
+                "priority":
+                    "LOW",
+
                 "message":
                     "Excellent work. Continue "
                     "practicing to maintain mastery."
@@ -649,17 +796,37 @@ class LearnerProfileService:
                 student_id
             )
         )
-        lesson_progress = profile.get(
-        "lesson_progress",
-        {
-            "completed": len(completed_letters),
-            "total": 26,
-            "percentage": round(
-                (len(completed_letters) / 26) * 100,
-                2
+
+        practiced_letters = (
+            self.get_practiced_letters(
+                student_id
             )
+        )
+
+        completed_count = len(
+            completed_letters
+        )
+
+        practiced_count = len(
+            practiced_letters
+        )
+
+        lesson_progress = {
+
+            "completed":
+                completed_count,
+
+            "total":
+                26,
+
+            "percentage":
+                round(
+                    (
+                        completed_count / 26
+                    ) * 100,
+                    2
+                )
         }
-    )
 
         weak_gestures = (
             self.get_weak_gestures(
@@ -691,9 +858,6 @@ class LearnerProfileService:
             )
         )
 
-       
-        
-
         return {
 
             "student_id":
@@ -722,7 +886,6 @@ class LearnerProfileService:
                     "incorrect_attempts",
                     0
                 ),
-                
 
             "accuracy":
                 accuracy,
@@ -730,28 +893,58 @@ class LearnerProfileService:
             "learning_level":
                 learning_level,
 
+            # ---------------------------------------------
+            # COMPLETION
+            # ---------------------------------------------
+
             "completed_letters":
                 completed_letters,
 
             "completed_count":
-                len(completed_letters),
+                completed_count,
 
             "remaining_count":
                 max(
                     0,
-                    26 - len(completed_letters)
+                    26 - completed_count
                 ),
 
             "progress_percentage":
                 round(
                     (
-                        len(completed_letters)
-                        / 26
+                        completed_count / 26
                     ) * 100,
                     2
                 ),
-                
-                "lesson_progress": lesson_progress,
+
+            # ---------------------------------------------
+            # PRACTICE
+            # ---------------------------------------------
+
+            "practiced_letters":
+                practiced_letters,
+
+            "practiced_count":
+                practiced_count,
+
+            "practice_percentage":
+                round(
+                    (
+                        practiced_count / 26
+                    ) * 100,
+                    2
+                ),
+
+            # ---------------------------------------------
+            # LESSON PROGRESS
+            # ---------------------------------------------
+
+            "lesson_progress":
+                lesson_progress,
+
+            # ---------------------------------------------
+            # CURRENT / NEXT
+            # ---------------------------------------------
 
             "current_letter":
                 profile.get(
@@ -762,6 +955,10 @@ class LearnerProfileService:
                 profile.get(
                     "next_letter"
                 ),
+
+            # ---------------------------------------------
+            # ANALYTICS
+            # ---------------------------------------------
 
             "strong_gestures":
                 strong_gestures,
@@ -849,8 +1046,13 @@ class LearnerProfileService:
                     fallback = letter
                     break
 
-            profile["current_letter"] = fallback
-            profile["next_letter"] = fallback
+            profile["current_letter"] = (
+                fallback
+            )
+
+            profile["next_letter"] = (
+                fallback
+            )
 
         profile["last_updated"] = (
             datetime.now().isoformat()
@@ -895,6 +1097,7 @@ class LearnerProfileService:
         student_id = str(student_id)
 
         if student_id not in self.profiles:
+
             return False
 
         del self.profiles[student_id]
@@ -959,9 +1162,16 @@ class LearnerProfileService:
         # -------------------------------------------------
 
         try:
-            confidence = float(confidence)
 
-        except (TypeError, ValueError):
+            confidence = float(
+                confidence
+            )
+
+        except (
+            TypeError,
+            ValueError
+        ):
+
             confidence = 0.0
 
         confidence = max(
@@ -969,7 +1179,27 @@ class LearnerProfileService:
             min(1.0, confidence)
         )
 
-        correct = bool(correct)
+        # -------------------------------------------------
+        # NORMALIZE CORRECT VALUE
+        # -------------------------------------------------
+
+        if isinstance(
+            correct,
+            str
+        ):
+
+            correct = (
+                correct.strip().lower()
+                in (
+                    "true",
+                    "1",
+                    "yes"
+                )
+            )
+
+        else:
+
+            correct = bool(correct)
 
         # -------------------------------------------------
         # GET PROFILE
@@ -1064,33 +1294,47 @@ class LearnerProfileService:
 
         default_letter_data = {
 
-            "accuracy": 0.0,
+            "accuracy":
+                0.0,
 
-            "average_confidence": 0.0,
+            "average_confidence":
+                0.0,
 
-            "attempts": 0,
+            "attempts":
+                0,
 
-            "correct": 0,
+            "correct":
+                0,
 
-            "incorrect": 0,
+            "incorrect":
+                0,
 
-            "confused_with": {},
+            "confused_with":
+                {},
 
-            "consecutive_correct": 0,
+            "consecutive_correct":
+                0,
 
-            "consecutive_incorrect": 0,
+            "consecutive_incorrect":
+                0,
 
-            "last_prediction": None,
+            "last_prediction":
+                None,
 
-            "last_confidence": 0.0,
+            "last_confidence":
+                0.0,
 
-            "last_practiced": None
+            "last_practiced":
+                None
         }
 
-        letter_data = mastery.setdefault(
-            alphabet,
-            default_letter_data
-        )
+        if alphabet not in mastery:
+
+            mastery[alphabet] = (
+                default_letter_data
+            )
+
+        letter_data = mastery[alphabet]
 
         # -------------------------------------------------
         # UPDATE LETTER ATTEMPTS
@@ -1188,7 +1432,8 @@ class LearnerProfileService:
             (
                 (
                     previous_average * n
-                ) + confidence
+                )
+                + confidence
             )
             / (n + 1),
             4
@@ -1198,9 +1443,13 @@ class LearnerProfileService:
         # LAST PREDICTION INFORMATION
         # -------------------------------------------------
 
-        letter_data["last_prediction"] = predicted
+        letter_data["last_prediction"] = (
+            predicted
+        )
 
-        letter_data["last_confidence"] = confidence
+        letter_data["last_confidence"] = (
+            confidence
+        )
 
         letter_data["last_practiced"] = (
             datetime.now().isoformat()
@@ -1234,16 +1483,19 @@ class LearnerProfileService:
 
         profile["alphabet_mastery"] = mastery
 
-        # -------------------------------------------------
+        # =================================================
         # COMPLETED LETTER LOGIC
-        # -------------------------------------------------
+        # =================================================
         #
-        # A letter is considered completed when:
+        # A letter is completed when:
         #
-        # - it has at least 3 attempts
-        # - accuracy is at least 80%
+        #   1. At least 3 attempts were made
+        #   2. Accuracy is at least 80%
         #
-        # -------------------------------------------------
+        # This prevents a single lucky correct prediction
+        # from completing a letter.
+        #
+        # =================================================
 
         completed_letters = profile.get(
             "completed_letters",
@@ -1257,9 +1509,13 @@ class LearnerProfileService:
 
             completed_letters = []
 
-        if (
+        letter_is_completed = (
             letter_attempts >= 3
             and letter_data["accuracy"] >= 80
+        )
+
+        if (
+            letter_is_completed
             and alphabet not in completed_letters
         ):
 
@@ -1270,109 +1526,121 @@ class LearnerProfileService:
         profile["completed_letters"] = (
             completed_letters
         )
+
+        # =================================================
+        # LESSON PROGRESS
+        # =================================================
+
         completed_count = len(
-    completed_letters
-)
-        profile["lesson_progress"] = {
-    "completed": completed_count,
-    "total": len(self.alphabets),
-    "percentage": round(
-        (
-            completed_count
-            / len(self.alphabets)
-        ) * 100,
-        2
-    )
-}
-
-        # -------------------------------------------------
-        # DETERMINE CURRENT / NEXT LETTER
-        # -------------------------------------------------
-
-        completed_set = set(
             completed_letters
         )
 
-        next_letter = None
+        profile["lesson_progress"] = {
 
-        for letter in self.alphabets:
+            "completed":
+                completed_count,
 
-            if letter not in completed_set:
+            "total":
+                len(self.alphabets),
 
-                next_letter = letter
-                break
+            "percentage":
+                round(
+                    (
+                        completed_count
+                        / len(self.alphabets)
+                    ) * 100,
+                    2
+                )
+        }
 
-        if next_letter is None:
+        # =================================================
+        # DETERMINE CURRENT / NEXT LETTER
+        # =================================================
 
-            profile["current_letter"] = (
-                "COMPLETED"
-            )
-
-            profile["next_letter"] = (
-                "COMPLETED"
-            )
-
+        completed_set = set(
+    completed_letters
+)
+        if len(completed_set) == len(self.alphabets):
+            profile["current_letter"] = "COMPLETED"
+            profile["next_letter"] = "COMPLETED"
         else:
+            current_letter = profile.get(
+        "current_letter"
+    )
+            if (
+        current_letter not in self.alphabets
+        or current_letter in completed_set
+    ):
+                for letter in self.alphabets:
+                    if letter not in completed_set:
+                        current_letter = letter
+                        break
+                    profile["current_letter"] = current_letter
+                    profile["next_letter"] = current_letter
 
-            profile["current_letter"] = (
-                next_letter
-            )
-
-            profile["next_letter"] = (
-                next_letter
-            )
-
-        # -------------------------------------------------
-        # UPDATE TIMESTAMP
-        # -------------------------------------------------
 
         profile["last_updated"] = (
             datetime.now().isoformat()
         )
 
-        # -------------------------------------------------
+        # =================================================
         # SAVE PROFILE
-        # -------------------------------------------------
+        # =================================================
 
         self.profiles[student_id] = profile
 
         self.save_profiles()
 
-        # -------------------------------------------------
+        # =================================================
         # DEBUG
-        # -------------------------------------------------
+        # =================================================
 
         print(
             "\n========== LEARNER PROFILE UPDATED =========="
         )
 
         print(
-            "Student       :",
+            "Student        :",
             student_id
         )
 
         print(
-            "Alphabet      :",
+            "Alphabet       :",
             alphabet
         )
 
         print(
-            "Predicted     :",
+            "Predicted      :",
             predicted
         )
 
         print(
-            "Correct       :",
+            "Correct        :",
             correct
         )
 
         print(
-            "Confidence    :",
+            "Confidence     :",
             confidence
         )
 
         print(
-            "Total Attempts:",
+            "Letter Attempts:",
+            letter_attempts
+        )
+
+        print(
+            "Letter Accuracy:",
+            letter_data["accuracy"]
+        )
+
+        print(
+            "Letter Complete:",
+            letter_is_completed
+        )
+
+        print(
+            "Total Attempts :",
             profile.get(
                 "total_attempts",
                 0
@@ -1380,7 +1648,7 @@ class LearnerProfileService:
         )
 
         print(
-            "Overall Acc.  :",
+            "Overall Acc.   :",
             profile.get(
                 "overall_accuracy",
                 0
@@ -1388,7 +1656,14 @@ class LearnerProfileService:
         )
 
         print(
-            "Completed     :",
+            "Practiced      :",
+            self.get_practiced_letters(
+                student_id
+            )
+        )
+
+        print(
+            "Completed      :",
             profile.get(
                 "completed_letters",
                 []
@@ -1396,14 +1671,14 @@ class LearnerProfileService:
         )
 
         print(
-            "Current       :",
+            "Current        :",
             profile.get(
                 "current_letter"
             )
         )
 
         print(
-            "Next          :",
+            "Next           :",
             profile.get(
                 "next_letter"
             )

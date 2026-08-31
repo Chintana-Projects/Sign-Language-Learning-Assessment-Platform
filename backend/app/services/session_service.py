@@ -1,4 +1,3 @@
-
 from datetime import datetime
 import string
 import uuid
@@ -34,14 +33,31 @@ class SessionService:
 
     # ------------------------------------------------------------
 
+    def _normalize_completed_letters(self, completed_letters):
+
+        if not isinstance(completed_letters, list):
+            return []
+
+        normalized = []
+
+        for letter in completed_letters:
+
+            letter = self._normalize_letter(letter)
+
+            if letter is not None:
+                normalized.append(letter)
+
+        return list(dict.fromkeys(normalized))
+
+    # ------------------------------------------------------------
+
     def _get_first_uncompleted_letter(self, completed_letters):
 
         completed = set(
-            self._normalize_letter(letter)
-            for letter in completed_letters
+            self._normalize_completed_letters(
+                completed_letters
+            )
         )
-
-        completed.discard(None)
 
         for letter in self.alphabets:
 
@@ -55,11 +71,10 @@ class SessionService:
     def _get_remaining_letters(self, completed_letters):
 
         completed = set(
-            self._normalize_letter(letter)
-            for letter in completed_letters
+            self._normalize_completed_letters(
+                completed_letters
+            )
         )
-
-        completed.discard(None)
 
         return [
             letter
@@ -80,16 +95,15 @@ class SessionService:
         )
 
         completed = set(
-            self._normalize_letter(letter)
-            for letter in completed_letters
+            self._normalize_completed_letters(
+                completed_letters
+            )
         )
-
-        completed.discard(None)
 
         if current_letter is None:
 
             return self._get_first_uncompleted_letter(
-                completed_letters
+                completed
             )
 
         try:
@@ -101,11 +115,11 @@ class SessionService:
         except ValueError:
 
             return self._get_first_uncompleted_letter(
-                completed_letters
+                completed
             )
 
         # --------------------------------------------------------
-        # First try normal A -> B -> C -> ... progression
+        # Move forward from the letter that was actually practiced
         # --------------------------------------------------------
 
         for index in range(
@@ -120,8 +134,8 @@ class SessionService:
                 return candidate
 
         # --------------------------------------------------------
-        # If there are uncompleted letters before current,
-        # return the first one.
+        # If nothing remains after current letter,
+        # search again from A.
         # --------------------------------------------------------
 
         for letter in self.alphabets:
@@ -155,68 +169,19 @@ class SessionService:
                 return
 
             # ----------------------------------------------------
-            # IMPORTANT
-            #
-            # Do NOT overwrite lifetime profile statistics with
-            # session statistics.
-            #
-            # LearnerProfileService.update_after_attempt()
-            # already maintains:
-            #
-            # total_attempts
-            # correct_attempts
-            # incorrect_attempts
-            # overall_accuracy
-            #
-            # Therefore these values are intentionally NOT copied
-            # from session here.
+            # Completed letters
             # ----------------------------------------------------
 
-            profile["total_sessions"] = profile.get(
-                "total_sessions",
-                0
-            )
-
-            # ----------------------------------------------------
-            # Always use the profile as the source of truth for
-            # completed letters.
-            # ----------------------------------------------------
-
-            completed_letters = profile.get(
-                "completed_letters",
-                []
-            )
-
-            if not isinstance(
-                completed_letters,
-                list
-            ):
-
-                completed_letters = []
-
-            normalized_completed = []
-
-            for letter in completed_letters:
-
-                normalized = self._normalize_letter(
-                    letter
-                )
-
-                if normalized is not None:
-                    normalized_completed.append(
-                        normalized
+            completed_letters = (
+                self._normalize_completed_letters(
+                    profile.get(
+                        "completed_letters",
+                        []
                     )
-
-            # Remove duplicates while preserving order
-            normalized_completed = list(
-                dict.fromkeys(
-                    normalized_completed
                 )
             )
 
-            profile["completed_letters"] = (
-                normalized_completed
-            )
+            profile["completed_letters"] = completed_letters
 
             # ----------------------------------------------------
             # Lesson progress
@@ -225,7 +190,7 @@ class SessionService:
             profile["lesson_progress"] = {
 
                 "completed":
-                    len(normalized_completed),
+                    len(completed_letters),
 
                 "total":
                     len(self.alphabets),
@@ -233,32 +198,50 @@ class SessionService:
                 "percentage":
                     round(
                         (
-                            len(normalized_completed)
-                            / len(self.alphabets)
+                            len(completed_letters)
+                            /
+                            len(self.alphabets)
                         ) * 100,
                         2
                     )
             }
 
             # ----------------------------------------------------
-            # Keep profile current/next letter synchronized with
-            # session when the session has a valid learning state.
+            # Synchronize session state with profile
             # ----------------------------------------------------
 
-            session_current = self._normalize_letter(
-                session.get("current_letter")
-            )
-
-            session_next = self._normalize_letter(
-                session.get("next_letter")
-            )
-
-            if session.get("practice_status") == "completed":
+            if session.get(
+                "practice_status"
+            ) == "completed":
 
                 profile["current_letter"] = "COMPLETED"
+
                 profile["next_letter"] = "COMPLETED"
 
             else:
+
+                session_current = (
+                    self._normalize_letter(
+                        session.get(
+                            "current_letter"
+                        )
+                    )
+                )
+
+                session_next = (
+                    self._normalize_letter(
+                        session.get(
+                            "next_letter"
+                        )
+                    )
+                )
+
+                # IMPORTANT:
+                #
+                # The session's actual letter is authoritative.
+                #
+                # This prevents recommendation/profile data
+                # from changing the letter the user selected.
 
                 if session_current is not None:
 
@@ -307,249 +290,116 @@ class SessionService:
             student_id
         )
 
+        # ========================================================
+        # DETERMINE SELECTED LETTER
+        # ========================================================
+
+        selected_letter = None
+
+        if (
+            isinstance(lesson_id, int)
+            and
+            1 <= lesson_id <= len(self.alphabets)
+        ):
+
+            selected_letter = self.alphabets[
+                lesson_id - 1
+            ]
+
+        # --------------------------------------------------------
+        # Invalid lesson ID
+        # --------------------------------------------------------
+
+        if selected_letter is None:
+
+            raise ValueError(
+                "Invalid lesson_id. Must be between 1 and 26."
+            )
+
+        # ========================================================
+        # LOAD PROFILE
+        # ========================================================
+
         profile = self.profile_service.get_profile(
             student_id
         )
 
-        if not isinstance(
-            profile,
-            dict
-        ):
+        if not isinstance(profile, dict):
 
             profile = {}
 
-        print(
-            "\n=========================================="
-        )
-
-        print(
-            "STARTING NEW PRACTICE SESSION"
-        )
-
-        print(
-            "STUDENT:",
-            student_id
-        )
-
-        print(
-            "LESSON:",
-            lesson_id
-        )
-
-        print(
-            "PROFILE:",
-            profile
-        )
-
-        print(
-            "=========================================="
-        )
-
-        completed_letters = profile.get(
-            "completed_letters",
-            []
-        )
-
-        if not isinstance(
-            completed_letters,
-            list
-        ):
-
-            completed_letters = []
-
-        # --------------------------------------------------------
-        # Normalize completed letters
-        # --------------------------------------------------------
-
-        completed_letters = [
-
-            letter
-
-            for letter in (
-                self._normalize_letter(letter)
-                for letter in completed_letters
-            )
-
-            if letter is not None
-        ]
-
-        # Remove duplicates
-        completed_letters = list(
-            dict.fromkeys(
-                completed_letters
-            )
-        )
-
-        profile_current = self._normalize_letter(
-            profile.get(
-                "current_letter"
-            )
-        )
-
-        profile_next = self._normalize_letter(
-            profile.get(
-                "next_letter"
-            )
-        )
-
         # ========================================================
-        # DETERMINE CURRENT LETTER
+        # COMPLETED LETTERS
         # ========================================================
 
-        current_letter = None
-
-        # First use profile current letter if it is valid and
-        # not mastered/completed.
-
-        if profile_current in self.alphabets:
-
-            if profile_current not in completed_letters:
-
-                current_letter = profile_current
-
-        # Otherwise use profile next letter.
-
-        if current_letter is None:
-
-            if profile_next in self.alphabets:
-
-                if profile_next not in completed_letters:
-
-                    current_letter = profile_next
-
-        # Otherwise start from first uncompleted letter.
-
-        if current_letter is None:
-
-            current_letter = (
-                self._get_first_uncompleted_letter(
-                    completed_letters
+        completed_letters = (
+            self._normalize_completed_letters(
+                profile.get(
+                    "completed_letters",
+                    []
                 )
             )
-
-        # ========================================================
-        # ALL LETTERS ALREADY COMPLETED
-        # ========================================================
-
-        if current_letter is None:
-
-            session = {
-
-                "session_id":
-                    session_id,
-
-                "lesson_id":
-                    lesson_id,
-
-                "student_id":
-                    student_id,
-
-                "current_letter":
-                    "COMPLETED",
-
-                "next_letter":
-                    "COMPLETED",
-
-                "completed_letters":
-                    self.alphabets.copy(),
-
-                "remaining_letters":
-                    [],
-
-                "practice_status":
-                    "completed",
-
-                "start_time":
-                    datetime.now().isoformat(),
-
-                "end_time":
-                    None,
-
-                "attempts":
-                    0,
-
-                "correct_attempts":
-                    0,
-
-                "incorrect_attempts":
-                    0,
-
-                "accuracy":
-                    0,
-
-                "history":
-                    [],
-
-                "last_attempt":
-                    None,
-
-                "last_processed_attempt":
-                    None,
-
-                "letter_attempts":
-                    {},
-
-                "mastery":
-                    {},
-
-                "latest_prediction":
-                    None,
-
-                "latest_confidence":
-                    0,
-
-                "latest_stable_prediction": {
-
-                    "stable":
-                        False,
-
-                    "prediction":
-                        None,
-
-                    "confidence":
-                        0,
-
-                    "stable_frames":
-                        0,
-
-                    "unstable_frames":
-                        0
-                }
-            }
-
-            self.sessions[
-                session_id
-            ] = session
-
-            print(
-                "ALL ALPHABETS ALREADY COMPLETED"
-            )
-
-            return session
-
-        # ========================================================
-        # CREATE NORMAL SESSION
-        # ========================================================
-
-        next_letter = (
-            self._get_next_uncompleted_letter(
-                current_letter,
-                completed_letters
-            )
         )
 
-        # IMPORTANT:
+        # ========================================================
+        # IMPORTANT FIX
+        # ========================================================
         #
-        # At the beginning of a session, "next_letter" is only
-        # a recommendation/preview.
+        # DO NOT use:
         #
-        # The actual current letter remains current_letter.
+        # profile["current_letter"]
+        #
+        # or:
+        #
+        # profile["next_letter"]
+        #
+        # to decide what the user wants to practice.
+        #
+        # lesson_id came directly from the selected alphabet
+        # button in the frontend.
+        #
+        # Therefore:
+        #
+        # lesson_id 1  -> A
+        # lesson_id 2  -> B
+        # lesson_id 3  -> C
+        # lesson_id 4  -> D
+        # ...
+        # lesson_id 26 -> Z
+        #
+        # The selected letter MUST remain the current letter.
+        #
+        # ========================================================
+
+        current_letter = selected_letter
+
+        # ========================================================
+        # NEXT LETTER
+        # ========================================================
+        #
+        # At the beginning of a session, next_letter is the
+        # currently selected letter because that is what is
+        # currently being practiced.
+        #
+        # It will be changed after a correct attempt.
+        #
+        # ========================================================
+
+        next_letter = selected_letter
+
+        # ========================================================
+        # REMAINING LETTERS
+        # ========================================================
 
         remaining_letters = (
             self._get_remaining_letters(
                 completed_letters
             )
         )
+
+        # ========================================================
+        # CREATE SESSION
+        # ========================================================
 
         session = {
 
@@ -600,7 +450,7 @@ class SessionService:
                 None,
 
             # ----------------------------------------------------
-            # Session Statistics
+            # Statistics
             # ----------------------------------------------------
 
             "attempts":
@@ -667,11 +517,17 @@ class SessionService:
             }
         }
 
+        # ========================================================
+        # SAVE SESSION
+        # ========================================================
+
         self.sessions[
             session_id
         ] = session
 
-        # Count this as a new learner session.
+        # ========================================================
+        # COUNT NEW SESSION
+        # ========================================================
 
         try:
 
@@ -686,41 +542,13 @@ class SessionService:
                 e
             )
 
-        print(
-            "\n=========================================="
-        )
+        # ========================================================
+        # IMPORTANT:
+        # Sync profile with the ACTUAL selected letter.
+        # ========================================================
 
-        print(
-            "SESSION CREATED"
-        )
-
-        print(
-            "SESSION:",
-            session_id
-        )
-
-        print(
-            "CURRENT:",
-            session["current_letter"]
-        )
-
-        print(
-            "NEXT:",
-            session["next_letter"]
-        )
-
-        print(
-            "COMPLETED:",
-            session["completed_letters"]
-        )
-
-        print(
-            "REMAINING:",
-            session["remaining_letters"]
-        )
-
-        print(
-            "=========================================="
+        self._sync_profile(
+            session
         )
 
         return session
@@ -783,11 +611,6 @@ class SessionService:
         )
 
         if session is None:
-
-            print(
-                "SESSION NOT FOUND"
-            )
-
             return None
 
         if isinstance(
@@ -818,11 +641,6 @@ class SessionService:
         )
 
         if session is None:
-
-            print(
-                "SESSION NOT FOUND"
-            )
-
             return None
 
         current_letter = self._normalize_letter(
@@ -856,17 +674,6 @@ class SessionService:
                     repeat_letter
                 )
 
-            print(
-                "\n========== WRONG ATTEMPT =========="
-            )
-
-            print(
-                "REPEAT:",
-                session.get(
-                    "current_letter"
-                )
-            )
-
             self._sync_profile(
                 session
             )
@@ -877,20 +684,19 @@ class SessionService:
         # CORRECT ATTEMPT
         # ========================================================
 
-        if current_letter is None:
+        # The expected letter is authoritative.
 
-            current_letter = expected_letter
+        practiced_letter = (
+            expected_letter
+            or current_letter
+        )
 
-        if current_letter is None:
-
+        if practiced_letter is None:
             return session
 
-        # --------------------------------------------------------
-        # Get latest profile state.
-        #
-        # LearnerProfileService decides which letters are officially
-        # completed/mastered.
-        # --------------------------------------------------------
+        # ========================================================
+        # LOAD LATEST PROFILE
+        # ========================================================
 
         profile = self.profile_service.get_profile(
             session["student_id"]
@@ -903,157 +709,51 @@ class SessionService:
 
             profile = {}
 
-        profile_completed = profile.get(
-            "completed_letters",
-            []
-        )
-
-        if not isinstance(
-            profile_completed,
-            list
-        ):
-
-            profile_completed = []
-
-        normalized_profile_completed = []
-
-        for letter in profile_completed:
-
-            normalized = self._normalize_letter(
-                letter
-            )
-
-            if normalized:
-
-                normalized_profile_completed.append(
-                    normalized
+        profile_completed = (
+            self._normalize_completed_letters(
+                profile.get(
+                    "completed_letters",
+                    []
                 )
-
-        normalized_profile_completed = list(
-            dict.fromkeys(
-                normalized_profile_completed
             )
         )
 
-        # --------------------------------------------------------
-        # Keep session completion list synchronized.
-        # --------------------------------------------------------
+        # ========================================================
+        # SYNCHRONIZE COMPLETED LETTERS
+        # ========================================================
 
         session["completed_letters"] = (
-            normalized_profile_completed.copy()
+            profile_completed.copy()
         )
 
         # ========================================================
-        # RECOMMENDATION
+        # DETERMINE NEXT LETTER
+        # ========================================================
+        #
+        # IMPORTANT:
+        #
+        # recommended_letter is deliberately NOT used.
+        #
+        # Example:
+        #
+        # User selected D
+        # Correct D
+        #
+        # Next should be E.
+        #
+        # Even if the recommendation system says:
+        # "Practice D again"
+        #
+        # it cannot override the actual sequence.
+        #
         # ========================================================
 
-        next_letter = None
-
-        if recommended_letter:
-
-            recommended_letter = (
-                self._normalize_letter(
-                    recommended_letter
-                )
+        next_letter = (
+            self._get_next_uncompleted_letter(
+                practiced_letter,
+                session["completed_letters"]
             )
-
-            if recommended_letter:
-
-                if (
-                    recommended_letter
-                    not in session["completed_letters"]
-                ):
-
-                    next_letter = (
-                        recommended_letter
-                    )
-
-        # ========================================================
-        # NORMAL SEQUENTIAL MOVEMENT
-        # ========================================================
-
-        if next_letter is None:
-
-            # IMPORTANT:
-            #
-            # Do NOT use the completed list to decide whether the
-            # immediate next alphabet can be visited.
-            #
-            # A letter may be correct but not yet "mastered".
-            #
-            # Therefore normal learning progression is simply:
-            #
-            # A -> B -> C -> D ...
-            #
-            # while completed_letters separately tracks mastery.
-
-            try:
-
-                current_index = (
-                    self.alphabets.index(
-                        current_letter
-                    )
-                )
-
-            except ValueError:
-
-                current_index = -1
-
-            next_letter = None
-
-            # First try immediate next alphabet.
-
-            if (
-                current_index >= 0
-                and current_index + 1
-                < len(self.alphabets)
-            ):
-
-                candidate = self.alphabets[
-                    current_index + 1
-                ]
-
-                if candidate not in (
-                    session["completed_letters"]
-                ):
-
-                    next_letter = candidate
-
-            # ----------------------------------------------------
-            # If immediate next letter is already mastered,
-            # continue forward until finding the next uncompleted
-            # letter.
-            # ----------------------------------------------------
-
-            if next_letter is None:
-
-                for index in range(
-                    current_index + 1,
-                    len(self.alphabets)
-                ):
-
-                    candidate = self.alphabets[
-                        index
-                    ]
-
-                    if candidate not in (
-                        session["completed_letters"]
-                    ):
-
-                        next_letter = candidate
-                        break
-
-            # ----------------------------------------------------
-            # If nothing exists after current, search from A.
-            # ----------------------------------------------------
-
-            if next_letter is None:
-
-                next_letter = (
-                    self._get_first_uncompleted_letter(
-                        session["completed_letters"]
-                    )
-                )
+        )
 
         # ========================================================
         # EVERYTHING MASTERED
@@ -1083,23 +783,6 @@ class SessionService:
                 datetime.now().isoformat()
             )
 
-            print(
-                "\n=========================================="
-            )
-
-            print(
-                "PRACTICE COMPLETED"
-            )
-
-            print(
-                "COMPLETED:",
-                session["completed_letters"]
-            )
-
-            print(
-                "=========================================="
-            )
-
             self._sync_profile(
                 session
             )
@@ -1107,56 +790,24 @@ class SessionService:
             return session
 
         # ========================================================
-        # MOVE TO NEXT LETTER
+        # MOVE FORWARD
         # ========================================================
 
         session["current_letter"] = (
             next_letter
         )
 
-        # Keep next_letter as the current target for frontend
-        # compatibility.
-
         session["next_letter"] = (
-            next_letter
+            self._get_next_uncompleted_letter(
+                next_letter,
+                session["completed_letters"]
+            )
         )
 
         session["remaining_letters"] = (
             self._get_remaining_letters(
                 session["completed_letters"]
             )
-        )
-
-        print(
-            "\n=========================================="
-        )
-
-        print(
-            "LETTER MOVED"
-        )
-
-        print(
-            "COMPLETED:",
-            session["completed_letters"]
-        )
-
-        print(
-            "CURRENT:",
-            session["current_letter"]
-        )
-
-        print(
-            "NEXT:",
-            session["next_letter"]
-        )
-
-        print(
-            "REMAINING:",
-            session["remaining_letters"]
-        )
-
-        print(
-            "=========================================="
         )
 
         self._sync_profile(
@@ -1175,43 +826,17 @@ class SessionService:
         attempt_data
     ):
 
-        print(
-            "\n=========================================="
-        )
-
-        print(
-            "RECORD SESSION ATTEMPT"
-        )
-
-        print(
-            "SESSION:",
-            session_id
-        )
-
-        print(
-            "=========================================="
-        )
-
         session = self.sessions.get(
             session_id
         )
 
         if session is None:
-
-            print(
-                "SESSION NOT FOUND"
-            )
-
             return None
 
         if not isinstance(
             attempt_data,
             dict
         ):
-
-            print(
-                "INVALID ATTEMPT DATA"
-            )
 
             return session
 
@@ -1229,11 +854,6 @@ class SessionService:
                 "last_processed_attempt"
             ) == attempt_id:
 
-                print(
-                    "DUPLICATE ATTEMPT IGNORED:",
-                    attempt_id
-                )
-
                 return session
 
             session["last_processed_attempt"] = (
@@ -1241,7 +861,7 @@ class SessionService:
             )
 
         # ========================================================
-        # DETERMINE EXPECTED LETTER
+        # EXPECTED LETTER
         # ========================================================
 
         current_letter = self._normalize_letter(
@@ -1250,12 +870,24 @@ class SessionService:
             )
         )
 
-        expected_letter = self._normalize_letter(
-            attempt_data.get(
-                "expected",
-                current_letter
-            )
-        )
+        # --------------------------------------------------------
+        # IMPORTANT:
+        #
+        # The session current_letter has priority.
+        #
+        # We do NOT allow the frontend's "expected" field
+        # to change the actual lesson being practiced.
+        #
+        # This prevents D from becoming the expected letter
+        # simply because the profile/recommendation says D.
+        #
+        # ========================================================
+
+        expected_letter = current_letter
+
+        # ========================================================
+        # PREDICTED LETTER
+        # ========================================================
 
         predicted_letter = self._normalize_letter(
             attempt_data.get(
@@ -1283,12 +915,8 @@ class SessionService:
         # ========================================================
         # UPDATE LEARNER PROFILE
         # ========================================================
-        #
-        # This remains the ONLY place where learner lifetime
-        # attempt statistics and alphabet mastery are updated.
-        # ========================================================
 
-        profile = self.profile_service.update_after_attempt(
+        self.profile_service.update_after_attempt(
 
             student_id=session["student_id"],
 
@@ -1304,9 +932,9 @@ class SessionService:
             correct=correct
         )
 
-        # IMPORTANT:
-        # Never trust frontend "correct".
-        # Backend calculates it from expected/predicted.
+        # ========================================================
+        # STORE AUTHORITATIVE ATTEMPT RESULT
+        # ========================================================
 
         attempt_data["expected"] = (
             expected_letter
@@ -1321,7 +949,7 @@ class SessionService:
         )
 
         # ========================================================
-        # SESSION ATTEMPT COUNTERS
+        # SESSION COUNTERS
         # ========================================================
 
         session["attempts"] += 1
@@ -1367,11 +995,10 @@ class SessionService:
         # LETTER ANALYTICS
         # ========================================================
 
-        analytics_letter = expected_letter
-
-        if analytics_letter is None:
-
-            analytics_letter = current_letter
+        analytics_letter = (
+            expected_letter
+            or current_letter
+        )
 
         if analytics_letter:
 
@@ -1423,9 +1050,9 @@ class SessionService:
                 2
             )
 
-            # ====================================================
-            # MASTERY
-            # ====================================================
+            # ----------------------------------------------------
+            # Mastery
+            # ----------------------------------------------------
 
             if letter_data["accuracy"] >= 80:
 
@@ -1492,91 +1119,24 @@ class SessionService:
             )
 
         # ========================================================
-        # RECOMMENDATION
-        # ========================================================
-
-        recommended_letter = None
-
-        recommendations = (
-            attempt_data.get(
-                "recommendations",
-                []
-            )
-        )
-
-        if isinstance(
-            recommendations,
-            list
-        ):
-
-            for recommendation in recommendations:
-
-                if not isinstance(
-                    recommendation,
-                    dict
-                ):
-
-                    continue
-
-                candidate = (
-                    self._normalize_letter(
-                        recommendation.get(
-                            "alphabet"
-                        )
-                    )
-                )
-
-                if candidate:
-
-                    if candidate not in (
-                        session["completed_letters"]
-                    ):
-
-                        recommended_letter = (
-                            candidate
-                        )
-
-                        break
-
-        # ========================================================
-        # MOVE LETTER
+        # CORRECT ATTEMPT
         # ========================================================
 
         if correct:
 
-            session = self.move_to_next_letter(
-
-                session_id,
-
-                recommended_letter=(
-                    recommended_letter
-                ),
-
-                correct=True,
-
-                expected_letter=(
-                    expected_letter
-                )
-            )
-
-        else:
-
-            # ----------------------------------------------------
-            # Wrong attempt:
-            # Stay on the expected letter.
-            # ----------------------------------------------------
+            # Keep the letter that was actually practiced.
 
             session["current_letter"] = (
                 expected_letter
-                or current_letter
             )
 
             session["next_letter"] = (
                 expected_letter
-                or current_letter
             )
 
-            # Get latest profile completion state.
+            # ----------------------------------------------------
+            # Get latest completed letters
+            # ----------------------------------------------------
 
             latest_profile = (
                 self.profile_service.get_profile(
@@ -1585,19 +1145,100 @@ class SessionService:
             )
 
             profile_completed = (
+
                 latest_profile.get(
                     "completed_letters",
                     []
                 )
+
                 if isinstance(
                     latest_profile,
                     dict
                 )
+
                 else []
             )
 
             session["completed_letters"] = (
-                profile_completed.copy()
+                self._normalize_completed_letters(
+                    profile_completed
+                )
+            )
+
+            session["remaining_letters"] = (
+                self._get_remaining_letters(
+                    session["completed_letters"]
+                )
+            )
+
+            # ----------------------------------------------------
+            # IMPORTANT:
+            #
+            # Do NOT automatically move the session to another
+            # letter here.
+            #
+            # The frontend will receive the completed letter and
+            # next recommendation separately.
+            #
+            # This keeps the expected letter stable for the
+            # current practice attempt.
+            #
+            # ----------------------------------------------------
+
+            self._sync_profile(
+                session
+            )
+
+        # ========================================================
+        # WRONG ATTEMPT
+        # ========================================================
+
+        else:
+
+            # Repeat the same expected letter.
+
+            repeat_letter = (
+                expected_letter
+                or current_letter
+            )
+
+            session["current_letter"] = (
+                repeat_letter
+            )
+
+            session["next_letter"] = (
+                repeat_letter
+            )
+
+            # ----------------------------------------------------
+            # Refresh completed letters
+            # ----------------------------------------------------
+
+            latest_profile = (
+                self.profile_service.get_profile(
+                    session["student_id"]
+                )
+            )
+
+            profile_completed = (
+
+                latest_profile.get(
+                    "completed_letters",
+                    []
+                )
+
+                if isinstance(
+                    latest_profile,
+                    dict
+                )
+
+                else []
+            )
+
+            session["completed_letters"] = (
+                self._normalize_completed_letters(
+                    profile_completed
+                )
             )
 
             session["remaining_letters"] = (
@@ -1609,77 +1250,6 @@ class SessionService:
             self._sync_profile(
                 session
             )
-
-        # ========================================================
-        # FINAL DEBUG
-        # ========================================================
-
-        print(
-            "\n=========================================="
-        )
-
-        print(
-            "ATTEMPT RESULT"
-        )
-
-        print(
-            "EXPECTED:",
-            expected_letter
-        )
-
-        print(
-            "PREDICTED:",
-            predicted_letter
-        )
-
-        print(
-            "CORRECT:",
-            correct
-        )
-
-        print(
-            "SESSION ATTEMPTS:",
-            session["attempts"]
-        )
-
-        print(
-            "SESSION CORRECT:",
-            session["correct_attempts"]
-        )
-
-        print(
-            "SESSION INCORRECT:",
-            session["incorrect_attempts"]
-        )
-
-        print(
-            "SESSION ACCURACY:",
-            session["accuracy"]
-        )
-
-        print(
-            "COMPLETED:",
-            session["completed_letters"]
-        )
-
-        print(
-            "CURRENT:",
-            session["current_letter"]
-        )
-
-        print(
-            "NEXT:",
-            session["next_letter"]
-        )
-
-        print(
-            "STATUS:",
-            session["practice_status"]
-        )
-
-        print(
-            "=========================================="
-        )
 
         return session
 
@@ -1836,11 +1406,7 @@ class SessionService:
             )
         )
 
-        # If session was completed or current letter is invalid,
-        # restart from A.
-
         if current_letter is None:
-
             current_letter = "A"
 
         # ========================================================
@@ -1858,13 +1424,11 @@ class SessionService:
         )
 
         session["next_letter"] = (
-            self.get_next_letter(
-                current_letter
-            )
+            current_letter
         )
 
         # ========================================================
-        # RESET SESSION STATISTICS
+        # RESET STATISTICS
         # ========================================================
 
         session["attempts"] = 0
@@ -1930,11 +1494,7 @@ class SessionService:
         }
 
         # --------------------------------------------------------
-        # IMPORTANT:
-        #
-        # Resetting a session does NOT reset the learner profile.
-        #
-        # The profile contains lifetime learning progress.
+        # Session reset does NOT reset learner profile.
         # --------------------------------------------------------
 
         self._sync_profile(
@@ -1957,11 +1517,6 @@ class SessionService:
             del self.sessions[
                 session_id
             ]
-
-            print(
-                "SESSION DELETED:",
-                session_id
-            )
 
             return True
 

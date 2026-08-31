@@ -1,6 +1,6 @@
 import { FaPlay } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { FaCheckCircle } from "react-icons/fa";
+
 
 import "../styles/Layout.css";
 import "../styles/Cards.css";
@@ -324,13 +324,15 @@ export default function Lessons() {
 
 
             const response =
-                await fetch(
-                    `http://127.0.0.1:8000/practice/start/${lessonId}/1`,
-                    {
-                        method: "POST"
-                    }
-                );
-
+    await fetch(
+        `http://127.0.0.1:8000/practice/start/${lessonId}`,
+        {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        }
+    );
 
             const data =
                 await response.json();
@@ -473,7 +475,7 @@ export default function Lessons() {
             setPrediction({
 
                 expected:
-                    lesson?.sign,
+    selectedLetter,
 
                 prediction:
                     data.prediction,
@@ -532,107 +534,107 @@ export default function Lessons() {
         // FINAL ASSESSMENT
         // ------------------------------------------
 
-        if (data.assessment) {
+       if (data.assessment) {
 
-            setAssessment(
-                data.assessment
-            );
+    setAssessment(data.assessment);
 
+    // ==========================================
+    // LETTER COMPLETED
+    // ==========================================
 
-            if (
-                data.assessment.correct
-            ) {
+    if (data.assessment.correct) {
 
-                setMasteredPopup({
+        const completedLetter =
+            data.assessment.expected;
 
-                    letter:
-                        data.assessment.expected,
+        setCompletedLetters(prev => {
 
-                    next:
-                        data.next_practice?.alphabet
-
-                });
-
-
-                setTimeout(() => {
-
-                    setMasteredPopup(null);
-
-                }, 1800);
-
+            if (prev.includes(completedLetter)) {
+                return prev;
             }
 
-
-            setPrediction(prev => ({
-
+            return [
                 ...prev,
+                completedLetter
+            ];
+        });
 
-                assessment:
-                    data.assessment,
+        // ==========================================
+        // MASTERED POPUP
+        // ==========================================
 
-                feedback:
-                    data.feedback,
+        setMasteredPopup({
 
-                sign_score:
-                    data.sign_score,
+    letter: completedLetter
 
-                session:
-                    data.session,
+});
 
-                profile:
-                    data.profile,
+        setTimeout(() => {
 
-                learning_state:
-                    data.learning_state,
+            setMasteredPopup(null);
 
-                recommendations:
-                    data.recommendations,
+        }, 1800);
+    }
 
-                next_practice:
-                    data.next_practice,
+    // ==========================================
+    // UPDATE PREDICTION
+    // ==========================================
 
-                dashboard:
-                    data.dashboard
+    setPrediction(prev => ({
 
-            }));
+        ...prev,
 
-        }
+        assessment:
+            data.assessment,
+
+        feedback:
+            data.feedback,
+
+        sign_score:
+            data.sign_score,
+
+        session:
+            data.session,
+
+        profile:
+            data.profile,
+
+        learning_state:
+            data.learning_state,
+
+        recommendations:
+            data.recommendations,
+
+        next_practice:
+            data.next_practice,
+
+        dashboard:
+            data.dashboard
+
+    }));
+
+}
 
 
         // ------------------------------------------
         // SESSION UPDATE
         // ------------------------------------------
 
-        if (data.session) {
+        // ------------------------------------------
+// SESSION UPDATE
+// ------------------------------------------
 
-            setSession(prev => ({
+if (data.session) {
 
-                ...prev,
+    setSession(prev => ({
 
-                ...data.session
+        ...prev,
 
-            }));
+        ...data.session
 
+    }));
 
-            // Automatically load the current lesson
-            // from backend
-
-            if (
-                data.session?.current_letter &&
-                data.session.current_letter !==
-                    selectedLetter &&
-                isValidAlphabet(
-                    data.session.current_letter
-                )
-            ) {
-
-                selectLetter(
-                    data.session.current_letter
-                );
-
-            }
-
-        }
+}
 
 
         // ------------------------------------------
@@ -640,61 +642,41 @@ export default function Lessons() {
         // ------------------------------------------
 
         if (
-            data.session?.completed_letters
-        ) {
+    Array.isArray(data.session?.completed_letters)
+) {
 
-            setCompletedLetters(
-                data.session.completed_letters
-            );
+    setCompletedLetters(prev => {
 
-        }
+        return Array.from(
+            new Set([
+                ...prev,
+                ...data.session.completed_letters
+            ])
+        );
+
+    });
+
+}
 
 
-        if (
-            data.session?.current_letter &&
-            data.session.current_letter !==
-                selectedLetter
-        ) {
-
-            setSelectedLetter(
-                data.session.current_letter
-            );
-
-        }
+    
 
 
         // ------------------------------------------
         // NEXT PRACTICE
         // ------------------------------------------
 
-        if (data.next_practice) {
+        // ------------------------------------------
+// NEXT PRACTICE
+// ------------------------------------------
 
-            setNextPractice(
-                data.next_practice
-            );
+if (data.next_practice) {
 
+    setNextPractice(
+        data.next_practice
+    );
 
-            const nextAlphabet =
-                data.next_practice.alphabet;
-
-
-            if (
-                nextAlphabet &&
-                isValidAlphabet(nextAlphabet) &&
-                nextAlphabet !== selectedLetter
-            ) {
-
-                setSelectedLetter(
-                    nextAlphabet
-                );
-
-                selectLetter(
-                    nextAlphabet
-                );
-
-            }
-
-        }
+}
 
 
         // ------------------------------------------
@@ -1252,41 +1234,35 @@ export default function Lessons() {
                                 }
                                 style={{
 
-                                    height: "58px",
+    height: "58px",
 
-                                    borderRadius: "14px",
+    borderRadius: "14px",
 
-                                    border:
-                                        isSelected
-                                            ? "2px solid #4F46E5"
-                                            : isCompleted
-                                            ? "2px solid #22C55E"
-                                            : "1px solid #E5E7EB",
+    border:
+        isSelected
+            ? "2px solid #4F46E5"
+            : "1px solid #E5E7EB",
 
-                                    background:
-                                        isSelected
-                                            ? "#4F46E5"
-                                            : isCompleted
-                                            ? "#DCFCE7"
-                                            : "#ffffff",
+    background:
+        isSelected
+            ? "#4F46E5"
+            : "#ffffff",
 
-                                    color:
-                                        isSelected
-                                            ? "#ffffff"
-                                            : isCompleted
-                                            ? "#15803D"
-                                            : "#374151",
+    color:
+        isSelected
+            ? "#ffffff"
+            : "#374151",
 
-                                    fontSize: "18px",
+    fontSize: "18px",
 
-                                    fontWeight: "700",
+    fontWeight: "700",
 
-                                    cursor: "pointer",
+    cursor: "pointer",
 
-                                    transition:
-                                        "0.2s"
+    transition:
+        "0.2s"
 
-                                }}
+}}
                             >
 
                                 <div
@@ -1305,15 +1281,7 @@ export default function Lessons() {
                                     </span>
 
 
-                                    {isCompleted &&
-                                        !isSelected && (
-
-                                            <FaCheckCircle
-                                                color="#16A34A"
-                                                size={14}
-                                            />
-
-                                        )}
+                                    
 
                                 </div>
 
@@ -1448,19 +1416,7 @@ export default function Lessons() {
                     </div>
 
 
-                    {masteredPopup.next && (
-
-                        <div
-                            style={{
-                                marginTop: "6px",
-                                opacity: 0.9
-                            }}
-                        >
-                            Moving to{" "}
-                            {masteredPopup.next}...
-                        </div>
-
-                    )}
+                    
 
                 </div>
 

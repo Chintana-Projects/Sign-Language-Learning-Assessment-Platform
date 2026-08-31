@@ -424,3 +424,60 @@
     color: #2563eb;
     border: 1px solid #bfdbfe;
 }
+/* ==========================================
+   RECOGNITION METRICS
+========================================== */
+
+.recognition-metrics {
+    flex: 1;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+/* ==========================================
+   SIGN ACCURACY
+========================================== */
+
+.accuracy-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.accuracy-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.accuracy-header span:last-child {
+    color: #111827;
+    font-weight: 700;
+}
+
+.accuracy-track {
+    flex: 1;
+    min-width: 100px;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.accuracy-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        #10b981,
+        #059669
+    );
+    transition: width 0.3s ease;
+}

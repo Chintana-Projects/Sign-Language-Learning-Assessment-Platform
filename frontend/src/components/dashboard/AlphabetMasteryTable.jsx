@@ -22,87 +22,82 @@ export default function AlphabetMasteryTable({
                 </div>
 
                 <div className="mastery-summary">
-                    {Object.keys(alphabetMastery).length}/26
-                    <span> practiced</span>
+                    {
+    Object.values(alphabetMastery).filter(
+        (data) => Number(data?.attempts ?? 0) > 0
+    ).length
+}/26
+<span> practiced</span>
                 </div>
             </div>
 
             {/* Alphabet Grid */}
             <div className="mastery-grid">
+{letters.map((letter) => {
+    const data = alphabetMastery?.[letter];
 
-                {letters.map((letter) => {
-                    const data = alphabetMastery?.[letter];
+    const practiced =
+        !!data &&
+        Number(data?.attempts ?? 0) > 0;
 
-console.log(
-    letter,
-    data
-);
-                    const practiced = !!data;
+    const accuracy = practiced
+        ? Math.min(
+              Math.max(
+                  Number(data?.accuracy ?? 0),
+                  0
+              ),
+              100
+          )
+        : 0;
 
-                    const accuracy = practiced
-                        ? Math.min(
-                              Math.max(
-                                  Number(data?.accuracy ?? 0),
-                                  0
-                              ),
-                              100
-                          )
-                        : 0;
+    let statusClass = "not-practiced";
 
-                    let statusClass = "not-practiced";
+    if (practiced) {
+        if (accuracy >= 80) {
+            statusClass = "mastered";
+        } else if (accuracy >= 50) {
+            statusClass = "learning";
+        } else {
+            statusClass = "needs-practice";
+        }
+    }
 
-                    if (practiced) {
-                        if (accuracy >= 80) {
-                            statusClass = "mastered";
-                        } else if (accuracy >= 50) {
-                            statusClass = "learning";
-                        } else {
-                            statusClass = "needs-practice";
-                        }
-                    }
+    return (
+        <div
+            key={letter}
+            className={`mastery-item ${statusClass}`}
+        >
+            <div className="mastery-letter">
+                {letter}
+            </div>
 
-                    return (
-                        <div
-                            key={letter}
-                            className={`mastery-item ${statusClass}`}
-                        >
+            <div className="mastery-accuracy">
+                {practiced
+                    ? `${accuracy}%`
+                    : "—"}
+            </div>
 
-                            {/* Letter */}
-                            <div className="mastery-letter">
-                                {letter}
-                            </div>
+            <div className="mastery-progress">
+                <div
+                    className="mastery-progress-fill"
+                    style={{
+                        width: `${accuracy}%`
+                    }}
+                />
+            </div>
 
-                            {/* Accuracy */}
-                            <div className="mastery-accuracy">
-                                {practiced
-                                    ? `${accuracy}%`
-                                    : "—"}
-                            </div>
-
-                            {/* Progress */}
-                            <div className="mastery-progress">
-                                <div
-                                    className="mastery-progress-fill"
-                                    style={{
-                                        width: `${accuracy}%`
-                                    }}
-                                />
-                            </div>
-
-                            {/* Status */}
-                            <div className="mastery-status">
-                                {!practiced
-                                    ? "Not practiced"
-                                    : accuracy >= 80
-                                    ? "Mastered"
-                                    : accuracy >= 50
-                                    ? "Learning"
-                                    : "Practice"}
-                            </div>
-
-                        </div>
-                    );
-                })}
+            <div className="mastery-status">
+                {!practiced
+                    ? "Not practiced"
+                    : accuracy >= 80
+                    ? "Mastered"
+                    : accuracy >= 50
+                    ? "Learning"
+                    : "Practice"}
+            </div>
+        </div>
+    );
+})}
 
             </div>
 

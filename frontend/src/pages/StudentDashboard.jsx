@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,7 +16,13 @@ export default function StudentDashboard() {
 
     const navigate = useNavigate();
 
-    const [dashboardData, setDashboardData] = useState(null);
+    const [dashboardData, setDashboardData] =
+        useState(null);
+
+
+    // ==========================================
+    // LOAD DASHBOARD
+    // ==========================================
 
     useEffect(() => {
 
@@ -27,7 +32,10 @@ export default function StudentDashboard() {
 
                 const data = await getDashboard();
 
-                console.log("Dashboard data:", data);
+                console.log(
+                    "Dashboard data:",
+                    data
+                );
 
                 setDashboardData(data);
 
@@ -47,6 +55,10 @@ export default function StudentDashboard() {
     }, []);
 
 
+    // ==========================================
+    // LOADING
+    // ==========================================
+
     if (!dashboardData) {
 
         return (
@@ -58,50 +70,115 @@ export default function StudentDashboard() {
     }
 
 
+    // ==========================================
+    // SAFE DATA
+    // ==========================================
+
+    const profile =
+        dashboardData.profile || {};
+
+    const learningState =
+        dashboardData.learning_state || {};
+
+    const recommendations =
+        dashboardData.recommendations || [];
+
+    const nextPractice =
+        dashboardData.next_practice || null;
+
+    const history =
+        dashboardData.history || [];
+
+    const recentPractice =
+        dashboardData.recent_practice || [];
+
+    const weeklyActivity =
+        dashboardData.weekly_activity || [];
+
+    const alphabetMastery =
+        profile.alphabet_mastery || {};
+
+
+    // ==========================================
+    // DASHBOARD
+    // ==========================================
+
     return (
+
         <div className="dashboard-grid">
 
+
+            {/* ==================================
+                WELCOME
+            ================================== */}
+
             <WelcomeCard
-                profile={dashboardData.profile}
+                profile={profile}
             />
+
+
+            {/* ==================================
+                LEARNING STATE
+            ================================== */}
 
             <LearningStateCard
-                learningState={
-                    dashboardData.learning_state
-                }
+                learningState={learningState}
             />
+
+
+            {/* ==================================
+                AI RECOMMENDATION
+            ================================== */}
 
             <RecommendationCard
-                recommendations={
-                    dashboardData.recommendations
-                }
-
+                nextPractice={nextPractice}
+                recommendations={recommendations}
                 onStartPractice={() =>
-                    navigate("/dashboard/practice")
+                    navigate(
+                        "/dashboard/practice"
+                    )
                 }
             />
+
+
+            {/* ==================================
+                PROGRESS OVERVIEW
+            ================================== */}
 
             <ProgressOverview
-                profile={dashboardData.profile}
-                learningState={
-                    dashboardData.learning_state
-                }
+                profile={profile}
+                learningState={learningState}
             />
+
+
+            {/* ==================================
+                WEEKLY PROGRESS
+            ================================== */}
 
             <WeeklyProgress
-                history={dashboardData.history}
+                history={history}
             />
+
+
+            {/* ==================================
+                ALPHABET MASTERY
+            ================================== */}
 
             <AlphabetMasteryTable
-                alphabetMastery={
-                    dashboardData.profile.alphabet_mastery
-                }
+                alphabetMastery={alphabetMastery}
             />
 
+
+            {/* ==================================
+                RECENT PRACTICE
+            ================================== */}
+
             <RecentPracticeHistory
-                history={dashboardData.history}
+                history={recentPractice}
             />
 
         </div>
+
     );
+
 }
