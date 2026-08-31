@@ -51,16 +51,6 @@ export default function StudentDashboard() {
 
                 console.log("Dashboard:", data);
 
-                console.log(
-                    "Student ID:",
-                    data.student_id
-                );
-
-                console.log(
-                    "Profile Student:",
-                    data.profile?.student_id
-                );
-
             } catch (err) {
 
                 console.error(
@@ -198,34 +188,124 @@ export default function StudentDashboard() {
     const metrics =
         learningState.metrics || {};
 
-
-    const completedLetters =
-        profile.completed_letters?.length ?? 0;
-
-
-    const alphabetCompletion =
-        Math.round(
-            (completedLetters / 26) * 100
-        );
-
-
-    const practiceHistory =
-    dashboard.history || [];
-
-const recentPractice =
-    dashboard.recent_practice || [];
-
-const weeklyActivity =
-    dashboard.weekly_activity || [];
-
     const alphabetMastery =
         profile.alphabet_mastery || {};
 
 
-    console.log(
-        "Dashboard:",
-        dashboard
-    );
+    /* ============================================
+       ALPHABET PROGRESS
+       
+       IMPORTANT:
+       Do NOT rely only on profile.completed_letters.
+
+       The actual mastery data shows which letters
+       have really been practiced/mastered.
+    ============================================ */
+
+    const masteredLetters = Object.entries(
+        alphabetMastery
+    )
+        .filter(([letter, data]) => {
+
+            const accuracy = Number(
+                data?.accuracy ?? 0
+            );
+
+            const attempts = Number(
+                data?.attempts ?? 0
+            );
+
+            return (
+                attempts > 0 &&
+                accuracy >= 80
+            );
+
+        })
+        .map(([letter]) => letter);
+
+
+    /* ============================================
+       PRACTICED LETTERS
+       
+       Any letter with actual attempts is considered
+       practiced.
+    ============================================ */
+
+    const practicedLettersList = Object.entries(
+        alphabetMastery
+    )
+        .filter(([letter, data]) => {
+
+            const attempts = Number(
+                data?.attempts ?? 0
+            );
+
+            return attempts > 0;
+
+        })
+        .map(([letter]) => letter);
+
+
+    /* ============================================
+       FINAL COUNTS
+    ============================================ */
+
+    const completedLetters =
+        masteredLetters.length;
+
+    const practicedLetters =
+        practicedLettersList.length;
+
+
+    /* ============================================
+       ALPHABET COMPLETION
+       
+       Based on mastered letters out of 26.
+       
+       Example:
+       4 / 26 = 15.38%
+       Displayed as 15%
+    ============================================ */
+
+    const alphabetCompletion =
+        Math.round(
+            (
+                completedLetters /
+                26
+            ) * 100
+        );
+
+
+    /* ============================================
+       PRACTICE COMPLETION
+    ============================================ */
+
+    const practiceCompletion =
+        Math.round(
+            (
+                practicedLetters /
+                26
+            ) * 100
+        );
+
+
+    /* ============================================
+       PRACTICE DATA
+    ============================================ */
+
+    const practiceHistory =
+        dashboard.history || [];
+
+    const recentPractice =
+        dashboard.recent_practice || [];
+
+    const weeklyActivity =
+        dashboard.weekly_activity || [];
+
+
+    /* ============================================
+       DEBUG DATA
+    ============================================ */
 
     console.log(
         "Profile:",
@@ -235,6 +315,26 @@ const weeklyActivity =
     console.log(
         "Alphabet Mastery:",
         alphabetMastery
+    );
+
+    console.log(
+        "Mastered Letters:",
+        masteredLetters
+    );
+
+    console.log(
+        "Practiced Letters:",
+        practicedLettersList
+    );
+
+    console.log(
+        "Completed Letter Count:",
+        completedLetters
+    );
+
+    console.log(
+        "Alphabet Completion:",
+        alphabetCompletion
     );
 
 
@@ -276,6 +376,10 @@ const weeklyActivity =
 
                     <div className="stats-grid">
 
+                        {/* ==========================
+                            ACCURACY
+                        ========================== */}
+
                         <StatCard
                             title="Accuracy"
                             value={`${metrics.accuracy ?? 0}%`}
@@ -284,6 +388,14 @@ const weeklyActivity =
                         />
 
 
+                        {/* ==========================
+                            LESSONS
+                            
+                            Based on mastered letters
+                            instead of stale
+                            profile.completed_letters
+                        ========================== */}
+
                         <StatCard
                             title="Lessons"
                             value={completedLetters}
@@ -291,6 +403,10 @@ const weeklyActivity =
                             color="#3B82F6"
                         />
 
+
+                        {/* ==========================
+                            PRACTICE SESSIONS
+                        ========================== */}
 
                         <StatCard
                             title="Practice Sessions"
@@ -301,6 +417,10 @@ const weeklyActivity =
                             color="#F97316"
                         />
 
+
+                        {/* ==========================
+                            ALPHABET COMPLETION
+                        ========================== */}
 
                         <StatCard
                             title="Alphabet Completion"
@@ -334,8 +454,10 @@ const weeklyActivity =
                 <section style={sectionStyle}>
 
                     <WeeklyProgress
-    weeklyActivity={weeklyActivity}
-/>
+                        weeklyActivity={
+                            weeklyActivity
+                        }
+                    />
 
                 </section>
 
@@ -347,7 +469,9 @@ const weeklyActivity =
                 <section style={sectionStyle}>
 
                     <LearningStateCard
-                        learningState={learningState}
+                        learningState={
+                            learningState
+                        }
                     />
 
                 </section>
@@ -360,7 +484,9 @@ const weeklyActivity =
                 <section style={sectionStyle}>
 
                     <AlphabetMasteryTable
-                        alphabetMastery={alphabetMastery}
+                        alphabetMastery={
+                            alphabetMastery
+                        }
                     />
 
                 </section>
@@ -373,8 +499,10 @@ const weeklyActivity =
                 <section style={sectionStyle}>
 
                     <RecentPracticeHistory
-    history={recentPractice}
-/>
+                        history={
+                            recentPractice
+                        }
+                    />
 
                 </section>
 
@@ -554,3 +682,4 @@ const messageText = {
     lineHeight: "1.6"
 
 };
+

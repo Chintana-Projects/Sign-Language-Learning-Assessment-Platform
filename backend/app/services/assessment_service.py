@@ -84,7 +84,7 @@ class AssessmentService:
 
         self.lesson_service = LessonService()
 
-        self.session_service = SessionService()
+        
 
         self.gesture_service = GestureService()
 
@@ -117,6 +117,9 @@ class AssessmentService:
         self.learner_profile_service = (
             LearnerProfileService()
         )
+        self.session_service = SessionService(
+    profile_service=self.learner_profile_service
+)
 
         self.recommendation_engine = (
             RecommendationEngine()
@@ -290,62 +293,25 @@ class AssessmentService:
                 "message": "Lesson not found.",
             }
 
-        profile = (
-            self.learner_profile_service.get_profile(
-                student_id
-            )
-        )
-
-        current_letter = profile.get(
-            "current_letter",
-            "A"
-        )
-
-        next_letter = profile.get(
-            "next_letter",
-            current_letter
-        )
-
-        completed_letters = profile.get(
-            "completed_letters",
-            []
-        )
-
-        session = (
-            self.session_service.start_session(
-                lesson_id=lesson_id,
-                student_id=student_id,
-            )
-        )
-
+        session = self.session_service.start_session(
+    lesson_id=lesson_id,
+    student_id=student_id,
+)
         session_id = session["session_id"]
+        current_letter = session.get(
+    "current_letter"
+)
+        if not current_letter:
+            profile = self.learner_profile_service.get_profile(
+        student_id
+    )
+            current_letter = profile.get(
+        "current_letter",
+        "A"
+    )
+            session["current_letter"] = current_letter
 
-        session["current_letter"] = (
-            current_letter
-        )
-
-        session["next_letter"] = (
-            next_letter
-        )
-
-        session["completed_letters"] = (
-            completed_letters.copy()
-        )
-
-        session["remaining_letters"] = [
-
-            letter
-
-            for letter in
-            self.session_service.alphabets
-
-            if letter not in completed_letters
-
-        ]
-
-        self.learner_profile_service.increment_sessions(
-            student_id
-        )
+        
 
         self.temporal_buffers[
             session_id
@@ -441,7 +407,7 @@ class AssessmentService:
                 lesson_response,
 
             "expected_letter":
-                current_letter,
+    session.get("current_letter"),
         }
 
     # ========================================================
@@ -1492,19 +1458,13 @@ class AssessmentService:
         # ==================================================
 
         updated_session = (
-            self.session_service.record_attempt(
-                session_id,
-                attempt_data
-            )
-        )
-        profile = (
-    self.learner_profile_service.update_after_attempt(
-        student_id=student_id,
-        alphabet=expected,
-        predicted=final_prediction,
-        confidence=final_confidence,
-        correct=correct,
+    self.session_service.record_attempt(
+        session_id,
+        attempt_data
     )
+)
+        profile = self.learner_profile_service.get_profile(
+    student_id
 )
 
         if updated_session is None:

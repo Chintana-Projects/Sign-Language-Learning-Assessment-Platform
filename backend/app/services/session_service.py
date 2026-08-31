@@ -7,11 +7,15 @@ from app.services.learner.learner_profile_service import LearnerProfileService
 
 class SessionService:
 
-    def __init__(self):
+    def __init__(self, profile_service=None):
 
         self.sessions = {}
 
-        self.profile_service = LearnerProfileService()
+        self.profile_service = (
+            profile_service
+            if profile_service is not None
+            else LearnerProfileService()
+        )
 
         self.alphabets = list(string.ascii_uppercase)
 

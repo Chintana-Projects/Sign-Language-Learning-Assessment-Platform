@@ -1,7 +1,11 @@
 from fastapi import APIRouter
 
-from app.services.assessment_service import AssessmentService
+from app.core.service_container import assessment_service
 
+
+# ============================================================
+# REPORT ROUTER
+# ============================================================
 
 router = APIRouter(
     prefix="/reports",
@@ -9,9 +13,9 @@ router = APIRouter(
 )
 
 
-# Create one AssessmentService instance
-assessment_service = AssessmentService()
-
+# ============================================================
+# GET STUDENT REPORT
+# ============================================================
 
 @router.get("/{student_id}")
 def get_student_report(student_id: str):

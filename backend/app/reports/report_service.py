@@ -1,3 +1,4 @@
+
 from statistics import mean
 
 
@@ -12,14 +13,28 @@ class ReportService:
 
     def get_student_report(self, student_id: str):
 
+        # ========================================================
+        # LOAD THE SAME PRACTICE HISTORY USED BY DASHBOARD
+        # ========================================================
+
         history = self.assessment_history.get_student_history(
             student_id
         )
 
+        if not isinstance(history, list):
+            history = []
+
+        # ========================================================
+        # EMPTY REPORT
+        # ========================================================
+
         if not history:
+
             return {
                 "success": True,
+
                 "student_id": student_id,
+
                 "summary": {
                     "total_attempts": 0,
                     "correct_attempts": 0,
@@ -28,8 +43,11 @@ class ReportService:
                     "average_confidence": 0,
                     "average_score": 0,
                 },
+
                 "letters_practiced": [],
+
                 "weak_letters": [],
+
                 "recent_attempts": [],
             }
 
@@ -42,16 +60,30 @@ class ReportService:
         correct_attempts = sum(
             1
             for attempt in history
-            if attempt.get("correct", False)
+            if bool(
+                attempt.get(
+                    "correct",
+                    False
+                )
+            )
         )
 
         incorrect_attempts = (
-            total_attempts - correct_attempts
+            total_attempts
+            - correct_attempts
         )
 
         accuracy = (
-            (correct_attempts / total_attempts) * 100
-            if total_attempts
+
+            (
+                correct_attempts
+                /
+                total_attempts
+            )
+            * 100
+
+            if total_attempts > 0
+
             else 0
         )
 
@@ -69,19 +101,43 @@ class ReportService:
             )
 
             try:
-                confidence = float(confidence)
+
+                confidence = float(
+                    confidence
+                )
+
+                # Backend may store confidence
+                # either as 0-1 or 0-100.
 
                 if confidence <= 1:
                     confidence *= 100
 
-                confidences.append(confidence)
+                # Prevent impossible values.
 
-            except (TypeError, ValueError):
+                confidence = max(
+                    0,
+                    min(
+                        confidence,
+                        100
+                    )
+                )
+
+                confidences.append(
+                    confidence
+                )
+
+            except (
+                TypeError,
+                ValueError
+            ):
                 continue
 
         average_confidence = (
+
             mean(confidences)
+
             if confidences
+
             else 0
         )
 
@@ -98,21 +154,36 @@ class ReportService:
                 {}
             )
 
-            if isinstance(sign_score, dict):
+            if not isinstance(
+                sign_score,
+                dict
+            ):
+                continue
 
-                score = sign_score.get(
-                    "overall_score"
-                )
+            score = sign_score.get(
+                "overall_score"
+            )
 
-                try:
-                    if score is not None:
-                        scores.append(float(score))
-                except (TypeError, ValueError):
-                    pass
+            try:
+
+                if score is not None:
+
+                    scores.append(
+                        float(score)
+                    )
+
+            except (
+                TypeError,
+                ValueError
+            ):
+                continue
 
         average_score = (
+
             mean(scores)
+
             if scores
+
             else 0
         )
 
@@ -128,91 +199,226 @@ class ReportService:
                 "expected"
             )
 
-            if expected:
+            if not expected:
+                continue
+
+            expected = str(
+                expected
+            ).upper().strip()
+
+            # Only A-Z count as alphabet letters.
+
+            if len(expected) == 1 and expected.isalpha():
+
                 letters.add(
-                    str(expected).upper()
+                    expected
                 )
+
+        # Always return alphabetical order.
 
         letters_practiced = sorted(
             letters
         )
 
         # ========================================================
-        # WEAK / CONFUSED LETTERS
+        # LETTER STATISTICS
         # ========================================================
 
         letter_stats = {}
 
         for attempt in history:
 
-            expected = str(
-                attempt.get(
-                    "expected",
-                    ""
-                )
-            ).upper()
+            expected = attempt.get(
+                "expected"
+            )
 
             if not expected:
+                continue
+
+            expected = str(
+                expected
+            ).upper().strip()
+
+            if len(expected) != 1:
+                continue
+
+            if not expected.isalpha():
                 continue
 
             if expected not in letter_stats:
 
                 letter_stats[expected] = {
+
                     "attempts": 0,
+
                     "correct": 0,
-                    "incorrect": 0,
+
+                    "incorrect": 0
+
                 }
 
-            letter_stats[expected]["attempts"] += 1
+            letter_stats[
+                expected
+            ]["attempts"] += 1
 
-            if attempt.get(
-                "correct",
-                False
+            if bool(
+                attempt.get(
+                    "correct",
+                    False
+                )
             ):
-                letter_stats[expected]["correct"] += 1
+
+                letter_stats[
+                    expected
+                ]["correct"] += 1
+
             else:
-                letter_stats[expected]["incorrect"] += 1
+
+                letter_stats[
+                    expected
+                ]["incorrect"] += 1
+
+        # ========================================================
+        # WEAK LETTERS
+        # ========================================================
 
         weak_letters = []
 
         for letter, stats in letter_stats.items():
 
-            attempts = stats["attempts"]
+            attempts = stats[
+                "attempts"
+            ]
+
+            correct = stats[
+                "correct"
+            ]
 
             letter_accuracy = (
-                (stats["correct"] / attempts) * 100
-                if attempts
+
+                (
+                    correct
+                    /
+                    attempts
+                )
+                * 100
+
+                if attempts > 0
+
                 else 0
             )
 
-            # Consider a letter weak when
-            # accuracy is below 70%.
+            # Below 70% = weak.
+
             if letter_accuracy < 70:
 
                 weak_letters.append({
-                    "letter": letter,
-                    "attempts": attempts,
-                    "correct": stats["correct"],
-                    "incorrect": stats["incorrect"],
-                    "accuracy": round(
-                        letter_accuracy,
-                        2
-                    ),
+
+                    "letter":
+                        letter,
+
+                    "attempts":
+                        attempts,
+
+                    "correct":
+                        correct,
+
+                    "incorrect":
+                        stats[
+                            "incorrect"
+                        ],
+
+                    "accuracy":
+                        round(
+                            letter_accuracy,
+                            2
+                        )
+
                 })
 
         weak_letters.sort(
-            key=lambda item: item["accuracy"]
+            key=lambda item:
+                item["accuracy"]
         )
 
         # ========================================================
         # RECENT ATTEMPTS
         # ========================================================
 
-        recent_history = history[-10:]
+        recent_history = sorted(
+
+            history,
+
+            key=lambda attempt: (
+
+                attempt.get(
+                    "timestamp"
+                )
+                or
+                attempt.get(
+                    "saved_at"
+                )
+                or
+                ""
+
+            ),
+
+            reverse=True
+
+        )[:10]
 
         recent_attempts = []
 
         for attempt in recent_history:
+
+            confidence = attempt.get(
+                "confidence",
+                0
+            )
+
+            try:
+
+                confidence = float(
+                    confidence
+                )
+
+                if confidence <= 1:
+
+                    confidence *= 100
+
+                confidence = max(
+                    0,
+                    min(
+                        confidence,
+                        100
+                    )
+                )
+
+            except (
+                TypeError,
+                ValueError
+            ):
+
+                confidence = 0
+
+            sign_score = attempt.get(
+                "sign_score",
+                {}
+            )
+
+            if isinstance(
+                sign_score,
+                dict
+            ):
+
+                score = sign_score.get(
+                    "overall_score",
+                    0
+                )
+
+            else:
+
+                score = 0
 
             recent_attempts.append({
 
@@ -233,42 +439,30 @@ class ReportService:
 
                 "confidence":
                     round(
-                        float(
-                            attempt.get(
-                                "confidence",
-                                0
-                            )
-                        ),
+                        confidence / 100,
                         3
                     ),
 
                 "correct":
-                    attempt.get(
-                        "correct",
-                        False
+                    bool(
+                        attempt.get(
+                            "correct",
+                            False
+                        )
                     ),
 
                 "score":
-                    attempt.get(
-                        "sign_score",
-                        {}
-                    ).get(
-                        "overall_score",
-                        0
-                    )
-                    if isinstance(
-                        attempt.get(
-                            "sign_score",
-                            {}
-                        ),
-                        dict
-                    )
-                    else 0,
+                    score,
 
                 "timestamp":
                     attempt.get(
                         "timestamp"
-                    ),
+                    )
+                    or
+                    attempt.get(
+                        "saved_at"
+                    )
+
             })
 
         # ========================================================
@@ -277,7 +471,8 @@ class ReportService:
 
         return {
 
-            "success": True,
+            "success":
+                True,
 
             "student_id":
                 student_id,
@@ -309,7 +504,8 @@ class ReportService:
                     round(
                         average_score,
                         2
-                    ),
+                    )
+
             },
 
             "letters_practiced":
@@ -319,5 +515,7 @@ class ReportService:
                 weak_letters,
 
             "recent_attempts":
-                recent_attempts,
+                recent_attempts
+
         }
+

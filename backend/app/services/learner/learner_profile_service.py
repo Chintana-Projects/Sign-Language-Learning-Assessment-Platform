@@ -1570,13 +1570,14 @@ class LearnerProfileService:
             if (
         current_letter not in self.alphabets
         or current_letter in completed_set
-    ):
+    ):  
+                current_letter = None
                 for letter in self.alphabets:
                     if letter not in completed_set:
                         current_letter = letter
                         break
-                    profile["current_letter"] = current_letter
-                    profile["next_letter"] = current_letter
+            profile["current_letter"] = current_letter
+            profile["next_letter"] = current_letter
 
 
         profile["last_updated"] = (
