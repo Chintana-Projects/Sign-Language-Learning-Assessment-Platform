@@ -1,0 +1,10 @@
+{
+    "CERT-test_student-B2C1E3": {
+        "certificate_id": "CERT-test_student-B2C1E3",
+        "student_id": "test_student",
+        "student_name": "test_student",
+        "score": 88.46,
+        "level": "Intermediate",
+        "issued_at": "2026-09-06T12:11:40.582120"
+    }
+}

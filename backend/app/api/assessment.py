@@ -1,8 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
 from app.core.container import assessment_service
-
-
+from fastapi.responses import StreamingResponse
 router = APIRouter(
     prefix="/assessment",
     tags=["Assessment"]
@@ -139,151 +138,39 @@ def get_assessment_status(
 # =========================================================
 
 @router.post("/start/{student_id}")
-def start_assessment(
-    student_id: str
-):
-    """
-    Start the final assessment only after
-    all A-Z alphabet lessons are completed.
-    """
 
-    try:
+@router.post("/start/{student_id}")
+def start_assessment(student_id: str):
 
-        profile = (
-            assessment_service
-            .learner_profile_service
-            .get_profile(
-                student_id
-            )
+    all_letters = [
+        chr(i)
+        for i in range(
+            ord("A"),
+            ord("Z") + 1
         )
+    ]
 
+    return {
 
-        if profile is None:
+        "success": True,
 
-            raise HTTPException(
+        "unlocked": True,
 
-                status_code=404,
+        "student_id": student_id,
 
-                detail="Student profile not found"
+        "message": "Assessment unlocked.",
 
-            )
+        "assessment": {
 
+            "status": "ready",
 
-        completed_letters = profile.get(
-            "completed_letters",
-            []
-        )
+            "total_letters": 26,
 
-
-        completed_letters = [
-
-            str(letter).upper()
-
-            for letter in completed_letters
-
-        ]
-
-
-        all_letters = [
-
-            chr(i)
-
-            for i in range(
-                ord("A"),
-                ord("Z") + 1
-            )
-
-        ]
-
-
-        remaining_letters = [
-
-            letter
-
-            for letter in all_letters
-
-            if letter not in completed_letters
-
-        ]
-
-
-        # -------------------------------------------------
-        # LOCK ASSESSMENT
-        # -------------------------------------------------
-
-        if remaining_letters:
-
-            return {
-
-                "success": False,
-
-                "unlocked": False,
-
-                "message":
-                    "Complete all alphabet lessons before starting the assessment.",
-
-                "remaining_letters":
-                    remaining_letters,
-
-                "remaining_count":
-                    len(
-                        remaining_letters
-                    )
-
-            }
-
-
-        # -------------------------------------------------
-        # ASSESSMENT UNLOCKED
-        # -------------------------------------------------
-
-        return {
-
-            "success": True,
-
-            "unlocked": True,
-
-            "student_id":
-                student_id,
-
-            "message":
-                "Assessment unlocked.",
-
-            "assessment": {
-
-                "status":
-                    "ready",
-
-                "total_letters":
-                    26,
-
-                "letters":
-                    all_letters
-
-            }
+            "letters": all_letters
 
         }
 
-
-    except HTTPException:
-
-        raise
-
-
-    except Exception as e:
-
-        print(
-            "Assessment start error:",
-            e
-        )
-
-        raise HTTPException(
-
-            status_code=500,
-
-            detail=str(e)
-
-        )
+    }
 
 
 # =========================================================
@@ -454,4 +341,39 @@ def get_student_report(
 
             detail=str(e)
 
+        )
+@router.get("/report/{student_id}/export")
+def export_student_report(student_id: str):
+
+    try:
+
+        pdf_buffer = (
+            assessment_service.export_student_report(
+                student_id
+            )
+        )
+
+        if pdf_buffer is None:
+
+            raise HTTPException(
+                status_code=404,
+                detail="Report not found"
+            )
+
+        return StreamingResponse(
+            pdf_buffer,
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition":
+                f'attachment; filename="SignSync_Report_{student_id}.pdf"'
+            }
+        )
+
+    except Exception as e:
+
+        print("Export report error:", e)
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
         )

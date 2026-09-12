@@ -1,10 +1,9 @@
 const API_URL = "http://localhost:8000";
 
-
 export async function getStudentProgress(studentId) {
     try {
         const response = await fetch(
-            `${API_URL}/api/dashboard/progress/${studentId}`
+            `${API_URL}/dashboard/progress/${studentId}`
         );
 
         if (!response.ok) {
@@ -19,11 +18,10 @@ export async function getStudentProgress(studentId) {
     }
 }
 
-
 export async function getRecommendations(studentId) {
     try {
         const response = await fetch(
-            `${API_URL}/api/dashboard/recommendations/${studentId}`
+            `${API_URL}/recommendations/${studentId}`
         );
 
         if (!response.ok) {
@@ -32,7 +30,7 @@ export async function getRecommendations(studentId) {
 
         return await response.json();
 
-    } catch(error){
+    } catch (error) {
         console.error("Recommendation API Error:", error);
         return null;
     }

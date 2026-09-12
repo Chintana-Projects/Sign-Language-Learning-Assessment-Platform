@@ -534,6 +534,45 @@ function PracticeReview({
             <GestureFeedback
                 feedback={feedbackData}
             />
+            <GestureFeedback
+    feedback={feedbackData}
+/>
+
+{reviewData.feedback && (
+    <div className="feedback-card">
+
+        <h3>
+            {reviewData.feedback.feedback_title}
+        </h3>
+
+        <ul>
+            {reviewData.feedback.feedback_messages?.map(
+                (msg, index) => (
+                    <li key={index}>
+                        {msg}
+                    </li>
+                )
+            )}
+        </ul>
+
+        {reviewData.feedback.improvement_tips?.length > 0 && (
+            <>
+                <h4>Improvement Tips</h4>
+
+                <ul>
+                    {reviewData.feedback.improvement_tips.map(
+                        (tip, index) => (
+                            <li key={index}>
+                                {tip}
+                            </li>
+                        )
+                    )}
+                </ul>
+            </>
+        )}
+
+    </div>
+)}
 
 
             {/* =================================

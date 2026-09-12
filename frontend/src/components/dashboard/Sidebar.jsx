@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 import {
@@ -10,6 +9,7 @@ import {
     FaHome,
     FaBookOpen,
     FaChartLine,
+    FaCertificate,
     FaCog,
     FaSignOutAlt,
     FaChevronLeft,
@@ -20,7 +20,6 @@ import { useAuth } from "../../context/AuthContext";
 
 import "./../../styles/Sidebar.css";
 
-
 export default function Sidebar() {
 
     const navigate = useNavigate();
@@ -29,11 +28,6 @@ export default function Sidebar() {
     const { user, logout } = useAuth();
 
     const [collapsed, setCollapsed] = useState(false);
-
-
-    /* ========================================
-       LOGOUT
-    ======================================== */
 
     const handleLogout = () => {
 
@@ -44,11 +38,6 @@ export default function Sidebar() {
         });
 
     };
-
-
-    /* ========================================
-       MENU ITEMS
-    ======================================== */
 
     const menuItems = [
 
@@ -62,26 +51,30 @@ export default function Sidebar() {
         },
 
         {
-    label: "Practice",
-    icon: <FaBookOpen />,
-    path: "/dashboard/practice"
-},
-{
-    label: "Reports",
-    icon: <FaChartLine />,
-    path: "/dashboard/reports"
-},
-{
-    label: "Settings",
-    icon: <FaCog />,
-    path: "/dashboard/settings"
-}
+            label: "Practice",
+            icon: <FaBookOpen />,
+            path: "/dashboard/practice"
+        },
+
+        {
+            label: "Reports",
+            icon: <FaChartLine />,
+            path: "/dashboard/reports"
+        },
+
+        {
+            label: "Certification",
+            icon: <FaCertificate />,
+            path: "/dashboard/certification"
+        },
+
+        {
+            label: "Settings",
+            icon: <FaCog />,
+            path: "/dashboard/settings"
+        }
+
     ];
-
-
-    /* ========================================
-       SIDEBAR
-    ======================================== */
 
     return (
 
@@ -93,9 +86,7 @@ export default function Sidebar() {
             }`}
         >
 
-            {/* ========================================
-                LOGO
-            ======================================== */}
+            {/* LOGO */}
 
             <div className="sidebar-logo">
 
@@ -103,14 +94,11 @@ export default function Sidebar() {
                     ✋
                 </div>
 
-
                 {!collapsed && (
 
                     <div className="sidebar-logo-text">
 
-                        <h2>
-                            SignSync
-                        </h2>
+                        <h2>SignSync</h2>
 
                         <span>
                             Learn • Practice • Sign
@@ -122,10 +110,66 @@ export default function Sidebar() {
 
             </div>
 
+           {/* PROFILE */}
 
-            {/* ========================================
-                COLLAPSE / EXPAND BUTTON
-            ======================================== */}
+<div
+    className="sidebar-profile"
+    role="button"
+    tabIndex={0}
+    onClick={() => navigate("/dashboard/profile")}
+    onKeyDown={(e) => {
+        if (e.key === "Enter") {
+            navigate("/dashboard/profile");
+        }
+    }}
+>
+
+    <div className="sidebar-avatar">
+
+        {localStorage.getItem(
+            `profile_photo_${user?.id}`
+        ) ? (
+
+            <img
+                src={localStorage.getItem(
+                    `profile_photo_${user?.id}`
+                )}
+                alt="Profile"
+                className="sidebar-avatar-image"
+            />
+
+        ) : (
+
+            user?.full_name
+                ?.split(" ")
+                ?.map(name => name[0])
+                ?.join("")
+                ?.substring(0, 2)
+                ?.toUpperCase() || "US"
+
+        )}
+
+    </div>
+
+    {!collapsed && (
+
+        <div className="sidebar-profile-info">
+
+            <h4>
+                {user?.full_name || "Learner"}
+            </h4>
+
+            <p>
+                Learner
+            </p>
+
+        </div>
+
+    )}
+
+</div>
+
+            {/* COLLAPSE */}
 
             <button
                 type="button"
@@ -133,24 +177,15 @@ export default function Sidebar() {
                 onClick={() =>
                     setCollapsed(!collapsed)
                 }
-                aria-label={
-                    collapsed
-                        ? "Expand sidebar"
-                        : "Collapse sidebar"
-                }
             >
 
                 {collapsed
                     ? <FaChevronRight />
-                    : <FaChevronLeft />
-                }
+                    : <FaChevronLeft />}
 
             </button>
 
-
-            {/* ========================================
-                NAVIGATION
-            ======================================== */}
+            {/* MENU */}
 
             <nav className="sidebar-menu">
 
@@ -162,47 +197,23 @@ export default function Sidebar() {
 
                 )}
 
-
                 {menuItems.map((item) => (
 
                     <div
                         key={item.label}
-
                         className={`sidebar-item ${
                             location.pathname === item.path
                                 ? "active"
                                 : ""
                         }`}
-
                         onClick={() =>
                             navigate(item.path)
                         }
-
-                        role="button"
-
-                        tabIndex={0}
-
-                        title={
-                            collapsed
-                                ? item.label
-                                : ""
-                        }
-
-                        onKeyDown={(e) => {
-
-                            if (e.key === "Enter") {
-
-                                navigate(item.path);
-
-                            }
-
-                        }}
                     >
 
                         <span className="sidebar-icon">
                             {item.icon}
                         </span>
-
 
                         {!collapsed && (
 
@@ -218,46 +229,20 @@ export default function Sidebar() {
 
             </nav>
 
-
-            {/* ========================================
-                FOOTER
-            ======================================== */}
+            {/* FOOTER */}
 
             <div className="sidebar-footer">
 
                 <div className="sidebar-footer-divider" />
 
-
                 <div
                     className="sidebar-item sidebar-logout"
-
                     onClick={handleLogout}
-
-                    role="button"
-
-                    tabIndex={0}
-
-                    title={
-                        collapsed
-                            ? "Logout"
-                            : ""
-                    }
-
-                    onKeyDown={(e) => {
-
-                        if (e.key === "Enter") {
-
-                            handleLogout();
-
-                        }
-
-                    }}
                 >
 
                     <span className="sidebar-icon">
                         <FaSignOutAlt />
                     </span>
-
 
                     {!collapsed && (
 
@@ -274,4 +259,5 @@ export default function Sidebar() {
         </aside>
 
     );
+
 }

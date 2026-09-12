@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database.database import get_db
 from app.content.lesson_service import LessonService
-
+from app.schemas.lesson_schema import LessonCreate
 
 router = APIRouter(
     prefix="/lessons",
@@ -115,3 +115,40 @@ def update_lesson_status(
         )
 
     return lesson   
+
+# ==========================================================
+# CREATE LESSON
+# ==========================================================
+
+@router.post("/")
+def create_lesson(
+    lesson: LessonCreate,
+    db: Session = Depends(get_db)
+):
+
+    return lesson_service.create_lesson(
+        db,
+        lesson
+    )
+
+@router.delete("/{lesson_id}")
+def delete_lesson(
+    lesson_id: int,
+    db: Session = Depends(get_db)
+):
+
+    deleted = lesson_service.delete_lesson(
+        db,
+        lesson_id
+    )
+
+    if not deleted:
+        raise HTTPException(
+            status_code=404,
+            detail="Lesson not found"
+        )
+
+    return {
+        "success": True,
+        "message": "Lesson deleted"
+    }

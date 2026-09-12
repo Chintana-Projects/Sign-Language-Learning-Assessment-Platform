@@ -1,15 +1,31 @@
+import { useNavigate } from "react-router-dom";
+
 export default function StudentsTable({ students = [] }) {
+    const navigate = useNavigate();
+
+    const handleViewDetails = (studentId) => {
+        if (!studentId) {
+            return;
+        }
+
+        navigate(`/instructor/students/${studentId}`);
+    };
+
     return (
         <div
             style={{
                 background: "#ffffff",
                 borderRadius: "16px",
                 border: "1px solid #e5e7eb",
-                boxShadow: "0 4px 14px rgba(15, 23, 42, 0.06)",
+                boxShadow:
+                    "0 4px 14px rgba(15, 23, 42, 0.06)",
                 overflow: "hidden"
             }}
         >
-            {/* Header */}
+            {/* =========================================
+                HEADER
+            ========================================= */}
+
             <div
                 style={{
                     padding: "22px 24px",
@@ -58,7 +74,10 @@ export default function StudentsTable({ students = [] }) {
                 </div>
             </div>
 
-            {/* Table */}
+            {/* =========================================
+                EMPTY STATE
+            ========================================= */}
+
             {students.length === 0 ? (
                 <div
                     style={{
@@ -86,6 +105,10 @@ export default function StudentsTable({ students = [] }) {
                     </p>
                 </div>
             ) : (
+                /* =========================================
+                   TABLE
+                ========================================= */
+
                 <div
                     style={{
                         overflowX: "auto"
@@ -95,7 +118,7 @@ export default function StudentsTable({ students = [] }) {
                         style={{
                             width: "100%",
                             borderCollapse: "collapse",
-                            minWidth: "850px"
+                            minWidth: "1050px"
                         }}
                     >
                         <thead>
@@ -127,6 +150,10 @@ export default function StudentsTable({ students = [] }) {
                                 <th style={headerStyle}>
                                     Last Updated
                                 </th>
+
+                                <th style={headerStyle}>
+                                    Action
+                                </th>
                             </tr>
                         </thead>
 
@@ -142,27 +169,40 @@ export default function StudentsTable({ students = [] }) {
                                         student.completed_letters ?? 0
                                     );
 
-                                const progress =
-                                    Math.min(
-                                        (completed / 26) * 100,
-                                        100
-                                    );
+                                const progress = Math.min(
+                                    (completed / 26) * 100,
+                                    100
+                                );
+
+                                const studentId =
+                                    student.student_id;
 
                                 return (
                                     <tr
                                         key={
-                                            student.student_id ||
+                                            studentId ||
                                             `student-${index}`
                                         }
                                         style={{
                                             borderBottom:
-                                                "1px solid #f0f2f5"
+                                                "1px solid #f0f2f5",
+                                            transition:
+                                                "background 0.15s ease"
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.background =
+                                                "#FAFAFF";
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.background =
+                                                "#FFFFFF";
                                         }}
                                     >
-                                        {/* Student */}
-                                        <td
-                                            style={cellStyle}
-                                        >
+                                        {/* =================================
+                                            STUDENT
+                                        ================================= */}
+
+                                        <td style={cellStyle}>
                                             <div
                                                 style={{
                                                     display: "flex",
@@ -173,8 +213,9 @@ export default function StudentsTable({ students = [] }) {
                                             >
                                                 <div
                                                     style={{
-                                                        width: "38px",
-                                                        height: "38px",
+                                                        width: "40px",
+                                                        height: "40px",
+                                                        flexShrink: 0,
                                                         borderRadius:
                                                             "50%",
                                                         background:
@@ -189,7 +230,8 @@ export default function StudentsTable({ students = [] }) {
                                                             "center",
                                                         fontWeight:
                                                             "700",
-                                                        color: "#4F46E5",
+                                                        color:
+                                                            "#4F46E5",
                                                         fontSize:
                                                             "14px"
                                                     }}
@@ -209,9 +251,10 @@ export default function StudentsTable({ students = [] }) {
                                                                 "#1f2937"
                                                         }}
                                                     >
-                                                        {student.student_id ||
+                                                        {studentId ||
                                                             `Student ${
-                                                                index + 1
+                                                                index +
+                                                                1
                                                             }`}
                                                     </div>
 
@@ -220,7 +263,9 @@ export default function StudentsTable({ students = [] }) {
                                                             fontSize:
                                                                 "12px",
                                                             color:
-                                                                "#9ca3af"
+                                                                "#9ca3af",
+                                                            marginTop:
+                                                                "2px"
                                                         }}
                                                     >
                                                         Learner
@@ -229,16 +274,17 @@ export default function StudentsTable({ students = [] }) {
                                             </div>
                                         </td>
 
-                                        {/* Current Letter */}
-                                        <td
-                                            style={cellStyle}
-                                        >
+                                        {/* =================================
+                                            CURRENT LETTER
+                                        ================================= */}
+
+                                        <td style={cellStyle}>
                                             <span
                                                 style={{
                                                     display:
                                                         "inline-flex",
-                                                    width: "38px",
-                                                    height: "38px",
+                                                    width: "40px",
+                                                    height: "40px",
                                                     alignItems:
                                                         "center",
                                                     justifyContent:
@@ -260,12 +306,14 @@ export default function StudentsTable({ students = [] }) {
                                             </span>
                                         </td>
 
-                                        {/* Progress */}
+                                        {/* =================================
+                                            PROGRESS
+                                        ================================= */}
+
                                         <td
                                             style={{
                                                 ...cellStyle,
-                                                minWidth:
-                                                    "170px"
+                                                minWidth: "180px"
                                             }}
                                         >
                                             <div
@@ -274,8 +322,10 @@ export default function StudentsTable({ students = [] }) {
                                                         "flex",
                                                     justifyContent:
                                                         "space-between",
+                                                    alignItems:
+                                                        "center",
                                                     marginBottom:
-                                                        "6px",
+                                                        "7px",
                                                     fontSize:
                                                         "12px"
                                                 }}
@@ -335,10 +385,11 @@ export default function StudentsTable({ students = [] }) {
                                             </div>
                                         </td>
 
-                                        {/* Accuracy */}
-                                        <td
-                                            style={cellStyle}
-                                        >
+                                        {/* =================================
+                                            ACCURACY
+                                        ================================= */}
+
+                                        <td style={cellStyle}>
                                             <AccuracyBadge
                                                 accuracy={
                                                     accuracy
@@ -346,7 +397,10 @@ export default function StudentsTable({ students = [] }) {
                                             />
                                         </td>
 
-                                        {/* Sessions */}
+                                        {/* =================================
+                                            SESSIONS
+                                        ================================= */}
+
                                         <td
                                             style={{
                                                 ...cellStyle,
@@ -360,7 +414,10 @@ export default function StudentsTable({ students = [] }) {
                                                 0}
                                         </td>
 
-                                        {/* Last Updated */}
+                                        {/* =================================
+                                            LAST UPDATED
+                                        ================================= */}
+
                                         <td
                                             style={{
                                                 ...cellStyle,
@@ -374,6 +431,74 @@ export default function StudentsTable({ students = [] }) {
                                                 student.last_updated
                                             )}
                                         </td>
+
+                                        {/* =================================
+                                            ACTION
+                                        ================================= */}
+
+                                        <td style={cellStyle}>
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    handleViewDetails(
+                                                        studentId
+                                                    )
+                                                }
+                                                disabled={
+                                                    !studentId
+                                                }
+                                                style={{
+                                                    border:
+                                                        "1px solid #C7D2FE",
+                                                    background:
+                                                        "#EEF2FF",
+                                                    color:
+                                                        "#4F46E5",
+                                                    padding:
+                                                        "8px 14px",
+                                                    borderRadius:
+                                                        "9px",
+                                                    fontSize:
+                                                        "13px",
+                                                    fontWeight:
+                                                        "700",
+                                                    cursor:
+                                                        studentId
+                                                            ? "pointer"
+                                                            : "not-allowed",
+                                                    whiteSpace:
+                                                        "nowrap",
+                                                    transition:
+                                                        "all 0.15s ease",
+                                                    opacity:
+                                                        studentId
+                                                            ? 1
+                                                            : 0.5
+                                                }}
+                                                onMouseEnter={(e) => {
+                                                    if (
+                                                        studentId
+                                                    ) {
+                                                        e.currentTarget.style.background =
+                                                            "#4F46E5";
+                                                        e.currentTarget.style.color =
+                                                            "#FFFFFF";
+                                                    }
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    if (
+                                                        studentId
+                                                    ) {
+                                                        e.currentTarget.style.background =
+                                                            "#EEF2FF";
+                                                        e.currentTarget.style.color =
+                                                            "#4F46E5";
+                                                    }
+                                                }}
+                                            >
+                                                View Details →
+                                            </button>
+                                        </td>
                                     </tr>
                                 );
                             })}
@@ -384,6 +509,7 @@ export default function StudentsTable({ students = [] }) {
         </div>
     );
 }
+
 
 /* ============================================
    ACCURACY BADGE
@@ -422,6 +548,7 @@ function AccuracyBadge({ accuracy }) {
     );
 }
 
+
 /* ============================================
    DATE FORMAT
 ============================================ */
@@ -446,6 +573,7 @@ function formatDate(value) {
     });
 }
 
+
 /* ============================================
    STUDENT INITIAL
 ============================================ */
@@ -455,8 +583,11 @@ function getInitial(student, index) {
         student.student_id ||
         `Student ${index + 1}`;
 
-    return String(name).charAt(0).toUpperCase();
+    return String(name)
+        .charAt(0)
+        .toUpperCase();
 }
+
 
 /* ============================================
    AVATAR BACKGROUND
@@ -471,8 +602,11 @@ function getAvatarBackground(index) {
         "#EFF6FF"
     ];
 
-    return backgrounds[index % backgrounds.length];
+    return backgrounds[
+        index % backgrounds.length
+    ];
 }
+
 
 /* ============================================
    TABLE STYLES
@@ -493,5 +627,6 @@ const cellStyle = {
     padding: "17px 16px",
     fontSize: "14px",
     whiteSpace: "nowrap",
-    textAlign: "left"
+    textAlign: "left",
+    verticalAlign: "middle"
 };

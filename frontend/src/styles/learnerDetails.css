@@ -1,236 +1,516 @@
-/* =========================================
-   LEARNER DETAILS PAGE
-========================================= */
+/* =========================================================
+   ACCESSIBILITY TRAINER - COMMON LAYOUT
+========================================================= */
 
-.learner-details-page {
+.accessibility-layout {
+    display: flex;
+    width: 100%;
     min-height: 100vh;
-    background: #f5f7fb;
-    padding: 32px 40px;
-    font-family: inherit;
+    background: #f8fafc;
+    box-sizing: border-box;
 }
 
 
-/* =========================================
-   BACK BUTTON
-========================================= */
+/* =========================================================
+   ACCESSIBILITY SIDEBAR
+========================================================= */
 
-.back-button {
-    border: none;
-    background: transparent;
-    color: #4f46e5;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 8px 0;
-    margin-bottom: 28px;
-}
+.accessibility-sidebar {
+    width: 240px;
+    min-width: 240px;
+    min-height: 100vh;
+    height: auto;
 
-.back-button:hover {
-    color: #3730a3;
-}
+    position: sticky;
+    top: 0;
 
-
-/* =========================================
-   HEADER
-========================================= */
-
-.learner-details-header {
     display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 32px;
+    flex-direction: column;
+
+    background: #111827;
+    color: white;
+
+    box-sizing: border-box;
+
+    align-self: flex-start;
 }
 
-.learner-details-avatar {
-    width: 64px;
-    height: 64px;
 
-    border-radius: 50%;
+/* =========================================================
+   SIDEBAR LOGO
+========================================================= */
 
-    background: #e0e7ff;
-    color: #4338ca;
+.accessibility-logo {
+    height: 90px;
+    min-height: 90px;
 
     display: flex;
     align-items: center;
-    justify-content: center;
+
+    gap: 12px;
+
+    padding: 0 22px;
+
+    border-bottom: 1px solid #263244;
+
+    box-sizing: border-box;
+}
+
+.logo-hand {
+    font-size: 28px;
+}
+
+.accessibility-logo h2 {
+    margin: 0;
+
+    color: white;
 
     font-size: 20px;
     font-weight: 700;
 }
 
-.learner-details-header h1 {
-    margin: 0 0 6px;
+.accessibility-logo span {
+    display: block;
 
-    font-size: 30px;
+    margin-top: 3px;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   SIDEBAR NAVIGATION
+========================================================= */
+
+.accessibility-nav {
+    flex: 1;
+
+    padding: 25px 14px;
+
+    box-sizing: border-box;
+}
+
+.nav-title {
+    margin: 0 10px 12px;
+
+    color: #6b7280;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+}
+
+
+/* =========================================================
+   SIDEBAR NAV ITEMS
+========================================================= */
+
+.accessibility-nav-item {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 12px 14px;
+    margin-bottom: 6px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: #d1d5db;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.accessibility-nav-item:hover {
+    background: #1f2937;
+    color: white;
+}
+
+.accessibility-nav-item.active {
+    background: #4f46e5;
+    color: white;
+}
+
+.nav-icon {
+    width: 22px;
+    min-width: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   SIDEBAR BOTTOM / LOGOUT
+========================================================= */
+
+.accessibility-sidebar-bottom {
+    margin-top: auto;
+
+    padding: 14px;
+
+    border-top: 1px solid #263244;
+
+    box-sizing: border-box;
+}
+
+.logout-item {
+    margin: 0;
+}
+
+.logout-item:hover {
+    background: #7f1d1d;
+    color: white;
+}
+
+
+/* =========================================================
+   MAIN CONTENT AREA
+========================================================= */
+
+.accessibility-main {
+    flex: 1;
+
+    min-width: 0;
+    min-height: 100vh;
+
+    background: #f8fafc;
+
+    box-sizing: border-box;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   LEARNER DETAILS PAGE
+========================================================= */
+
+.learner-details-page {
+    width: 100%;
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    padding: 32px 40px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+.back-button {
+    display: inline-flex;
+    align-items: center;
+
+    margin-bottom: 24px;
+
+    padding: 12px 18px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: white;
+
+    color: #374151;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    box-shadow:
+        0 4px 12px rgba(15,23,42,0.06);
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+}
+
+.back-button:hover {
+    transform: translateY(-2px);
+
+    background: #ffffff;
+
+    box-shadow:
+        0 10px 20px rgba(15,23,42,0.10);
+}
+.empty-state {
+    color: #9ca3af;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.back-button:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+}
+
+
+/* =========================================================
+   LEARNER HEADER
+========================================================= */
+
+.learner-details-header {
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 32px;
+
+    padding: 28px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 30px rgba(15,23,42,0.06);
+}
+.learner-details-avatar {
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    color: white;
+
+    font-size: 28px;
+    font-weight: 700;
+
+    box-shadow: 0 10px 25px rgba(99,102,241,0.35);
+}
+
+.learner-details-header h1 {
+    margin: 0 0 5px;
+
     color: #111827;
+
+    font-size: 28px;
+    font-weight: 700;
 }
 
 .learner-details-header p {
     margin: 0;
 
     color: #6b7280;
+
     font-size: 14px;
 }
 
 
-/* =========================================
+/* =========================================================
    OVERVIEW CARDS
-========================================= */
+========================================================= */
 
 .learner-overview {
+    width: 100%;
+
     display: grid;
 
-    grid-template-columns:
-        repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
 
-    gap: 18px;
+    gap: 16px;
 
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
 .overview-card {
-    background: white;
-
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
+    min-width: 0;
 
     padding: 24px;
 
+    background: white;
+
+    border-radius: 18px;
+
+    border: none;
+
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.04);
+        0 8px 24px rgba(15,23,42,0.06);
 
-    display: flex;
-    flex-direction: column;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
 
-    gap: 10px;
+.overview-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 14px 32px rgba(15,23,42,0.10);
 }
 
 .overview-card span {
+    display: block;
+
+    margin-bottom: 10px;
+
     color: #6b7280;
 
     font-size: 13px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .overview-card strong {
     color: #111827;
 
-    font-size: 26px;
+    font-size: 32px;
+    font-weight: 800;
+
+    line-height: 1;
 }
 
 
-/* =========================================
-   PROGRESS SECTION
-========================================= */
-
-.learner-progress-section {
-    background: white;
-
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-
-    padding: 28px;
+/* =========================================================
+   GENERAL CONTENT SECTIONS
+========================================================= */
+.learner-progress-section,
+.learner-status-section {
+    width: 100%;
 
     margin-bottom: 24px;
 
-    box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.04);
-}
+    padding: 28px;
 
-.learner-progress-section h2 {
-    margin: 0 0 6px;
-
-    color: #111827;
-    font-size: 20px;
-}
-
-.learner-progress-section p {
-    margin: 0 0 24px;
-
-    color: #6b7280;
-    font-size: 14px;
-}
-
-
-/* =========================================
-   LARGE PROGRESS BAR
-========================================= */
-
-.large-progress-bar {
-    width: 100%;
-    height: 12px;
-
-    background: #e5e7eb;
+    background: white;
 
     border-radius: 20px;
 
-    overflow: hidden;
+    border: none;
+
+    box-shadow:
+        0 8px 24px rgba(15,23,42,0.06);
+
+    box-sizing: border-box;
+}
+.learner-progress-section h2,
+.learner-status-section h2 {
+    margin: 0 0 6px;
+
+    color: #111827;
+
+    font-size: 20px;
+    font-weight: 700;
 }
 
+.learner-progress-section > p,
+.learner-status-section > p {
+    margin: 0 0 18px;
+
+    color: #6b7280;
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   LARGE PROGRESS BAR
+========================================================= */
+.large-progress-bar {
+    width: 100%;
+    height: 16px;
+
+    margin-top: 20px;
+
+    background: #e5e7eb;
+
+    border-radius: 999px;
+
+    overflow: hidden;
+}
 .large-progress-fill {
     height: 100%;
 
     background:
         linear-gradient(
             90deg,
-            #2563eb,
-            #10b981
+            #6366f1,
+            #8b5cf6
         );
 
-    border-radius: 20px;
+    border-radius: 999px;
 
-    transition: width 0.4s ease;
+    transition: width 0.5s ease;
 }
 
 .progress-percentage {
-    margin-top: 10px;
+    margin-top: 12px;
+
+    color: #6366f1;
+
+    font-size: 18px;
+    font-weight: 700;
 
     text-align: right;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    color: #374151;
 }
 
 
-/* =========================================
-   STATUS SECTION
-========================================= */
-
-.learner-status-section {
-    background: white;
-
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-
-    padding: 28px;
-
-    box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.04);
-}
-
-.learner-status-section h2 {
-    margin: 0 0 18px;
-
-    font-size: 20px;
-    color: #111827;
-}
+/* =========================================================
+   STATUS CARD
+========================================================= */
 
 .status-card {
-    display: flex;
+    width: 100%;
 
+    display: flex;
     align-items: center;
     justify-content: space-between;
 
-    padding: 18px 20px;
+    gap: 20px;
 
-    background: #f9fafb;
+    padding: 20px;
 
-    border: 1px solid #e5e7eb;
+    background: #f8fafc;
 
-    border-radius: 12px;
+    border-radius: 16px;
+
+    border: none;
+
+    box-shadow:
+        inset 0 0 0 1px #eef2f7;
 }
-
 .status-card strong {
     display: block;
 
@@ -238,7 +518,7 @@
 
     color: #111827;
 
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .status-card p {
@@ -250,348 +530,200 @@
 }
 
 
-/* =========================================
-   STATUS BADGE
-========================================= */
+/* =========================================================
+   LETTER BADGES
+========================================================= */
 
-.status-badge {
-    padding: 7px 14px;
-
-    border-radius: 20px;
-
-    background: #dcfce7;
-    color: #15803d;
-
-    font-size: 12px;
-    font-weight: 600;
-}
-
-
-/* =========================================
-   RESPONSIVE
-========================================= */
-
-@media (max-width: 900px) {
-
-    .learner-overview {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-}
-
-
-@media (max-width: 600px) {
-
-    .learner-details-page {
-        padding: 24px 18px;
-    }
-
-    .learner-overview {
-        grid-template-columns: 1fr;
-    }
-
-    .status-card {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-
-}
-/* =========================================
-   PERFORMANCE SECTION
-========================================= */
-
-.learner-performance-section {
-    background: white;
-
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-
-    padding: 28px;
-
-    margin-bottom: 24px;
-
-    box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.04);
-}
-
-.learner-performance-section h2 {
-    margin: 0 0 6px;
-
-    color: #111827;
-    font-size: 20px;
-}
-
-.learner-performance-section > p {
-    margin: 0 0 22px;
-
-    color: #6b7280;
-    font-size: 14px;
-}
-
-.performance-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 16px;
-}
-
-.performance-card {
-    background: #f9fafb;
-
-    border: 1px solid #e5e7eb;
-
-    border-radius: 12px;
-
-    padding: 20px;
-
+.letter-badge-list {
     display: flex;
-    flex-direction: column;
+
+    flex-wrap: wrap;
 
     gap: 8px;
 }
-
-.performance-card span {
-    color: #6b7280;
-
-    font-size: 13px;
-}
-
-.performance-card strong {
-    color: #111827;
-
-    font-size: 24px;
-}
-
-
-/* =========================================
-   PERFORMANCE RESPONSIVE
-========================================= */
-
-@media (max-width: 900px) {
-
-    .performance-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-}
-
-
-@media (max-width: 600px) {
-
-    .performance-grid {
-        grid-template-columns: 1fr;
-    }
-
-}
-/* =========================================
-   PERFORMANCE OVERVIEW
-========================================= */
-
-.learner-performance-section {
-    background: white;
-
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-
-    padding: 28px;
-
-    margin-bottom: 24px;
-
-    box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.04);
-}
-
-.learner-performance-section h2 {
-    margin: 0 0 6px;
-
-    font-size: 20px;
-    color: #111827;
-}
-
-.learner-performance-section > p {
-    margin: 0 0 24px;
-
-    color: #6b7280;
-    font-size: 14px;
-}
-
-.performance-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 16px;
-}
-
-.performance-card {
-    display: flex;
-
+.status-badge {
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
 
-    gap: 14px;
+    padding: 8px 14px;
 
-    padding: 18px;
-
-    background: #f9fafb;
-
-    border: 1px solid #e5e7eb;
-
-    border-radius: 12px;
-}
-
-.performance-icon {
-    width: 42px;
-    height: 42px;
-
-    border-radius: 10px;
+    border-radius: 999px;
 
     background: #eef2ff;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: #4338ca;
 
-    font-size: 20px;
-}
-
-.performance-card div {
-    display: flex;
-    flex-direction: column;
-
-    gap: 4px;
-}
-
-.performance-card span:not(.performance-icon) {
     font-size: 12px;
-    color: #6b7280;
+    font-weight: 700;
+}
+.weak-badge {
+    background: #fef2f2;
+    color: #b91c1c;
 }
 
-.performance-card strong {
-    font-size: 17px;
-    color: #111827;
-}
 
+/* =========================================================
+   RECOMMENDATIONS
+========================================================= */
 
-/* =========================================
-   RESPONSIVE
-========================================= */
-
-@media (max-width: 1000px) {
-
-    .performance-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-}
-
-@media (max-width: 600px) {
-
-    .performance-grid {
-        grid-template-columns: 1fr;
-    }
-
-}
-/* =========================================
-   RECENT PRACTICE ACTIVITY
-========================================= */
-
-.learner-activity-section {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 28px;
-    margin-bottom: 24px;
-
-    box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.04);
-}
-
-.learner-activity-section h2 {
-    margin: 0 0 6px;
-    font-size: 20px;
-    color: #111827;
-}
-
-.learner-activity-section > p {
-    margin: 0 0 20px;
-    color: #6b7280;
-    font-size: 14px;
-}
-
-.activity-list {
+.recommendation-list {
     display: flex;
+
     flex-direction: column;
+
     gap: 10px;
 }
 
-.activity-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-
-    padding: 14px 16px;
-
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
+.recommendation-card {
+    width: 100%;
 }
 
-.activity-letter {
-    width: 42px;
-    height: 42px;
 
-    border-radius: 10px;
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
 
-    background: #e0e7ff;
-    color: #4338ca;
+.view-button {
+    margin-top: 12px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 10px 16px;
 
-    font-size: 18px;
-    font-weight: 700;
-}
+    border: none;
+    border-radius: 9px;
 
-.activity-info {
-    flex: 1;
+    background: #4f46e5;
+    color: white;
 
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.activity-info strong {
+    font-family: inherit;
     font-size: 14px;
-    color: #111827;
-}
-
-.activity-info span {
-    font-size: 12px;
-    color: #6b7280;
-}
-
-.activity-status {
-    padding: 6px 12px;
-    border-radius: 20px;
-
-    font-size: 12px;
     font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
 }
 
-.activity-status.correct {
-    background: #dcfce7;
-    color: #15803d;
+.view-button:hover {
+    background: #4338ca;
 }
 
-.activity-status.needs-practice {
-    background: #fef3c7;
-    color: #b45309;
+
+/* =========================================================
+   LOADING / ERROR
+========================================================= */
+
+.learner-status-section h2 {
+    line-height: 1.3;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .accessibility-sidebar {
+        width: 220px;
+        min-width: 220px;
+    }
+
+    .learner-details-page {
+        padding: 28px;
+    }
+
+    .learner-overview {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE - SMALL TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .accessibility-sidebar {
+        width: 210px;
+        min-width: 210px;
+    }
+
+    .accessibility-logo {
+        padding: 0 15px;
+    }
+
+    .learner-details-page {
+        padding: 24px;
+    }
+
+    .status-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .accessibility-layout {
+        flex-direction: column;
+    }
+
+    .accessibility-sidebar {
+        width: 100%;
+        min-width: 100%;
+        min-height: auto;
+        height: auto;
+
+        position: sticky;
+    }
+
+    .accessibility-logo {
+        height: 75px;
+        min-height: 75px;
+    }
+
+    .accessibility-nav {
+        padding: 12px;
+    }
+
+    .accessibility-sidebar-bottom {
+        padding: 12px;
+    }
+
+    .accessibility-main {
+        width: 100%;
+        min-height: auto;
+    }
+
+    .learner-details-page {
+        padding: 20px;
+    }
+
+    .learner-details-header {
+        align-items: flex-start;
+    }
+
+    .learner-details-header h1 {
+        font-size: 24px;
+    }
+
+    .learner-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .learner-progress-section,
+    .learner-status-section {
+        padding: 20px;
+    }
+}
+.accessibility-trainer-content {
+    width: 100%;
+    padding-left: 10px;
 }

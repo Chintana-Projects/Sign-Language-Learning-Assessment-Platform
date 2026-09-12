@@ -1,7 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-
+from app.services.learner.learner_profile_service import (
+    LearnerProfileService
+)
+from app.api.certificate import router as certificate_router
+from app.api.admin import router as admin_router
+from app.api.leaderboard import router as leaderboard_router
+from app.routers.certificate_routes import router as certificate_router
 # ---------------------------------------------------------
 # API Imports
 # ---------------------------------------------------------
@@ -9,6 +14,12 @@ from app.routers.instructor import router as instructor_router
 from app.api.analytics import router as analytics_router
 from app.api.dashboard import router as dashboard_router
 from app.api.health import router as health_router
+from app.api.certification import (
+    router as certification_router
+)
+from app.api.admin_reports import (
+    router as admin_reports_router
+)
 from app.api.predict import router as predict_router
 from app.api.lessons import router as lessons_router
 from app.api.practice import router as practice_router
@@ -97,11 +108,18 @@ app.include_router(user_router)
 app.include_router(
     predict_router
 )
+app.include_router(certificate_router)
 app.include_router(report_router)
 app.include_router(instructor_dashboard_router)
-
+app.include_router(
+    leaderboard_router
+)
+app.include_router(admin_router)
 app.include_router(
     lessons_router
+)
+app.include_router(
+    certification_router
 )
 app.include_router(instructor_router)
 app.include_router(assessment_router)
@@ -111,7 +129,12 @@ app.include_router(
 app.include_router(
     dashboard_router
 )
-
+app.include_router(
+    certificate_router
+)
+app.include_router(
+    admin_reports_router
+)
 app.include_router(
     preprocess_router
 )
@@ -153,3 +176,68 @@ def startup_event():
     logger.info(
         "SignSync backend started"
     )
+
+
+learner_profile_service = (
+    LearnerProfileService()
+)
+
+@app.get("/health")
+def health():
+    return {
+        "status": "ok",
+        "backend": "operational",
+        "ai": "operational"
+    }
+@app.get("/leaderboard")
+def leaderboard():
+
+    profiles = (
+        learner_profile_service
+        .get_all_profiles()
+    )
+
+    leaderboard = []
+
+    for profile in profiles:
+
+        leaderboard.append({
+
+            "student_id":
+                profile.get(
+                    "student_id"
+                ),
+
+            "accuracy":
+                profile.get(
+                    "overall_accuracy",
+                    0
+                ),
+
+            "completed_letters":
+                len(
+                    profile.get(
+                        "completed_letters",
+                        []
+                    )
+                ),
+
+            "certification_level":
+                profile.get(
+                    "certification_level",
+                    "Beginner"
+                ),
+
+            "certificate_id":
+                profile.get(
+                    "certificate_id"
+                )
+        })
+
+    leaderboard.sort(
+        key=lambda x:
+            x["accuracy"],
+        reverse=True
+    )
+
+    return leaderboard

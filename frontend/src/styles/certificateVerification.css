@@ -1,0 +1,87 @@
+.verification-page{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(
+        135deg,
+        #eef2ff,
+        #f8fafc
+    );
+}
+
+.verification-card{
+    width:700px;
+    background:white;
+    padding:50px;
+    border-radius:20px;
+    box-shadow:0 20px 40px rgba(0,0,0,.08);
+}
+
+.verification-title{
+    text-align:center;
+    color:#1e3a8a;
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.verification-subtitle{
+    text-align:center;
+    color:#64748b;
+    margin-bottom:30px;
+}
+
+.verification-input{
+    width:100%;
+    padding:16px;
+    border:2px solid #e2e8f0;
+    border-radius:10px;
+    font-size:16px;
+}
+
+.verification-input:focus{
+    outline:none;
+    border-color:#2563eb;
+}
+
+.verify-btn{
+    width:100%;
+    margin-top:15px;
+    padding:16px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.verify-btn:hover{
+    background:#1d4ed8;
+}
+
+.valid-card{
+    margin-top:25px;
+    padding:25px;
+    border-radius:15px;
+    background:#f0fdf4;
+    border:2px solid #22c55e;
+}
+
+.invalid-card{
+    margin-top:25px;
+    padding:25px;
+    border-radius:15px;
+    background:#fef2f2;
+    border:2px solid #ef4444;
+    color:#b91c1c;
+}
+
+.cert-info{
+    margin-top:15px;
+}
+
+.cert-info p{
+    margin:8px 0;
+}

@@ -20,6 +20,25 @@ def get_dashboard():
 
 
 # =====================================================
+# All Students
+# =====================================================
+
+@router.get("/students")
+def get_all_students():
+
+    try:
+
+        return instructor_dashboard_service.get_all_students()
+
+    except Exception:
+
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to load students."
+        )
+
+
+# =====================================================
 # Individual Student Details
 # =====================================================
 
@@ -32,7 +51,7 @@ def get_student_details(student_id: str):
             student_id
         )
 
-    except Exception as e:
+    except Exception:
 
         raise HTTPException(
             status_code=500,

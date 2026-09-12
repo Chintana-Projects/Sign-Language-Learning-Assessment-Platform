@@ -542,3 +542,464 @@
     }
 
 }
+
+/* ============================================================
+   RECENT ATTEMPTS
+============================================================ */
+
+.report-section-subtitle {
+    margin: 6px 0 0;
+    color: #64748B;
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   ATTEMPTS LIST
+============================================================ */
+
+.attempts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+/* ============================================================
+   ATTEMPT CARD
+============================================================ */
+
+.attempt-card {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        240px
+        minmax(180px, 1fr)
+        190px;
+
+    align-items: center;
+
+    gap: 24px;
+
+    padding: 18px 22px;
+
+    background: #FFFFFF;
+
+    border: 1px solid #E2E8F0;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 3px 12px rgba(15, 23, 42, 0.04);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+/* LEFT ACCENT */
+
+.attempt-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+
+    width: 4px;
+
+    border-radius: 0 5px 5px 0;
+}
+
+
+.attempt-correct::before {
+    background: #22C55E;
+}
+
+
+.attempt-incorrect::before {
+    background: #EF4444;
+}
+
+
+/* HOVER */
+
+.attempt-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 22px rgba(15, 23, 42, 0.08);
+
+    border-color: #CBD5E1;
+}
+
+
+/* ============================================================
+   LETTER AREA
+============================================================ */
+
+.attempt-letters {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.attempt-letter-box {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    min-width: 72px;
+}
+
+
+.attempt-label {
+    margin-bottom: 5px;
+
+    color: #94A3B8;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.06em;
+}
+
+
+.attempt-letter-box .attempt-letter {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #F8FAFC;
+
+    border: 1px solid #E2E8F0;
+
+    color: #0F172A;
+
+    font-size: 22px;
+
+    font-weight: 800;
+}
+
+
+.attempt-letter-box .detected {
+    background: #F0FDF4;
+
+    border-color: #BBF7D0;
+
+    color: #15803D;
+}
+
+
+.attempt-letter-box .detected-incorrect {
+    background: #FEF2F2;
+
+    border-color: #FECACA;
+
+    color: #DC2626;
+}
+
+
+.attempt-arrow {
+    color: #94A3B8;
+
+    font-size: 20px;
+
+    font-weight: 600;
+
+    margin-top: 17px;
+}
+
+
+/* ============================================================
+   RESULT AREA
+============================================================ */
+
+.attempt-main {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.attempt-status {
+    width: fit-content;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 6px 11px;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+.status-icon {
+    width: 19px;
+    height: 19px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 11px;
+}
+
+
+.status-correct {
+    background: #DCFCE7;
+
+    color: #15803D;
+}
+
+
+.status-correct .status-icon {
+    background: #22C55E;
+
+    color: #FFFFFF;
+}
+
+
+.status-incorrect {
+    background: #FEE2E2;
+
+    color: #B91C1C;
+}
+
+
+.status-incorrect .status-icon {
+    background: #EF4444;
+
+    color: #FFFFFF;
+}
+
+
+.attempt-date {
+    color: #64748B;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+}
+
+
+/* ============================================================
+   METRICS
+============================================================ */
+
+.attempt-metrics {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+}
+
+
+.attempt-metric {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    padding: 11px 12px;
+
+    background: #F8FAFC;
+
+    border-radius: 10px;
+
+    border: 1px solid #F1F5F9;
+}
+
+
+.attempt-metric span {
+    color: #94A3B8;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+}
+
+
+.attempt-metric strong {
+    color: #0F172A;
+
+    font-size: 16px;
+
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+.empty-attempts {
+    text-align: center;
+
+    padding: 45px 20px;
+
+    background: #FFFFFF;
+
+    border: 1px dashed #CBD5E1;
+
+    border-radius: 16px;
+}
+
+
+.empty-attempts-icon {
+    font-size: 32px;
+
+    margin-bottom: 10px;
+}
+
+
+.empty-attempts h3 {
+    margin: 0 0 6px;
+
+    color: #1E293B;
+
+    font-size: 16px;
+}
+
+
+.empty-attempts p {
+    margin: 0;
+
+    color: #64748B;
+
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 900px) {
+
+    .attempt-card {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 18px;
+    }
+
+    .attempt-metrics {
+        grid-column: 1 / -1;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .attempt-card {
+        grid-template-columns: 1fr;
+
+        padding: 16px;
+    }
+
+    .attempt-letters {
+        justify-content: center;
+    }
+
+    .attempt-main {
+        align-items: center;
+
+        text-align: center;
+    }
+
+    .attempt-metrics {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+
+/* ============================================================
+   REPORT HEADER ACTIONS
+   ============================================================ */
+
+.reports-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+
+/* ============================================================
+   DOWNLOAD REPORT BUTTON
+   ============================================================ */
+
+.download-report-btn {
+    border: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+
+    background: #111827;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.download-report-btn:hover {
+    background: #1f2937;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.download-report-btn:active {
+    transform: translateY(0);
+}

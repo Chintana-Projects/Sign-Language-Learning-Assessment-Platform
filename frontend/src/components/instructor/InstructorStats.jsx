@@ -17,6 +17,14 @@ export default function InstructorStats({ dashboard }) {
             iconColor: "#16A34A"
         },
         {
+    title: "Certified Learners",
+    value: dashboard.certified_students ?? 0,
+    icon: "🏅",
+    description: "Certified learners",
+    iconBackground: "#FEF3C7",
+    iconColor: "#D97706"
+},
+        {
             title: "Completed",
             value: dashboard.completed_students ?? 0,
             icon: "🏆",

@@ -49,8 +49,8 @@ export default function Login() {
                     break;
 
                 case "accessibility_trainer":
-                    navigate("/trainer/dashboard");
-                    break;
+    navigate("/accessibility-trainer");
+    break;
 
                 default:
                     navigate("/");

@@ -132,3 +132,20 @@ class UserService:
         db.refresh(user)
 
         return user
+
+
+
+
+    def delete_user(
+    self,
+    db: Session,
+    user_id: int
+):
+        user = db.query(User).filter(
+        User.id == user_id
+    ).first()
+        if user is None:
+            return False
+        db.delete(user)
+        db.commit()
+        return True

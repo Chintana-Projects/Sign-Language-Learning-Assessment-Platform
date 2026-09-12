@@ -1,12 +1,70 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Settings.css";
 
 export default function Settings() {
     const navigate = useNavigate();
 
-    const [notifications, setNotifications] = useState(true);
-    const [reportUpdates, setReportUpdates] = useState(true);
+    const [notifications, setNotifications] = useState(
+    localStorage.getItem("notifications") !== "false"
+);
+
+const [reportUpdates, setReportUpdates] = useState(
+    localStorage.getItem("reportUpdates") !== "false"
+);
+
+const [backendStatus, setBackendStatus] = useState("Checking...");
+const [aiStatus, setAiStatus] = useState("Checking...");
+const [version, setVersion] = useState("1.0.0");
+useEffect(() => {
+
+    localStorage.setItem(
+        "notifications",
+        notifications
+    );
+
+}, [notifications]);
+
+useEffect(() => {
+
+    localStorage.setItem(
+        "reportUpdates",
+        reportUpdates
+    );
+
+}, [reportUpdates]);
+
+useEffect(() => {
+
+    async function checkServices() {
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:8000/health"
+            );
+
+            if (response.ok) {
+
+                setBackendStatus("Operational");
+                setAiStatus("Operational");
+
+            } else {
+
+                setBackendStatus("Offline");
+                setAiStatus("Offline");
+            }
+
+        } catch {
+
+            setBackendStatus("Offline");
+            setAiStatus("Offline");
+        }
+    }
+
+    checkServices();
+
+}, []);
 
     const handleRefresh = () => {
         window.location.reload();
@@ -49,21 +107,37 @@ export default function Settings() {
 
                     <div className="setting-row">
                         <span>Version</span>
-                        <strong>1.0.0</strong>
+                        <strong>{version}</strong>
                     </div>
 
                     <div className="setting-row">
                         <span>Backend API</span>
-                        <strong className="status-good">
-                            ● Operational
-                        </strong>
+                       <strong
+    className={
+        backendStatus === "Operational"
+            ? "status-good"
+            : "status-bad"
+    }
+>
+    {backendStatus === "Operational"
+        ? "● Operational"
+        : "● Offline"}
+</strong>
                     </div>
 
                     <div className="setting-row">
                         <span>AI Recognition</span>
-                        <strong className="status-good">
-                            ● Operational
-                        </strong>
+                        <strong
+    className={
+        aiStatus === "Operational"
+            ? "status-good"
+            : "status-bad"
+    }
+>
+    {aiStatus === "Operational"
+        ? "● Operational"
+        : "● Offline"}
+</strong>
                     </div>
 
                 </div>
@@ -78,7 +152,7 @@ export default function Settings() {
                     PREFERENCES
                 </span>
 
-                <h2>Administrator Preferences</h2>
+                <h2>Learner Preferences</h2>
 
                 <div className="settings-card">
 

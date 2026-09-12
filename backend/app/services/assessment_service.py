@@ -1,6 +1,6 @@
 from datetime import datetime
 import uuid
-
+from app.reports.export_service import ExportService
 # ============================================================
 # CORE SERVICES
 # ============================================================
@@ -84,8 +84,6 @@ class AssessmentService:
 
         self.lesson_service = LessonService()
 
-        
-
         self.gesture_service = GestureService()
 
         self.frame_detection_service = (
@@ -109,6 +107,10 @@ class AssessmentService:
         self.report_service = ReportService(
             self.assessment_history
         )
+
+        self.export_service = ExportService(
+        self.report_service
+    )
 
         # =====================================================
         # LEARNER
@@ -1914,9 +1916,18 @@ class AssessmentService:
         self,
         student_id: str
     ):
+        
 
         return (
             self.report_service.get_student_report(
                 student_id
             )
         )
+    
+    def export_student_report(
+    self,
+    student_id: str
+    ):
+        return self.export_service.generate_student_report_pdf(
+        student_id
+    )

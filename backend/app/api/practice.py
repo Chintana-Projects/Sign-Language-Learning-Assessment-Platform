@@ -663,3 +663,76 @@ def get_dashboard(
             student_id
         )
     )
+
+# ==========================================================
+# RECORD CERTIFICATION ATTEMPT
+# ==========================================================
+
+@router.post(
+    "/{certification_id}/attempt"
+)
+def record_certification_attempt(
+    certification_id: str,
+    request: LandmarkRequest
+):
+
+    session = (
+        certification_service.get_session(
+            certification_id
+        )
+    )
+
+    if session is None:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Certification session not found."
+        )
+
+    try:
+
+        stable_prediction = (
+            request.stable_prediction or {}
+        )
+
+        predicted_letter = (
+            stable_prediction.get(
+                "prediction"
+            )
+        )
+
+        confidence = (
+            stable_prediction.get(
+                "confidence",
+                0
+            )
+        )
+
+        if not predicted_letter:
+
+            raise HTTPException(
+                status_code=400,
+                detail="No prediction available."
+            )
+
+        result = (
+            certification_service.submit_letter(
+                certification_id=
+                    certification_id,
+
+                predicted_letter=
+                    predicted_letter,
+
+                confidence=
+                    confidence
+            )
+        )
+
+        return result
+
+    except Exception as e:
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )

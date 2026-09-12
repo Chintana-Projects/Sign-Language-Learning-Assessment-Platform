@@ -17,7 +17,9 @@ from app.core.container import assessment_service
 from app.analytics.progress_analyzer import ProgressAnalyzer
 from app.analytics.report_generator import ReportGenerator
 from app.analytics.error_analysis_service import ErrorAnalysisService
-
+from app.analytics.achievement_engine import (
+    AchievementEngine
+)
 
 
 # =====================================================
@@ -90,7 +92,49 @@ def get_student_progress(
 
 
 
+# =====================================================
+# ACHIEVEMENTS
+# =====================================================
 
+@router.get("/achievements/{student_id}")
+def get_achievements(
+    student_id: str
+):
+
+    tracker = assessment_service.get_tracker(
+        student_id
+    )
+
+    if tracker is None:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Student not found"
+        )
+
+    analyzer = ProgressAnalyzer(
+        tracker.get_history()
+    )
+
+    profile = analyzer.summary()
+
+    achievement_engine = (
+        AchievementEngine()
+    )
+
+    achievements = (
+        achievement_engine.generate(
+            profile
+        )
+    )
+
+    return {
+
+        "success": True,
+
+        "achievements":
+            achievements
+    }
 # =====================================================
 # Error Analysis Module
 # =====================================================

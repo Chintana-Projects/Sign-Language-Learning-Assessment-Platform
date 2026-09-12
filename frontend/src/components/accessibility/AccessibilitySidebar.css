@@ -1,115 +1,92 @@
 /* =========================================
-   ACCESSIBILITY TRAINER LAYOUT
+   ACCESSIBILITY SIDEBAR
 ========================================= */
 
-.accessibility-layout {
+.accessibility-sidebar {
+    width: 240px;
+    min-width: 240px;
+
+    /* Make sidebar fill the full viewport */
     min-height: 100vh;
+    height: 100vh;
 
-    background: #f8f9fc;
-}
+    position: sticky;
+    top: 0;
 
-
-/* =========================================
-   MAIN CONTENT
-========================================= */
-
-.accessibility-main {
-    margin-left: 250px;
-
-    min-height: 100vh;
-
-    padding: 32px 40px;
-}
-
-
-/* =========================================
-   HEADER
-========================================= */
-
-.accessibility-header {
     display: flex;
+    flex-direction: column;
 
-    align-items: center;
-    justify-content: space-between;
+    background: #111827;
+    color: white;
 
-    margin-bottom: 32px;
+    box-sizing: border-box;
+}
+.accessibility-layout {
+    display: flex;
+    min-height: 100vh;
+    align-items: stretch;
+}
+
+.accessibility-sidebar-wrapper {
+    width: 240px;
+    min-width: 240px;
+    display: flex;
+}
+
+.accessibility-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.accessibility-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+.accessibility-sidebar-wrapper {
+    width: 240px;
+    min-width: 240px;
+    background: #111827;
 }
 
 
-.accessibility-header h1 {
+/* =========================================
+   LOGO
+========================================= */
+
+.accessibility-logo {
+    height: 90px;
+    min-height: 90px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+    padding: 0 22px;
+
+    border-bottom: 1px solid #263244;
+
+    box-sizing: border-box;
+}
+
+.logo-hand {
+    font-size: 28px;
+    line-height: 1;
+}
+
+.accessibility-logo h2 {
     margin: 0;
 
-    font-size: 30px;
-
+    font-size: 20px;
     font-weight: 700;
 
-    color: #111827;
+    color: #ffffff;
 }
 
-
-.accessibility-header p {
-    margin: 7px 0 0;
-
-    font-size: 14px;
-
-    color: #6b7280;
-}
-
-
-/* =========================================
-   TRAINER PROFILE
-========================================= */
-
-.trainer-profile {
-    display: flex;
-
-    align-items: center;
-
-    gap: 11px;
-
-    padding: 10px 14px;
-
-    background: #ffffff;
-
-    border: 1px solid #e5e7eb;
-
-    border-radius: 12px;
-}
-
-
-.trainer-avatar {
-    width: 42px;
-    height: 42px;
-
-    border-radius: 50%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #eef2ff;
-
-    color: #4f46e5;
-
-    font-size: 13px;
-
-    font-weight: 700;
-}
-
-
-.trainer-profile strong {
+.accessibility-logo span {
     display: block;
 
-    font-size: 13px;
-
-    color: #111827;
-}
-
-
-.trainer-profile span {
-    display: block;
-
-    margin-top: 2px;
+    margin-top: 3px;
 
     font-size: 11px;
 
@@ -118,326 +95,163 @@
 
 
 /* =========================================
-   STATISTICS
+   NAVIGATION
 ========================================= */
 
-.trainer-stats {
-    display: grid;
+.accessibility-nav {
+    flex: 1;
 
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+    padding: 25px 14px;
 
-    gap: 18px;
-
-    margin-bottom: 35px;
+    box-sizing: border-box;
 }
 
+.nav-title {
+    margin: 0 10px 12px;
 
-.trainer-stat-card {
-    display: flex;
+    font-size: 11px;
+    font-weight: 700;
 
-    align-items: center;
-
-    gap: 15px;
-
-    padding: 20px;
-
-    background: #ffffff;
-
-    border: 1px solid #e5e7eb;
-
-    border-radius: 14px;
-
-    box-shadow:
-        0 2px 8px rgba(
-            15,
-            23,
-            42,
-            0.03
-        );
-}
-
-
-.stat-icon {
-    width: 46px;
-    height: 46px;
-
-    border-radius: 12px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #f3f4ff;
-
-    font-size: 20px;
-}
-
-
-.trainer-stat-card span {
-    display: block;
-
-    font-size: 12px;
+    letter-spacing: 0.08em;
 
     color: #6b7280;
-}
-
-
-.trainer-stat-card h2 {
-    margin: 4px 0 0;
-
-    font-size: 24px;
-
-    color: #111827;
 }
 
 
 /* =========================================
-   LEARNERS SECTION
+   NAVIGATION ITEMS
 ========================================= */
 
-.learners-section {
-    background: #ffffff;
+.accessibility-nav-item {
+    width: 100%;
 
-    border: 1px solid #e5e7eb;
-
-    border-radius: 16px;
-
-    padding: 25px;
-}
-
-
-.section-header {
     display: flex;
-
     align-items: center;
-    justify-content: space-between;
 
-    margin-bottom: 22px;
-}
+    gap: 13px;
 
+    padding: 12px 14px;
+    margin-bottom: 6px;
 
-.section-header h2 {
-    margin: 0;
-
-    font-size: 20px;
-
-    color: #111827;
-}
-
-
-.section-header p {
-    margin: 5px 0 0;
-
-    font-size: 13px;
-
-    color: #6b7280;
-}
-
-
-.view-all-btn {
     border: none;
+    border-radius: 10px;
 
     background: transparent;
 
-    color: #4f46e5;
+    color: #d1d5db;
 
-    font-size: 13px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
 
-    font-weight: 600;
+    text-align: left;
 
     cursor: pointer;
-}
 
-
-.view-all-btn:hover {
-    text-decoration: underline;
-}
-
-
-/* =========================================
-   LEARNER GRID
-========================================= */
-
-.learners-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
-    gap: 18px;
-}
-
-
-/* =========================================
-   LEARNER CARD
-========================================= */
-
-.learner-card {
-    padding: 20px;
-
-    border: 1px solid #e5e7eb;
-
-    border-radius: 13px;
-
-    background: #ffffff;
+    box-sizing: border-box;
 
     transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+        background 0.2s ease,
+        color 0.2s ease;
 }
 
+.accessibility-nav-item:hover {
+    background: #1f2937;
+    color: #ffffff;
+}
 
-.learner-card:hover {
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 6px 18px rgba(
-            15,
-            23,
-            42,
-            0.06
-        );
+.accessibility-nav-item.active {
+    background: #4f46e5;
+    color: #ffffff;
 }
 
 
 /* =========================================
-   LEARNER TOP
+   NAV ICON
 ========================================= */
 
-.learner-top {
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    margin-bottom: 22px;
-}
-
-
-.learner-avatar {
-    width: 42px;
-    height: 42px;
-
-    border-radius: 50%;
+.nav-icon {
+    width: 22px;
+    min-width: 22px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    background: #eef2ff;
-
-    color: #4f46e5;
-
-    font-size: 12px;
-
-    font-weight: 700;
+    font-size: 18px;
 }
 
 
-.learner-top h3 {
+/* =========================================
+   LOGOUT AREA
+========================================= */
+
+.accessibility-sidebar-bottom {
+    margin-top: auto;
+
+    padding: 14px;
+
+    border-top: 1px solid #263244;
+
+    box-sizing: border-box;
+}
+
+.logout-item {
     margin: 0;
-
-    font-size: 15px;
-
-    color: #111827;
 }
 
-
-.learner-top p {
-    margin: 4px 0 0;
-
-    font-size: 12px;
-
-    color: #6b7280;
+.logout-item:hover {
+    background: #7f1d1d;
+    color: #ffffff;
 }
 
 
 /* =========================================
-   PROGRESS
+   PAGE LAYOUT
 ========================================= */
 
-.progress-info {
+.accessibility-layout {
+    width: 100%;
+
+    min-height: 100vh;
+
     display: flex;
+    align-items: stretch;
 
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 7px;
-}
-
-
-.progress-info span {
-    font-size: 12px;
-
-    color: #6b7280;
-}
-
-
-.progress-info strong {
-    font-size: 12px;
-
-    color: #111827;
-}
-
-
-.progress-bar {
-    width: 100%;
-
-    height: 7px;
-
-    overflow: hidden;
-
-    border-radius: 10px;
-
-    background: #eef0f4;
-
-    margin-bottom: 18px;
-}
-
-
-.progress-fill {
-    height: 100%;
-
-    border-radius: inherit;
-
-    background: #6366f1;
+    background: #f8fafc;
 }
 
 
 /* =========================================
-   VIEW LEARNER BUTTON
+   SIDEBAR WRAPPER
 ========================================= */
 
-.learner-button {
-    width: 100%;
+.accessibility-sidebar-wrapper {
+    width: 240px;
+    min-width: 240px;
 
-    padding: 9px 12px;
+    min-height: 100vh;
+    height: 100vh;
 
-    border: 1px solid #e5e7eb;
+    align-self: stretch;
 
-    border-radius: 8px;
+    flex-shrink: 0;
 
-    background: #ffffff;
-
-    color: #4f46e5;
-
-    font-size: 12px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: 0.2s ease;
+    box-sizing: border-box;
 }
 
 
-.learner-button:hover {
-    background: #eef2ff;
+/* =========================================
+   MAIN CONTENT
+========================================= */
 
-    border-color: #c7d2fe;
+.accessibility-main {
+    flex: 1;
+
+    min-width: 0;
+    min-height: 100vh;
+
+    box-sizing: border-box;
 }
 
 
@@ -445,47 +259,56 @@
    RESPONSIVE
 ========================================= */
 
-@media (max-width: 1100px) {
+@media (max-width: 800px) {
 
-    .trainer-stats {
-        grid-template-columns:
-            repeat(2, 1fr);
+    .accessibility-sidebar {
+        width: 210px;
+        min-width: 210px;
     }
 
-
-    .learners-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
+    .accessibility-sidebar-wrapper {
+        width: 210px;
+        min-width: 210px;
     }
 
+    .accessibility-logo {
+        padding: 0 15px;
+    }
 }
 
 
-@media (max-width: 768px) {
+/* =========================================
+   MOBILE
+========================================= */
 
-    .accessibility-main {
-        margin-left: 70px;
+@media (max-width: 600px) {
 
-        padding: 25px;
-    }
-
-
-    .accessibility-header {
-        align-items: flex-start;
-
-        gap: 20px;
-
+    .accessibility-layout {
         flex-direction: column;
     }
 
-
-    .trainer-stats {
-        grid-template-columns: 1fr;
+    .accessibility-sidebar-wrapper {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        min-height: auto;
     }
 
+    .accessibility-sidebar {
+        width: 100%;
+        min-width: 100%;
 
-    .learners-grid {
-        grid-template-columns: 1fr;
+        height: auto;
+        min-height: auto;
+
+        position: sticky;
     }
 
+    .accessibility-nav {
+        padding: 15px;
+    }
+
+    .accessibility-sidebar-bottom {
+        margin-top: 0;
+    }
 }

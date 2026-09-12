@@ -1,596 +1,364 @@
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import AccessibilitySidebar
-    from "../components/dashboard/AccessibilitySidebar";
-
-import "../styles/accessibilityTrainer.css";
-
+import "../styles/AccessibilityTrainer.css";
 
 export default function AccessibilityTrainer() {
-
     const navigate = useNavigate();
 
     const [dashboard, setDashboard] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-
-    // =====================================================
-    // LOAD INSTRUCTOR DASHBOARD
-    // =====================================================
-
     useEffect(() => {
-
         const loadDashboard = async () => {
-
             try {
-
-                setLoading(true);
-                setError("");
-
                 const response = await fetch(
                     "http://localhost:8000/instructor/dashboard"
                 );
 
                 if (!response.ok) {
-
-                    throw new Error(
-                        "Failed to load trainer dashboard."
-                    );
-
+                    throw new Error("Failed to load dashboard");
                 }
 
                 const data = await response.json();
-
-                console.log(
-                    "Instructor Dashboard:",
-                    data
-                );
-
                 setDashboard(data);
-
-            }
-
-            catch (err) {
-
-                console.error(
-                    "Dashboard Error:",
-                    err
-                );
-
-                setError(
-                    "Unable to load dashboard data."
-                );
-
-            }
-
-            finally {
-
+            } catch (err) {
+                console.error(err);
+                setError("Unable to load dashboard data.");
+            } finally {
                 setLoading(false);
-
             }
-
         };
 
-
         loadDashboard();
-
     }, []);
 
-
-    // =====================================================
-    // OPEN LEARNER DETAILS
-    // =====================================================
-
-    const openLearner = (learnerId) => {
-
-        console.log(
-            "Opening learner:",
-            learnerId
-        );
-
-        navigate(
-            `/accessibility-trainer/learner/${learnerId}`
-        );
-
-    };
-
-
-    // =====================================================
-    // LOADING STATE
-    // =====================================================
-
     if (loading) {
-
         return (
-
-            <div className="trainer-layout">
-
-                <AccessibilitySidebar />
-
-                <main className="trainer-page">
-
-                    <h2>
-                        Loading dashboard...
-                    </h2>
-
-                </main>
-
+            <div className="trainer-state">
+                <h2>Loading dashboard...</h2>
             </div>
-
         );
-
     }
-
-
-    // =====================================================
-    // ERROR STATE
-    // =====================================================
 
     if (error) {
-
         return (
-
-            <div className="trainer-layout">
-
-                <AccessibilitySidebar />
-
-                <main className="trainer-page">
-
-                    <h2>
-                        {error}
-                    </h2>
-
-                </main>
-
+            <div className="trainer-state">
+                <h2>{error}</h2>
             </div>
-
         );
-
     }
-
-
-    // =====================================================
-    // SAFETY CHECK
-    // =====================================================
 
     if (!dashboard) {
-
-        return (
-
-            <div className="trainer-layout">
-
-                <AccessibilitySidebar />
-
-                <main className="trainer-page">
-
-                    <h2>
-                        No dashboard data available.
-                    </h2>
-
-                </main>
-
-            </div>
-
-        );
-
+        return null;
     }
 
+    const students = Array.isArray(dashboard.students)
+        ? dashboard.students
+        : [];
 
-    // =====================================================
-    // MAIN PAGE
-    // =====================================================
+    const openLearner = (id) => {
+        if (!id) return;
+
+        navigate(`/accessibility-trainer/learner/${id}`);
+    };
 
     return (
+        <div className="accessibility-trainer-content">
 
-        <div className="trainer-layout">
+            {/* STATISTICS */}
+            <section className="trainer-stats">
 
-
-            {/* =================================================
-                SIDEBAR
-            ================================================= */}
-
-            <AccessibilitySidebar />
-
-
-            {/* =================================================
-                MAIN CONTENT
-            ================================================= */}
-
-            <main className="trainer-page">
-
-
-                {/* =================================================
-                    HEADER
-                ================================================= */}
-
-                <header className="trainer-header">
+                <div className="trainer-stat-card">
+                    <div className="stat-icon">👥</div>
 
                     <div>
+                        <span>Total Learners</span>
+                        <h2>
+                            {dashboard.total_students ?? 0}
+                        </h2>
+                    </div>
+                </div>
 
-                        <h1>
-                            Accessibility Trainer
-                        </h1>
+                <div className="trainer-stat-card">
+                    <div className="stat-icon">🎯</div>
+
+                    <div>
+                        <span>Active Learners</span>
+                        <h2>
+                            {dashboard.active_students ?? 0}
+                        </h2>
+                    </div>
+                </div>
+
+                <div className="trainer-stat-card">
+                    <div className="stat-icon">📚</div>
+
+                    <div>
+                        <span>Completed Learners</span>
+                        <h2>
+                            {dashboard.completed_students ?? 0}
+                        </h2>
+                    </div>
+                </div>
+
+                <div className="trainer-stat-card">
+                    <div className="stat-icon">⭐</div>
+
+                    <div>
+                        <span>Average Accuracy</span>
+                        <h2>
+                            {Number(
+                                dashboard.average_accuracy ?? 0
+                            ).toFixed(2)}%
+                        </h2>
+                    </div>
+                </div>
+
+            </section>
+
+
+            {/* QUICK ACTIONS */}
+            <section className="trainer-tools">
+
+                <div className="section-header">
+                    <div>
+                        <h2>Trainer Tools</h2>
 
                         <p>
-                            Help learners practice and improve
-                            their sign language skills.
+                            Quickly access learner management
+                            and performance analytics.
                         </p>
-
                     </div>
+                </div>
 
+                <div className="trainer-tools-grid">
 
-                    <div className="trainer-profile">
-
-                        <div className="profile-avatar">
-                            AT
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                Accessibility Trainer
-                            </strong>
-
-                            <span>
-                                SignSync
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </header>
-
-
-
-                {/* =================================================
-                    OVERVIEW STATISTICS
-                ================================================= */}
-
-                <section className="trainer-stats">
-
-
-                    {/* ---------------------------------------------
-                        TOTAL LEARNERS
-                    --------------------------------------------- */}
-
-                    <div className="trainer-stat-card">
-
-                        <span className="stat-icon">
+                    <button
+                        className="trainer-tool-card"
+                        onClick={() =>
+                            navigate(
+                                "/accessibility-trainer/learners"
+                            )
+                        }
+                    >
+                        <div className="tool-icon">
                             👥
-                        </span>
-
-                        <div>
-
-                            <p>
-                                Total Learners
-                            </p>
-
-                            <h2>
-                                {dashboard.total_students}
-                            </h2>
-
                         </div>
 
-                    </div>
-
-
-                    {/* ---------------------------------------------
-                        ACTIVE LEARNERS
-                    --------------------------------------------- */}
-
-                    <div className="trainer-stat-card">
-
-                        <span className="stat-icon">
-                            🎯
-                        </span>
-
                         <div>
+                            <h3>Learners</h3>
 
                             <p>
-                                Active Learners
+                                View learner progress and
+                                practice performance.
                             </p>
-
-                            <h2>
-                                {dashboard.active_students}
-                            </h2>
-
                         </div>
 
-                    </div>
+                        <span>→</span>
+                    </button>
 
 
-                    {/* ---------------------------------------------
-                        COMPLETED LEARNERS
-                    --------------------------------------------- */}
-
-                    <div className="trainer-stat-card">
-
-                        <span className="stat-icon">
-                            📚
-                        </span>
+                    <button
+                        className="trainer-tool-card"
+                        onClick={() =>
+                            navigate(
+                                "/accessibility-trainer/analytics"
+                            )
+                        }
+                    >
+                        <div className="tool-icon">
+                            📊
+                        </div>
 
                         <div>
+                            <h3>Analytics</h3>
 
                             <p>
-                                Lessons Completed
+                                Monitor skill development,
+                                assessments and progress.
                             </p>
-
-                            <h2>
-                                {dashboard.completed_students}
-                            </h2>
-
                         </div>
 
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            {/* LEARNER PREVIEW */}
+            <section className="learners-section">
+
+                <div className="section-header">
+
+                    <div>
+                        <h2>Recent Learners</h2>
+
+                        <p>
+                            View a quick overview of learner progress.
+                        </p>
                     </div>
 
+                    <button
+                        className="view-all-btn"
+                        onClick={() =>
+                            navigate(
+                                "/accessibility-trainer/learners"
+                            )
+                        }
+                    >
+                        View All
+                    </button>
 
-                    {/* ---------------------------------------------
-                        AVERAGE ACCURACY
-                    --------------------------------------------- */}
-
-                    <div className="trainer-stat-card">
-
-                        <span className="stat-icon">
-                            ⭐
-                        </span>
-
-                        <div>
-
-                            <p>
-                                Average Accuracy
-                            </p>
-
-                            <h2>
-                                {dashboard.average_accuracy}%
-                            </h2>
-
-                        </div>
-
-                    </div>
+                </div>
 
 
-                </section>
+                <div className="learners-grid">
 
+                    {students.length > 0 ? (
 
+                        students
+                            .slice(0, 4)
+                            .map((student, index) => {
 
-                {/* =================================================
-                    LEARNERS
-                ================================================= */}
+                                const learnerId =
+    student.student_id ||
+    `learner-${index}`;
 
-                <section className="learners-section">
+const learnerName =
+    student.student_name?.trim()
+        ? student.student_name
+        : `Learner ${learnerId}`;
 
+                                const initials =
+    learnerName
+        .split(" ")
+        .map(name => name[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase();
 
-                    {/* ---------------------------------------------
-                        SECTION HEADING
-                    --------------------------------------------- */}
+                                const completedLetters =
+                                    Number(
+                                        student.completed_letters || 0
+                                    );
 
-                    <div className="section-heading">
+                                const progress =
+                                    Math.min(
+                                        100,
+                                        Math.round(
+                                            (completedLetters / 26) * 100
+                                        )
+                                    );
 
-                        <div>
+                                const accuracy =
+                                    Number(
+                                        student.accuracy || 0
+                                    );
 
-                            <h2>
-                                Learners
-                            </h2>
+                                return (
+                                    <div
+                                        className="learner-card"
+                                        key={learnerId}
+                                    >
 
-                            <p>
-                                View learner practice progress.
-                            </p>
+                                        <div className="learner-top">
 
-                        </div>
-
-
-                        <button
-                            className="view-all-button"
-                            type="button"
-                            onClick={() =>
-                                navigate(
-                                    "/accessibility-trainer/learners"
-                                )
-                            }
-                        >
-                            View All
-                        </button>
-
-                    </div>
-
-
-
-                    {/* =================================================
-                        LEARNER LIST
-                    ================================================= */}
-
-                    <div className="learner-list">
-
-
-                        {dashboard.students &&
-                        dashboard.students.length > 0 ? (
-
-                            dashboard.students.map(
-                                (student) => {
-
-                                    const learnerId =
-                                        student.student_id;
-
-                                    const learnerName =
-                                        learnerId
-                                            ? learnerId
-                                                .charAt(0)
-                                                .toUpperCase() +
-                                              learnerId.slice(1)
-                                            : "Learner";
-
-                                    const initials =
-                                        learnerName
-                                            .substring(0, 2)
-                                            .toUpperCase();
-
-
-                                    return (
-
-                                        <div
-                                            className="learner-card"
-                                            key={learnerId}
-                                        >
-
-
-                                            {/* ---------------------------------
-                                                LEARNER INFO
-                                            --------------------------------- */}
-
-                                            <div className="learner-info">
-
-                                                <div className="learner-avatar">
-
-                                                    {initials}
-
-                                                </div>
-
-
-                                                <div>
-
-                                                    <h3>
-                                                        {learnerName}
-                                                    </h3>
-
-                                                    <p>
-                                                        Current lesson:{" "}
-                                                        {
-                                                            student.current_letter ||
-                                                            "A"
-                                                        }
-                                                    </p>
-
-                                                </div>
-
+                                            <div className="learner-avatar">
+                                                {initials}
                                             </div>
 
+                                            <div>
+                                                <h3>
+                                                    {learnerName}
+                                                </h3>
 
-
-                                            {/* ---------------------------------
-                                                PROGRESS
-                                            --------------------------------- */}
-
-                                            <div className="learner-progress">
-
-                                                <div className="progress-label">
-
-                                                    <span>
-                                                        Progress
-                                                    </span>
-
-                                                    <strong>
-                                                        {Math.round(
-                                                            (
-                                                                (
-                                                                    student.completed_letters ||
-                                                                    0
-                                                                ) / 26
-                                                            ) * 100
-                                                        )}%
-                                                    </strong>
-
-                                                </div>
-
-
-                                                <div className="progress-bar">
-
-                                                    <div
-                                                        className="progress-fill"
-                                                        style={{
-                                                            width: `${Math.min(
-                                                                100,
-                                                                Math.max(
-                                                                    0,
-                                                                    (
-                                                                        (
-                                                                            student.completed_letters ||
-                                                                            0
-                                                                        ) / 26
-                                                                    ) * 100
-                                                                )
-                                                            )}%`
-                                                        }}
-                                                    />
-
-                                                </div>
-
+                                                <p>
+    {student.current_letter === "COMPLETED"
+        ? "🏆 Certified Learner"
+        : `Current lesson: ${student.current_letter || "-"}`
+    }
+</p>
                                             </div>
-
-
-
-                                            {/* ---------------------------------
-                                                ACCURACY
-                                            --------------------------------- */}
-
-                                            <div className="learner-accuracy">
-
-                                                <span>
-                                                    Accuracy
-                                                </span>
-
-                                                <strong>
-                                                    {
-                                                        student.accuracy ??
-                                                        0
-                                                    }%
-                                                </strong>
-
-                                            </div>
-
-
-
-                                            {/* ---------------------------------
-                                                VIEW LEARNER BUTTON
-                                            --------------------------------- */}
-
-                                            <button
-                                                className="view-button"
-                                                type="button"
-                                                onClick={() =>
-                                                    openLearner(
-                                                        learnerId
-                                                    )
-                                                }
-                                            >
-                                                View Learner
-                                            </button>
-
 
                                         </div>
 
-                                    );
 
-                                }
+                                        <div className="progress-info">
 
-                            )
+                                            <span>
+                                                Progress
+                                            </span>
 
-                        ) : (
+                                            <strong>
+                                                {progress}%
+                                            </strong>
 
-                            <div className="no-learners">
-
-                                <p>
-                                    No learners found.
-                                </p>
-
-                            </div>
-
-                        )}
+                                        </div>
 
 
-                    </div>
+                                        <div className="progress-bar">
+
+                                            <div
+    className="progress-fill"
+    style={{
+        width: `${progress}%`,
+        background:
+            progress < 30
+                ? "#ef4444"
+                : progress < 70
+                ? "#f59e0b"
+                : "#10b981"
+    }}
+/>
+
+                                        </div>
 
 
-                </section>
+                                        <div className="learner-bottom">
+
+                                            <span>
+                                                Accuracy
+                                            </span>
+
+                                            <strong>
+                                                {accuracy.toFixed(2)}%
+                                            </strong>
+
+                                        </div>
 
 
-            </main>
+                                        <button
+                                            className="learner-button"
+                                            onClick={() =>
+                                                openLearner(
+                                                    student.student_id
+                                                )
+                                            }
+                                        >
+                                            View Learner
+                                        </button>
 
+                                    </div>
+                                );
+                            })
+
+                    ) : (
+
+                        <div className="no-learners">
+                            No learners found.
+                        </div>
+
+                    )}
+
+                </div>
+
+            </section>
 
         </div>
-
     );
-
 }

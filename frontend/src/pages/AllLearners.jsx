@@ -1,153 +1,212 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import AccessibilitySidebar
-    from "../components/dashboard/AccessibilitySidebar";
-
 import "../styles/allLearners.css";
 
 export default function AllLearners() {
+useEffect(() => {
 
-    const navigate = useNavigate();
+    const loadLearners = async () => {
 
-    const learners = [
-        {
-            id: "arjun",
-            name: "Arjun S",
-            initials: "AS",
-            lesson: "C",
-            progress: 72,
-            accuracy: 82,
-            completed: 18
-        },
-        {
-            id: "priya",
-            name: "Priya R",
-            initials: "PR",
-            lesson: "H",
-            progress: 58,
-            accuracy: 76,
-            completed: 14
-        },
-        {
-            id: "rahul",
-            name: "Rahul K",
-            initials: "RK",
-            lesson: "M",
-            progress: 86,
-            accuracy: 91,
-            completed: 22
+        try {
+
+            const response = await fetch(
+                "http://localhost:8000/instructor/dashboard"
+            );
+
+            if (!response.ok) {
+                throw new Error();
+            }
+
+            const data = await response.json();
+
+            setLearners(
+                Array.isArray(data.students)
+                    ? data.students
+                    : []
+            );
+
+        } catch (err) {
+
+            console.error(err);
+
+            setError(
+                "Unable to load learners."
+            );
+
+        } finally {
+
+            setLoading(false);
+
         }
-    ];
+
+    };
+
+    loadLearners();
+
+}, []);
+    const navigate = useNavigate();
+    const [learners, setLearners] = React.useState([]);
+const [loading, setLoading] = React.useState(true);
+const [error, setError] = React.useState("");
+
+  if (loading) {
 
     return (
-        <div className="trainer-layout">
+        <div className="all-learners-page">
+            Loading learners...
+        </div>
+    );
 
-            <AccessibilitySidebar />
+}
 
-            <main className="all-learners-page">
+if (error) {
 
-                <button
-                    className="back-button"
-                    onClick={() =>
-                        navigate("/accessibility-trainer")
-                    }
-                >
-                    ← Back to Dashboard
-                </button>
+    return (
+        <div className="all-learners-page">
+            {error}
+        </div>
+    );
 
-                <header className="all-learners-header">
-                    <h1>All Learners</h1>
+}
 
-                    <p>
-                        View and monitor learner practice progress.
-                    </p>
-                </header>
+    return (
+        <div className="all-learners-page">
 
-                <section className="all-learners-list">
+            <button
+                className="back-button"
+                onClick={() =>
+                    navigate("/accessibility-trainer")
+                }
+            >
+                ← Back to Dashboard
+            </button>
 
-                    {learners.map((learner) => (
+            <header className="all-learners-header">
+                <h1>All Learners</h1>
 
-                        <div
-                            className="all-learner-card"
-                            key={learner.id}
-                        >
+                <p>
+                    View and monitor learner practice progress.
+                </p>
+            </header>
 
-                            <div className="all-learner-info">
+            <section className="all-learners-table-wrapper">
 
-                                <div className="all-learner-avatar">
-                                    {learner.initials}
-                                </div>
+                <table className="all-learners-table">
 
-                                <div>
-                                    <h2>{learner.name}</h2>
+                    <thead>
+                        <tr>
+                            <th>Learner</th>
+                            <th>Current Lesson</th>
+                            <th>Progress</th>
+                            <th>Accuracy</th>
+                            <th>Completed</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
 
-                                    <p>
-                                        Current lesson:{" "}
-                                        {learner.lesson}
-                                    </p>
-                                </div>
+                    <tbody>
 
-                            </div>
+                        {learners.map((learner) => (
 
-                            <div className="all-learner-stats">
+                            <tr key={learner.id}>
 
-                                <div>
-                                    <span>Progress</span>
-                                    <strong>
-                                        {learner.progress}%
+                                {/* Learner */}
+                                <td>
+                                    <div className="table-learner-info">
+
+                                        <div className="table-learner-avatar">
+                                            {(learner.student_name || learner.student_id)
+    .split(" ")
+    .map(word => word[0])
+    .join("")
+    .substring(0, 2)
+    .toUpperCase()}
+                                        </div>
+
+                                        <strong>
+                                          {learner.student_name ||
+ learner.student_id}
+                                        </strong>
+
+                                    </div>
+                                </td>
+
+                                {/* Current Lesson */}
+                                <td>
+                                    <span className="lesson-badge">
+                                        {learner.current_letter === "COMPLETED"
+    ? "✓"
+    : learner.current_letter}
+                                    </span>
+                                </td>
+
+                                {/* Progress */}
+                                <td>
+                                    <div className="table-progress">
+
+                                        <div className="table-progress-top">
+                                            <span>
+                                                {Math.round(
+    (
+        Number(
+            learner.completed_letters || 0
+        ) / 26
+    ) * 100
+)}%
+                                            </span>
+                                        </div>
+
+                                        <div className="table-progress-bar">
+                                            <div
+                                                className="table-progress-fill"
+                                                style={{
+                                                    width: `${learner.progress}%`
+                                                }}
+                                            />
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                {/* Accuracy */}
+                                <td>
+                                    <strong className="accuracy-value">
+                                        {learner.accuracy.toFixed(2)}%
                                     </strong>
-                                </div>
+                                </td>
 
-                                <div>
-                                    <span>Accuracy</span>
-                                    <strong>
-                                        {learner.accuracy}%
+                                {/* Completed */}
+                                <td>
+                                    <strong className="completed-value">
+                                      {learner.completed_letters || 0}/26
                                     </strong>
-                                </div>
+                                </td>
 
-                                <div>
-                                    <span>Completed</span>
-                                    <strong>
-                                        {learner.completed}
-                                    </strong>
-                                </div>
+                                {/* Action */}
+                                <td>
+                                    <button
+                                        className="view-button"
+                                        onClick={() =>
+                                            navigate(
+                                                `/accessibility-trainer/learner/${learner.student_id}`
+                                            )
+                                        }
+                                    >
+                                        View Learner
+                                    </button>
+                                </td>
 
-                            </div>
+                            </tr>
 
-                            <div className="all-learner-progress">
+                        ))}
 
-                                <div className="progress-bar">
-                                    <div
-                                        className="progress-fill"
-                                        style={{
-                                            width:
-                                                `${learner.progress}%`
-                                        }}
-                                    />
-                                </div>
+                    </tbody>
 
-                            </div>
+                </table>
 
-                            <button
-                                className="view-button"
-                                onClick={() =>
-                                    navigate(
-                                        `/accessibility-trainer/learner/${learner.id}`
-                                    )
-                                }
-                            >
-                                View Learner
-                            </button>
-
-                        </div>
-
-                    ))}
-
-                </section>
-
-            </main>
+            </section>
 
         </div>
     );
 }
+

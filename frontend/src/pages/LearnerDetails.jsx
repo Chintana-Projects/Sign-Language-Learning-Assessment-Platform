@@ -1,46 +1,25 @@
 import React, { useEffect, useState } from "react";
-import {
-    useNavigate,
-    useParams
-} from "react-router-dom";
-
-import AccessibilitySidebar
-    from "../components/dashboard/AccessibilitySidebar";
+import { useNavigate, useParams } from "react-router-dom";
 
 import "../styles/learnerDetails.css";
 
-
 export default function LearnerDetails() {
-
     const navigate = useNavigate();
-
     const { learnerId } = useParams();
 
     const [learner, setLearner] = useState(null);
-
     const [loading, setLoading] = useState(true);
-
     const [error, setError] = useState("");
 
-
     // =====================================================
-    // FETCH LEARNER DETAILS FROM BACKEND
+    // FETCH LEARNER DETAILS
     // =====================================================
 
     useEffect(() => {
-
         const fetchLearnerDetails = async () => {
-
             try {
-
                 setLoading(true);
-
                 setError("");
-
-
-                // =================================================
-                // CALL INSTRUCTOR STUDENT DETAILS API
-                // =================================================
 
                 const response = await fetch(
                     `http://localhost:8000/instructor/students/${encodeURIComponent(
@@ -48,54 +27,27 @@ export default function LearnerDetails() {
                     )}`
                 );
 
-
-                // =================================================
-                // CHECK RESPONSE
-                // =================================================
-
                 if (!response.ok) {
-
                     throw new Error(
                         "Failed to fetch learner details."
                     );
-
                 }
-
-
-                // =================================================
-                // GET JSON
-                // =================================================
 
                 const data = await response.json();
 
-
-                console.log(
-                    "Learner Details:",
-                    data
-                );
-
-
-                // =================================================
-                // CONVERT BACKEND DATA TO PAGE DATA
-                // =================================================
-
                 const studentId =
-                    data.student_id ||
-                    learnerId;
-
+                    data.student_id || learnerId;
 
                 const learnerName =
-                    studentId
-                        ? studentId.charAt(0).toUpperCase() +
-                          studentId.slice(1)
-                        : "Learner";
+                    data.student_name ||
+                    `Learner ${studentId}`;
 
-
-                const initials =
-                    learnerName
-                        .substring(0, 2)
-                        .toUpperCase();
-
+                const initials = learnerName
+                    .split(" ")
+                    .map(word => word[0])
+                    .join("")
+                    .substring(0, 2)
+                    .toUpperCase();
 
                 const progress =
                     data.progress_percentage ??
@@ -105,76 +57,57 @@ export default function LearnerDetails() {
                         ) / 26
                     ) * 100;
 
-
                 setLearner({
+                    name: learnerName,
 
-                    name:
-                        learnerName,
+                    studentId: studentId,
 
-                    studentId:
-                        studentId,
-
-                    initials:
-                        initials,
+                    initials: initials,
 
                     lesson:
-                        data.current_letter ||
-                        "A",
+                        data.current_letter || "A",
 
                     nextLesson:
-                        data.next_letter ||
-                        "A",
+                        data.next_letter || "A",
 
-                    progress:
-                        Math.round(
-                            progress
-                        ),
+                    progress: Math.round(
+                        Math.min(
+                            100,
+                            Math.max(0, progress)
+                        )
+                    ),
 
                     accuracy:
-                        data.accuracy ??
-                        0,
+                        Number(data.accuracy ?? 0),
 
                     completed:
                         data.completed_count ??
                         (
-                            data.completed_letters?.length ||
-                            0
+                            data.completed_letters?.length || 0
                         ),
 
                     totalAttempts:
-                        data.total_attempts ??
-                        0,
+                        Number(data.total_attempts ?? 0),
 
                     totalSessions:
-                        data.total_sessions ??
-                        0,
+                        Number(data.total_sessions ?? 0),
 
                     strongLetters:
-                        data.strong_letters ||
-                        [],
+                        data.strong_letters || [],
 
                     weakLetters:
-                        data.weak_letters ||
-                        [],
+                        data.weak_letters || [],
 
                     alphabetMastery:
-                        data.alphabet_mastery ||
-                        {},
+                        data.alphabet_mastery || {},
 
                     practiceHistory:
-                        data.practice_history ||
-                        [],
+                        data.practice_history || [],
 
                     recommendations:
-                        data.recommendations ||
-                        []
-
+                        data.recommendations || []
                 });
-
-            }
-
-            catch (err) {
-
+            } catch (err) {
                 console.error(
                     "Learner details error:",
                     err
@@ -184,132 +117,80 @@ export default function LearnerDetails() {
                     err.message ||
                     "Unable to load learner details."
                 );
-
-            }
-
-            finally {
-
+            } finally {
                 setLoading(false);
-
             }
-
         };
 
-
         if (learnerId) {
-
             fetchLearnerDetails();
-
         }
-
     }, [learnerId]);
 
+    // =====================================================
+    // BACK TO DASHBOARD
+    // =====================================================
+
+    const goBack = () => {
+        navigate("/accessibility-trainer");
+    };
 
     // =====================================================
-    // LOADING STATE
+    // LOADING
     // =====================================================
 
     if (loading) {
-
         return (
+            <div className="learner-details-page">
 
-            <div className="trainer-layout">
+                <button
+                    className="back-button"
+                    type="button"
+                    onClick={goBack}
+                >
+                    ← Back to Dashboard
+                </button>
 
-                <AccessibilitySidebar />
-
-                <main className="learner-details-page">
-
-                    <button
-                        className="back-button"
-                        type="button"
-                        onClick={() =>
-                            navigate(
-                                "/accessibility-trainer"
-                            )
-                        }
-                    >
-                        ← Back to Dashboard
-                    </button>
-
-
-                    <div>
-
-                        <h2>
-                            Loading learner details...
-                        </h2>
-
-                    </div>
-
-                </main>
+                <section className="learner-status-section">
+                    <h2>
+                        Loading learner details...
+                    </h2>
+                </section>
 
             </div>
-
         );
-
     }
 
-
     // =====================================================
-    // ERROR STATE
+    // ERROR
     // =====================================================
 
     if (error || !learner) {
-
         return (
+            <div className="learner-details-page">
 
-            <div className="trainer-layout">
+                <button
+                    className="back-button"
+                    type="button"
+                    onClick={goBack}
+                >
+                    ← Back to Dashboard
+                </button>
 
-                <AccessibilitySidebar />
+                <section className="learner-status-section">
 
-                <main className="learner-details-page">
+                    <h2>Unable to Load Learner</h2>
 
-                    <button
-                        className="back-button"
-                        type="button"
-                        onClick={() =>
-                            navigate(
-                                "/accessibility-trainer"
-                            )
-                        }
-                    >
-                        ← Back to Dashboard
-                    </button>
+                    <p>
+                        {error ||
+                            "Learner details could not be found."}
+                    </p>
 
-
-                    <section className="learner-status-section">
-
-                        <h2>
-                            Unable to Load Learner
-                        </h2>
-
-                        <p>
-                            {error ||
-                                "Learner details could not be found."}
-                        </p>
-
-
-                        <button
-                            className="view-button"
-                            type="button"
-                            onClick={() =>
-                                navigate(
-                                    "/accessibility-trainer"
-                                )
-                            }
-                        >
-                            Back to Dashboard
-                        </button>
-
-                    </section>
-
-                </main>
+                </section>
 
             </div>
-
         );
-
     }
-
 
     // =====================================================
     // MAIN PAGE
@@ -317,456 +198,312 @@ export default function LearnerDetails() {
 
     return (
 
-        <div className="trainer-layout">
+        <div className="learner-details-page">
+
+            {/* =================================================
+                BACK BUTTON
+            ================================================= */}
+
+            <button
+                className="back-button"
+                type="button"
+                onClick={goBack}
+            >
+                ← Back to Dashboard
+            </button>
 
 
             {/* =================================================
-                SIDEBAR
+                LEARNER HEADER
             ================================================= */}
 
-            <AccessibilitySidebar />
+            <header className="learner-details-header">
+
+                <div className="learner-details-avatar">
+                    {learner.initials}
+                </div>
+
+                <div>
+                    <h1>{learner.name}</h1>
+
+                    <p>
+                        Accessibility Trainer • Learner Profile
+                    </p>
+                </div>
+
+            </header>
 
 
             {/* =================================================
-                MAIN CONTENT
+                OVERVIEW
             ================================================= */}
 
-            <main className="learner-details-page">
+            <section className="learner-overview">
+
+                <div className="overview-card">
+                    <span>Current Lesson</span>
+                    <strong>{learner.lesson}</strong>
+                </div>
+
+                <div className="overview-card">
+                    <span>Overall Progress</span>
+                    <strong>{learner.progress}%</strong>
+                </div>
+
+                <div className="overview-card">
+                    <span>Accuracy</span>
+                    <strong>
+                        {learner.accuracy.toFixed(2)}%
+                    </strong>
+                </div>
+
+                <div className="overview-card">
+                    <span>Lessons Completed</span>
+                    <strong>
+                        {learner.completed}/26
+                    </strong>
+                </div>
+
+            </section>
 
 
-                {/* =================================================
-                    BACK BUTTON
-                ================================================= */}
+            {/* =================================================
+                LEARNING PROGRESS
+            ================================================= */}
 
-                <button
-                    className="back-button"
-                    type="button"
-                    onClick={() =>
-                        navigate(
-                            "/accessibility-trainer"
-                        )
-                    }
-                >
-                    ← Back to Dashboard
-                </button>
+            <section className="learner-status-section">
+
+                <h2>Learning Progress</h2>
+
+                <p>
+                    View {learner.name}'s sign language
+                    learning progress.
+                </p>
+
+                <div className="large-progress-bar">
+
+                    <div
+                        className="large-progress-fill"
+                        style={{
+                            width: `${learner.progress}%`
+                        }}
+                    />
+
+                </div>
+
+                <div className="progress-percentage">
+                    {learner.progress}%
+                </div>
+
+            </section>
 
 
-                {/* =================================================
-                    LEARNER HEADER
-                ================================================= */}
+            {/* =================================================
+                CURRENT STATUS
+            ================================================= */}
 
-                <header className="learner-details-header">
+            <section className="learner-status-section">
 
-                    <div className="learner-details-avatar">
+                <h2>Current Status</h2>
 
-                        {learner.initials}
-
-                    </div>
-
+                <div className="status-card">
 
                     <div>
 
-                        <h1>
-                            {learner.name}
-                        </h1>
-
+                        <strong>
+                            Currently Learning
+                        </strong>
 
                         <p>
-                            Accessibility Trainer
-                            {" • "}
-                            Learner Profile
+                            ASL Letter {learner.lesson}
                         </p>
 
                     </div>
 
-                </header>
+                    <span className="status-badge">
+                        In Progress
+                    </span>
+
+                </div>
+
+            </section>
 
 
-                {/* =================================================
-                    OVERVIEW
-                ================================================= */}
+            {/* =================================================
+                LEARNING STATS
+            ================================================= */}
 
-                <section className="learner-overview">
+            <section className="learner-status-section">
 
+                <h2>Learning Statistics</h2>
 
-                    {/* ---------------------------------------------
-                        CURRENT LESSON
-                    --------------------------------------------- */}
+                <div className="learner-overview">
 
                     <div className="overview-card">
-
-                        <span>
-                            Current Lesson
-                        </span>
-
-
+                        <span>Total Attempts</span>
                         <strong>
-                            {learner.lesson}
+                            {learner.totalAttempts}
                         </strong>
+                    </div>
+
+                    <div className="overview-card">
+                        <span>Total Sessions</span>
+                        <strong>
+                            {learner.totalSessions}
+                        </strong>
+                    </div>
+
+                    <div className="overview-card">
+                        <span>Next Letter</span>
+                        <strong>
+                            {learner.nextLesson}
+                        </strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            {/* =================================================
+                STRONG LETTERS
+            ================================================= */}
+
+            <section className="learner-status-section">
+
+                <h2>Strong Letters</h2>
+
+                {learner.strongLetters.length > 0 ? (
+
+                    <div className="letter-badge-list">
+
+                        {learner.strongLetters.map(
+                            (letter) => (
+                                <span
+                                    key={letter}
+                                    className="status-badge"
+                                >
+                                    {letter}
+                                </span>
+                            )
+                        )}
 
                     </div>
 
-
-                    {/* ---------------------------------------------
-                        OVERALL PROGRESS
-                    --------------------------------------------- */}
-
-                    <div className="overview-card">
-
-                        <span>
-                            Overall Progress
-                        </span>
-
-
-                        <strong>
-                            {learner.progress}%
-                        </strong>
-
-                    </div>
-
-
-                    {/* ---------------------------------------------
-                        ACCURACY
-                    --------------------------------------------- */}
-
-                    <div className="overview-card">
-
-                        <span>
-                            Accuracy
-                        </span>
-
-
-                        <strong>
-                            {learner.accuracy}%
-                        </strong>
-
-                    </div>
-
-
-                    {/* ---------------------------------------------
-                        COMPLETED LETTERS
-                    --------------------------------------------- */}
-
-                    <div className="overview-card">
-
-                        <span>
-                            Lessons Completed
-                        </span>
-
-
-                        <strong>
-                            {learner.completed}
-                        </strong>
-
-                    </div>
-
-                </section>
-
-
-                {/* =================================================
-                    LEARNING PROGRESS
-                ================================================= */}
-
-                <section className="learner-progress-section">
-
-                    <h2>
-                        Learning Progress
-                    </h2>
-
+                ) : (
 
                     <p>
-                        View {learner.name}'s
-                        sign language learning progress.
+                        Complete more lessons to identify
+                        strong letters.
                     </p>
 
+                )}
 
-                    <div className="large-progress-bar">
-
-                        <div
-                            className="large-progress-fill"
-                            style={{
-                                width:
-                                    `${Math.min(
-                                        100,
-                                        Math.max(
-                                            0,
-                                            learner.progress
-                                        )
-                                    )}%`
-                            }}
-                        />
-
-                    </div>
+            </section>
 
 
-                    <div className="progress-percentage">
+            {/* =================================================
+                WEAK LETTERS
+            ================================================= */}
 
-                        {learner.progress}%
+            <section className="learner-status-section">
 
-                    </div>
+                <h2>Letters Needing Practice</h2>
 
-                </section>
+                {learner.weakLetters.length > 0 ? (
 
+                    <div className="letter-badge-list">
 
-                {/* =================================================
-                    CURRENT STATUS
-                ================================================= */}
-
-                <section className="learner-status-section">
-
-                    <h2>
-                        Current Status
-                    </h2>
-
-
-                    <div className="status-card">
-
-
-                        <div>
-
-                            <strong>
-                                Currently Learning
-                            </strong>
-
-
-                            <p>
-                                ASL Letter {learner.lesson}
-                            </p>
-
-                        </div>
-
-
-                        <span className="status-badge">
-
-                            In Progress
-
-                        </span>
+                        {learner.weakLetters.map(
+                            (letter) => (
+                                <span
+                                    key={letter}
+                                    className="status-badge weak-badge"
+                                >
+                                    {letter}
+                                </span>
+                            )
+                        )}
 
                     </div>
 
-                </section>
+                ) : (
 
+                    <p>
+                        Not enough practice data available yet.
+                    </p>
 
-                {/* =================================================
-                    LEARNING STATISTICS
-                ================================================= */}
+                )}
 
-                <section className="learner-status-section">
+            </section>
 
-                    <h2>
-                        Learning Statistics
-                    </h2>
 
+            {/* =================================================
+                RECOMMENDATIONS
+            ================================================= */}
 
-                    <div className="learner-overview">
+            <section className="learner-status-section">
 
+                <h2>Recommendations</h2>
 
-                        <div className="overview-card">
+                {learner.recommendations.length > 0 ? (
 
-                            <span>
-                                Total Attempts
-                            </span>
+                    <div className="recommendation-list">
 
-                            <strong>
-                                {learner.totalAttempts}
-                            </strong>
+                        {learner.recommendations.map(
+                            (
+                                recommendation,
+                                index
+                            ) => (
 
-                        </div>
+                                <div
+                                    key={index}
+                                    className="status-card recommendation-card"
+                                >
 
+                                    <div>
 
-                        <div className="overview-card">
-
-                            <span>
-                                Total Sessions
-                            </span>
-
-                            <strong>
-                                {learner.totalSessions}
-                            </strong>
-
-                        </div>
-
-
-                        <div className="overview-card">
-
-                            <span>
-                                Next Letter
-                            </span>
-
-                            <strong>
-                                {learner.nextLesson}
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                {/* =================================================
-                    STRONG LETTERS
-                ================================================= */}
-
-                <section className="learner-status-section">
-
-                    <h2>
-                        Strong Letters
-                    </h2>
-
-
-                    {learner.strongLetters.length > 0 ? (
-
-                        <div>
-
-                            {learner.strongLetters.map(
-                                (letter) => (
-
-                                    <span
-                                        key={letter}
-                                        className="status-badge"
-                                        style={{
-                                            marginRight: "8px"
-                                        }}
-                                    >
-                                        {letter}
-                                    </span>
-
-                                )
-                            )}
-
-                        </div>
-
-                    ) : (
-
-                        <p>
-                            No strong letters identified yet.
-                        </p>
-
-                    )}
-
-                </section>
-
-
-                {/* =================================================
-                    WEAK LETTERS
-                ================================================= */}
-
-                <section className="learner-status-section">
-
-                    <h2>
-                        Letters Needing Practice
-                    </h2>
-
-
-                    {learner.weakLetters.length > 0 ? (
-
-                        <div>
-
-                            {learner.weakLetters.map(
-                                (letter) => (
-
-                                    <span
-                                        key={letter}
-                                        className="status-badge"
-                                        style={{
-                                            marginRight: "8px"
-                                        }}
-                                    >
-                                        {letter}
-                                    </span>
-
-                                )
-                            )}
-
-                        </div>
-
-                    ) : (
-
-                        <p>
-                            No weak letters identified yet.
-                        </p>
-
-                    )}
-
-                </section>
-
-
-                {/* =================================================
-                    RECOMMENDATIONS
-                ================================================= */}
-
-                <section className="learner-status-section">
-
-                    <h2>
-                        Recommendations
-                    </h2>
-
-
-                    {learner.recommendations.length > 0 ? (
-
-                        <div>
-
-                            {learner.recommendations.map(
-                                (recommendation, index) => (
-
-                                    <div
-                                        key={index}
-                                        className="status-card"
-                                        style={{
-                                            marginBottom: "10px"
-                                        }}
-                                    >
-
-                                        <div>
-
-                                            <strong>
-                                                {
-                                                    recommendation.type ||
-                                                    "Recommendation"
-                                                }
-                                            </strong>
-
-                                            <p>
-                                                {
-                                                    recommendation.message ||
-                                                    "Continue practicing."
-                                                }
-                                            </p>
-
-                                        </div>
-
-                                        <span className="status-badge">
-
+                                        <strong>
                                             {
-                                                recommendation.priority ||
-                                                "NORMAL"
+                                                recommendation.type ||
+                                                "Recommendation"
                                             }
+                                        </strong>
 
-                                        </span>
+                                        <p>
+                                            {
+                                                recommendation.message ||
+                                                "Continue practicing."
+                                            }
+                                        </p>
 
                                     </div>
 
-                                )
-                            )}
+                                    <span className="status-badge">
+                                        {
+                                            recommendation.priority ||
+                                            "NORMAL"
+                                        }
+                                    </span>
 
-                        </div>
+                                </div>
 
-                    ) : (
+                            )
+                        )}
 
-                        <p>
-                            No recommendations available yet.
-                        </p>
+                    </div>
 
-                    )}
+                ) : (
 
-                </section>
+                    <p>
+                        No recommendations available yet.
+                    </p>
 
+                )}
 
-            </main>
+            </section>
 
         </div>
 
     );
-
 }

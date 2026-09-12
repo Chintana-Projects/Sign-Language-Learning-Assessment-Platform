@@ -4,7 +4,7 @@
 # ==========================================================
 
 from sqlalchemy.orm import Session
-
+from app.models.lesson_model import Lesson
 from app.models.lesson_model import Lesson
 
 
@@ -95,3 +95,40 @@ class LessonService:
         db.commit()
         db.refresh(lesson)
         return lesson
+    def create_lesson(
+    self,
+    db,
+    lesson_data
+):
+        lesson = Lesson(
+
+        title=lesson_data.title,
+        description=lesson_data.description,
+        category=lesson_data.category,
+
+        sign=lesson_data.sign,
+        image_url=lesson_data.image_url,
+        video_url=lesson_data.video_url,
+
+        is_active=True
+    )
+        db.add(lesson)
+        db.commit()
+        db.refresh(lesson)
+        return lesson
+
+    def delete_lesson(
+    self,
+    db: Session,
+    lesson_id: int
+):
+        lesson = (
+        db.query(Lesson)
+        .filter(Lesson.id == lesson_id)
+        .first()
+    )
+        if lesson is None:
+            return False
+        db.delete(lesson)
+        db.commit()
+        return True

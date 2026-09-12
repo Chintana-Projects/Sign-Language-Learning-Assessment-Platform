@@ -1,7 +1,7 @@
 import json
 import os
 from datetime import datetime
-
+from app.services.notification_service import NotificationService
 
 class LearnerProfileService:
 
@@ -13,6 +13,7 @@ class LearnerProfileService:
         self,
         profile_file="app/database/learner_profiles.json"
     ):
+        self.notification_service = NotificationService()
         self.profile_file = profile_file
         self.profiles = {}
 
@@ -203,13 +204,25 @@ class LearnerProfileService:
 
                 "total":
                     26,
+                "certificates": [],
 
                 "percentage":
                     0.0
             },
 
             "alphabet_mastery":
-                alphabet_mastery
+                alphabet_mastery,
+                "certified":
+    False,
+
+"certification_level":
+    "Beginner",
+
+"certificate_id":
+    None,
+
+"certified_at":
+    None
         }
 
     # =====================================================
@@ -806,6 +819,7 @@ class LearnerProfileService:
         completed_count = len(
             completed_letters
         )
+
 
         practiced_count = len(
             practiced_letters
@@ -1515,15 +1529,19 @@ class LearnerProfileService:
         )
 
         if (
-            letter_is_completed
-            and alphabet not in completed_letters
-        ):
-
+    letter_is_completed
+    and alphabet not in completed_letters
+):
             completed_letters.append(
-                alphabet
-            )
-
-        profile["completed_letters"] = (
+        alphabet
+    )
+            self.notification_service.add_notification(
+        student_id=student_id,
+        title="Lesson Completed",
+        message=f"You successfully mastered letter {alphabet}",
+        notification_type="lesson"
+    )
+            profile["completed_letters"] = (
             completed_letters
         )
 
@@ -1534,6 +1552,13 @@ class LearnerProfileService:
         completed_count = len(
             completed_letters
         )
+        if completed_count == 26:
+            self.notification_service.add_notification(
+        student_id=student_id,
+        title="All Lessons Completed",
+        message="You completed all 26 alphabet lessons and unlocked certification.",
+        notification_type="achievement"
+    )
 
         profile["lesson_progress"] = {
 

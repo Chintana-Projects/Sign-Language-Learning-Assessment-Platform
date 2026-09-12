@@ -2,111 +2,184 @@ import { useEffect, useState } from "react";
 import "../styles/Layout.css";
 import "../styles/Cards.css";
 
+import {
+    getLessons,
+    createLesson,
+    updateLesson,
+    updateLessonStatus
+} from "../services/lessonService";
+
 export default function ContentManagement() {
+
     const [lessons, setLessons] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [editingLesson, setEditingLesson] = useState(null);
-const [saving, setSaving] = useState(false);
+
+    const [editingLesson, setEditingLesson] =
+        useState(null);
+
+    const [saving, setSaving] =
+        useState(false);
+
+    const [showAddModal, setShowAddModal] =
+        useState(false);
+
+    const [newLesson, setNewLesson] =
+        useState({
+            title: "",
+            description: "",
+            category: "",
+            sign: "",
+            image_url: "",
+            video_url: ""
+        });
 
     // =========================================
     // LOAD LESSONS
     // =========================================
 
-    async function loadLessons() {
+    const loadLessons = async () => {
+
         try {
+
             setLoading(true);
 
-            const response = await fetch(
-                "http://127.0.0.1:8000/lessons/"
-            );
-
-            if (!response.ok) {
-                throw new Error("Unable to load lessons");
-            }
-
-            const data = await response.json();
+            const data =
+                await getLessons();
 
             setLessons(data);
+
         } catch (error) {
+
             console.error(
-                "Content loading error:",
+                "Failed to load lessons",
                 error
             );
+
         } finally {
+
             setLoading(false);
+
         }
-    }
+    };
 
     // =========================================
-    // LOAD ON PAGE OPEN
+    // PAGE LOAD
     // =========================================
 
     useEffect(() => {
+
         loadLessons();
+
     }, []);
 
     // =========================================
-    // TOGGLE STATUS
+    // ACTIVATE / DEACTIVATE
     // =========================================
 
-    async function toggleStatus(lesson) {
+    const toggleStatus = async (
+        lesson
+    ) => {
+
         try {
-            const response = await fetch(
-                `http://127.0.0.1:8000/lessons/${lesson.id}/status?is_active=${!lesson.is_active}`,
-                {
-                    method: "PATCH"
-                }
+
+            await updateLessonStatus(
+                lesson.id,
+                !lesson.is_active
             );
 
-            if (!response.ok) {
-                throw new Error(
-                    "Unable to update lesson status"
-                );
-            }
-
             await loadLessons();
+
         } catch (error) {
+
             console.error(
-                "Status update error:",
+                "Status update error",
                 error
             );
         }
-    }
+    };
 
-    async function saveLesson() {
-    try {
-        setSaving(true);
+    // =========================================
+    // SAVE EDIT
+    // =========================================
 
-        const response = await fetch(
-            `http://127.0.0.1:8000/lessons/${editingLesson.id}?title=${encodeURIComponent(editingLesson.title)}&description=${encodeURIComponent(editingLesson.description)}&category=${encodeURIComponent(editingLesson.category)}`,
-            {
-                method: "PUT"
-            }
-        );
+    const saveLesson = async () => {
 
-        if (!response.ok) {
-            throw new Error("Unable to update lesson");
+        try {
+
+            setSaving(true);
+
+            await updateLesson(
+                editingLesson.id,
+                {
+                    title:
+                        editingLesson.title,
+
+                    description:
+                        editingLesson.description,
+
+                    category:
+                        editingLesson.category
+                }
+            );
+
+            setEditingLesson(null);
+
+            await loadLessons();
+
+        } catch (error) {
+
+            console.error(
+                "Lesson update error",
+                error
+            );
+
+        } finally {
+
+            setSaving(false);
+
         }
+    };
 
-        setEditingLesson(null);
+    // =========================================
+    // CREATE LESSON
+    // =========================================
 
-        await loadLessons();
+    const handleAddLesson = async () => {
 
-    } catch (error) {
-        console.error(
-            "Lesson update error:",
-            error
-        );
-    } finally {
-        setSaving(false);
-    }
-}
+        try {
+
+            await createLesson(
+                newLesson
+            );
+
+            setShowAddModal(false);
+
+            setNewLesson({
+                title: "",
+                description: "",
+                category: "",
+                sign: "",
+                image_url: "",
+                video_url: ""
+            });
+
+            await loadLessons();
+
+        } catch (error) {
+
+            console.error(
+                "Create lesson error",
+                error
+            );
+        }
+    };
 
     // =========================================
     // LOADING
     // =========================================
 
     if (loading) {
+
         return (
             <div
                 style={{
@@ -119,33 +192,26 @@ const [saving, setSaving] = useState(false);
         );
     }
 
-    // =========================================
-    // PAGE
-    // =========================================
-
     return (
-       <div
-    style={{
-        width: "100%",
-        minHeight: "100vh",
-        boxSizing: "border-box",
-        background: "#F5F7FB",
-        padding: "30px 40px"
-    }}
->
-            {/* HEADER */}
+        <div
+            style={{
+                width: "100%",
+                minHeight: "100vh",
+                background: "#F5F7FB",
+                padding: "30px 40px",
+                boxSizing: "border-box"
+            }}
+        >
 
             <div
                 style={{
-                   width: "100%",
-margin: "0 auto 25px"
+                    marginBottom: "25px"
                 }}
             >
                 <h1
                     style={{
                         margin: 0,
-                        fontSize: "30px",
-                        color: "#111827"
+                        fontSize: "30px"
                     }}
                 >
                     Content Management
@@ -153,347 +219,494 @@ margin: "0 auto 25px"
 
                 <p
                     style={{
-                        marginTop: "6px",
                         color: "#6B7280"
                     }}
                 >
-                    Manage learning lessons available to learners.
+                    Manage learning lessons.
                 </p>
-            </div>
 
-            {/* CONTENT CARD */}
-
-<div
-    style={{
-        width: "100%",
-        background: "#FFFFFF",
-        color: "#111827",
-        borderRadius: "20px",
-        padding: "25px",
-        boxSizing: "border-box",
-        boxShadow:
-            "0 8px 30px rgba(15,23,42,0.08)"
-    }}
-> <div
+                <button
+                    onClick={() =>
+                        setShowAddModal(true)
+                    }
                     style={{
-                        overflowX: "auto"
+                        marginTop: "15px",
+                        background: "#4F46E5",
+                        color: "#FFF",
+                        border: "none",
+                        padding: "10px 18px",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        fontWeight: "600"
                     }}
                 >
-                    <table
-                        style={{
-                            width: "100%",
-                            borderCollapse: "collapse"
-                        }}
-                    >
-                        <thead>
-                            <tr
-                                style={{
-                                    borderBottom:
-                                        "1px solid #E5E7EB",
-                                    textAlign: "left"
-                                }}
-                            >
-                                <th style={thStyle}>
-                                    Letter
-                                </th>
+                    + Add Lesson
+                </button>
+            </div>
 
-                                <th style={thStyle}>
-                                    Title
-                                </th>
+            <div
+                style={{
+                    background: "#FFF",
+                    padding: "25px",
+                    borderRadius: "20px",
+                    boxShadow:
+                        "0 8px 30px rgba(0,0,0,0.08)"
+                }}
+            >
 
-                                <th style={thStyle}>
-                                    Category
-                                </th>
+                <table
+                    style={{
+                        width: "100%",
+                        borderCollapse:
+                            "collapse"
+                    }}
+                >
+                    <thead>
+                        <tr>
+                            <th style={thStyle}>
+                                Sign
+                            </th>
 
-                                <th style={thStyle}>
-                                    Status
-                                </th>
+                            <th style={thStyle}>
+                                Title
+                            </th>
 
-                                <th style={thStyle}>
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
+                            <th style={thStyle}>
+                                Category
+                            </th>
 
-                        <tbody>
-                            {lessons.map((lesson) => (
+                            <th style={thStyle}>
+                                Status
+                            </th>
+
+                            <th style={thStyle}>
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {lessons.map(
+                            (lesson) => (
+
                                 <tr
-                                    key={lesson.id}
-                                    style={{
-                                        borderBottom:
-                                            "1px solid #F1F5F9"
-                                    }}
+                                    key={
+                                        lesson.id
+                                    }
                                 >
+
                                     <td style={tdStyle}>
-                                        <strong
-                                            style={{
-                                                fontSize: "20px",
-                                                color: "#4F46E5"
-                                            }}
-                                        >
-                                            {lesson.sign}
-                                        </strong>
+                                        {
+                                            lesson.sign
+                                        }
                                     </td>
 
                                     <td style={tdStyle}>
-                                        {lesson.title}
+                                        {
+                                            lesson.title
+                                        }
                                     </td>
 
                                     <td style={tdStyle}>
-                                        {lesson.category}
+                                        {
+                                            lesson.category
+                                        }
                                     </td>
 
                                     <td style={tdStyle}>
                                         <span
                                             style={{
-                                                padding:
-                                                    "6px 12px",
-                                                borderRadius:
-                                                    "999px",
-                                                fontSize:
-                                                    "13px",
-                                                fontWeight:
-                                                    "600",
-                                                background:
-                                                    lesson.is_active
-                                                        ? "#DCFCE7"
-                                                        : "#FEE2E2",
                                                 color:
                                                     lesson.is_active
-                                                        ? "#15803D"
-                                                        : "#B91C1C"
+                                                        ? "green"
+                                                        : "red"
                                             }}
                                         >
-                                            {lesson.is_active
-                                                ? "Active"
-                                                : "Inactive"}
+                                            {
+                                                lesson.is_active
+                                                    ? "Active"
+                                                    : "Inactive"
+                                            }
                                         </span>
                                     </td>
 
                                     <td style={tdStyle}>
-                                        <div
-    style={{
-        display: "flex",
-        gap: "8px"
-    }}
->
-    <button
-        onClick={() =>
-            setEditingLesson({
-                ...lesson
-            })
-        }
-        style={{
-            border: "none",
-            borderRadius: "8px",
-            padding: "8px 14px",
-            cursor: "pointer",
-            background: "#EEF2FF",
-            color: "#4F46E5",
-            fontWeight: "600"
-        }}
-    >
-        Edit
-    </button>
+                                        <button
+                                            onClick={() =>
+                                                setEditingLesson(
+                                                    {
+                                                        ...lesson
+                                                    }
+                                                )
+                                            }
+                                            style={
+                                                editBtn
+                                            }
+                                        >
+                                            Edit
+                                        </button>
 
-    <button
-        onClick={() =>
-            toggleStatus(lesson)
-        }
-        style={{
-            border: "none",
-            borderRadius: "8px",
-            padding: "8px 14px",
-            cursor: "pointer",
-            background: lesson.is_active
-                ? "#FEE2E2"
-                : "#DCFCE7",
-            color: lesson.is_active
-                ? "#B91C1C"
-                : "#15803D",
-            fontWeight: "600"
-        }}
-    >
-        {lesson.is_active
-            ? "Deactivate"
-            : "Activate"}
-    </button>
-</div>
+                                        <button
+                                            onClick={() =>
+                                                toggleStatus(
+                                                    lesson
+                                                )
+                                            }
+                                            style={
+                                                statusBtn
+                                            }
+                                        >
+                                            {
+                                                lesson.is_active
+                                                    ? "Deactivate"
+                                                    : "Activate"
+                                            }
+                                        </button>
                                     </td>
+
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                            )
+                        )}
+
+                    </tbody>
+
+                </table>
+
             </div>
-            {editingLesson && (
-    <div
-        style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.45)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000
-        }}
-    >
-        <div
-            style={{
-                width: "500px",
-                maxWidth: "90%",
-                background: "#FFFFFF",
-                borderRadius: "16px",
-                padding: "25px",
-                boxShadow:
-                    "0 20px 50px rgba(0,0,0,0.2)"
-            }}
-        >
-            <h2
-    style={{
-        marginTop: 0,
-        color: "#111827",
-        background: "#FFFFFF"
-    }}
->
-    Edit Lesson
-</h2>
 
-            <label style={labelStyle}>
-                Title
-            </label>
+            {/* ADD MODAL */}
 
-            <input
-                value={editingLesson.title}
-                onChange={(e) =>
-                    setEditingLesson({
-                        ...editingLesson,
-                        title: e.target.value
-                    })
-                }
-                style={inputStyle}
-            />
+            {showAddModal && (
 
-            <label style={labelStyle}>
-                Description
-            </label>
-
-            <textarea
-                value={editingLesson.description || ""}
-                onChange={(e) =>
-                    setEditingLesson({
-                        ...editingLesson,
-                        description:
-                            e.target.value
-                    })
-                }
-                rows={4}
-                style={inputStyle}
-            />
-
-            <label style={labelStyle}>
-                Category
-            </label>
-
-            <input
-                value={editingLesson.category || ""}
-                onChange={(e) =>
-                    setEditingLesson({
-                        ...editingLesson,
-                        category: e.target.value
-                    })
-                }
-                style={inputStyle}
-            />
-
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    gap: "10px",
-                    marginTop: "20px"
-                }}
-            >
-                <button
-                    onClick={() =>
-                        setEditingLesson(null)
+                <div
+                    style={
+                        modalOverlay
                     }
-                    style={cancelButtonStyle}
                 >
-                    Cancel
-                </button>
+                    <div
+                        style={
+                            modalBox
+                        }
+                    >
 
-                <button
-                    onClick={saveLesson}
-                    disabled={saving}
-                    style={saveButtonStyle}
+                        <h2>
+                            Add Lesson
+                        </h2>
+
+                        <input
+                            placeholder="Title"
+                            value={
+                                newLesson.title
+                            }
+                            onChange={(e) =>
+                                setNewLesson({
+                                    ...newLesson,
+                                    title:
+                                        e.target
+                                            .value
+                                })
+                            }
+                            style={
+                                inputStyle
+                            }
+                        />
+
+                        <input
+                            placeholder="Sign"
+                            value={
+                                newLesson.sign
+                            }
+                            onChange={(e) =>
+                                setNewLesson({
+                                    ...newLesson,
+                                    sign:
+                                        e.target
+                                            .value
+                                })
+                            }
+                            style={
+                                inputStyle
+                            }
+                        />
+
+                        <input
+                            placeholder="Category"
+                            value={
+                                newLesson.category
+                            }
+                            onChange={(e) =>
+                                setNewLesson({
+                                    ...newLesson,
+                                    category:
+                                        e.target
+                                            .value
+                                })
+                            }
+                            style={
+                                inputStyle
+                            }
+                        />
+
+                        <textarea
+                            placeholder="Description"
+                            rows={4}
+                            value={
+                                newLesson.description
+                            }
+                            onChange={(e) =>
+                                setNewLesson({
+                                    ...newLesson,
+                                    description:
+                                        e.target
+                                            .value
+                                })
+                            }
+                            style={
+                                inputStyle
+                            }
+                        />
+
+                        <div
+                            style={{
+                                display:
+                                    "flex",
+                                justifyContent:
+                                    "flex-end",
+                                gap: "10px",
+                                marginTop:
+                                    "20px"
+                            }}
+                        >
+
+                            <button
+                                onClick={() =>
+                                    setShowAddModal(
+                                        false
+                                    )
+                                }
+                                style={
+                                    cancelButtonStyle
+                                }
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={
+                                    handleAddLesson
+                                }
+                                style={
+                                    saveButtonStyle
+                                }
+                            >
+                                Create
+                            </button>
+
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
+            {/* EDIT MODAL */}
+
+            {editingLesson && (
+
+                <div
+                    style={
+                        modalOverlay
+                    }
                 >
-                    {saving
-                        ? "Saving..."
-                        : "Save"}
-                </button>
-            </div>
-        </div>
-    </div>
-)}
+                    <div
+                        style={
+                            modalBox
+                        }
+                    >
+
+                        <h2>
+                            Edit Lesson
+                        </h2>
+
+                        <input
+                            value={
+                                editingLesson.title
+                            }
+                            onChange={(e) =>
+                                setEditingLesson(
+                                    {
+                                        ...editingLesson,
+                                        title:
+                                            e
+                                                .target
+                                                .value
+                                    }
+                                )
+                            }
+                            style={
+                                inputStyle
+                            }
+                        />
+
+                        <textarea
+                            rows={4}
+                            value={
+                                editingLesson.description
+                            }
+                            onChange={(e) =>
+                                setEditingLesson(
+                                    {
+                                        ...editingLesson,
+                                        description:
+                                            e
+                                                .target
+                                                .value
+                                    }
+                                )
+                            }
+                            style={
+                                inputStyle
+                            }
+                        />
+
+                        <input
+                            value={
+                                editingLesson.category
+                            }
+                            onChange={(e) =>
+                                setEditingLesson(
+                                    {
+                                        ...editingLesson,
+                                        category:
+                                            e
+                                                .target
+                                                .value
+                                    }
+                                )
+                            }
+                            style={
+                                inputStyle
+                            }
+                        />
+
+                        <div
+                            style={{
+                                display:
+                                    "flex",
+                                justifyContent:
+                                    "flex-end",
+                                gap: "10px",
+                                marginTop:
+                                    "20px"
+                            }}
+                        >
+
+                            <button
+                                onClick={() =>
+                                    setEditingLesson(
+                                        null
+                                    )
+                                }
+                                style={
+                                    cancelButtonStyle
+                                }
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={
+                                    saveLesson
+                                }
+                                disabled={
+                                    saving
+                                }
+                                style={
+                                    saveButtonStyle
+                                }
+                            >
+                                {saving
+                                    ? "Saving..."
+                                    : "Save"}
+                            </button>
+
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }
 
-// =========================================
-// TABLE STYLES
-// =========================================
-
 const thStyle = {
-    padding: "14px 16px",
-    color: "#6B7280",
-    fontSize: "14px",
-    fontWeight: "600"
+    padding: "12px",
+    textAlign: "left"
 };
 
 const tdStyle = {
-    padding: "16px",
-    color: "#374151",
-    fontSize: "15px"
+    padding: "12px"
 };
-const labelStyle = {
-    display: "block",
-    marginBottom: "6px",
-    marginTop: "15px",
-    color: "#374151",
-    background: "#FFFFFF",
-    fontSize: "14px",
-    fontWeight: "600"
+
+const editBtn = {
+    marginRight: "10px",
+    padding: "8px 12px",
+    border: "none",
+    background: "#EEF2FF",
+    color: "#4F46E5",
+    borderRadius: "6px",
+    cursor: "pointer"
+};
+
+const statusBtn = {
+    padding: "8px 12px",
+    border: "none",
+    background: "#F3F4F6",
+    borderRadius: "6px",
+    cursor: "pointer"
+};
+
+const modalOverlay = {
+    position: "fixed",
+    inset: 0,
+    background:
+        "rgba(0,0,0,0.45)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000
+};
+
+const modalBox = {
+    width: "500px",
+    background: "#FFF",
+    padding: "25px",
+    borderRadius: "16px"
 };
 
 const inputStyle = {
     width: "100%",
-    boxSizing: "border-box",
-    padding: "10px 12px",
+    marginTop: "10px",
+    padding: "10px",
     border: "1px solid #D1D5DB",
     borderRadius: "8px",
-    fontSize: "14px",
-    color: "#111827",
-    background: "#FFFFFF",
-    outline: "none"
+    boxSizing: "border-box"
 };
 
 const cancelButtonStyle = {
+    padding: "10px 16px",
     border: "1px solid #D1D5DB",
+    background: "#FFF",
     borderRadius: "8px",
-    padding: "9px 16px",
-    background: "#FFFFFF",
-    color: "#374151",
-    cursor: "pointer",
-    fontWeight: "600"
+    cursor: "pointer"
 };
 
 const saveButtonStyle = {
+    padding: "10px 16px",
     border: "none",
-    borderRadius: "8px",
-    padding: "9px 18px",
     background: "#4F46E5",
-    color: "#FFFFFF",
-    cursor: "pointer",
-    fontWeight: "600"
+    color: "#FFF",
+    borderRadius: "8px",
+    cursor: "pointer"
 };
